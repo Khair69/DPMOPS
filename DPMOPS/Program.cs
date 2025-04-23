@@ -1,4 +1,5 @@
 using DPMOPS.Data;
+using DPMOPS.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +17,10 @@ namespace DPMOPS
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => { 
+                options.SignIn.RequireConfirmedAccount = true; 
+                options.Lockout.AllowedForNewUsers = true;
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
