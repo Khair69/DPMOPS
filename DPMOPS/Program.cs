@@ -1,5 +1,7 @@
 using DPMOPS.Data;
 using DPMOPS.Models;
+using DPMOPS.Services.City;
+using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +24,9 @@ namespace DPMOPS
                 options.Lockout.AllowedForNewUsers = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
+
+            builder.Services.AddScoped<ICityService, CityService>();
+            builder.Services.AddScoped<IDistrictService, DistrictService>();
 
             var app = builder.Build();
 

@@ -26,5 +26,9 @@ namespace DPMOPS.Models
         [PersonalData]
         [DataType(DataType.DateTime)]
         public DateTime DateCreated { get; set; }
+
+        public Guid DistrictId { get; set; }
+
+        public virtual District? District { get; set; }
     }
 }

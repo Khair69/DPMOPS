@@ -1,0 +1,39 @@
+﻿@page "{cityId}"
+@model DPMOPS.Pages.Location.Districts.IndexModel
+@{
+    ViewData["Title"] = "Districts";
+}
+
+<div class="panel panel-default table-panel">
+    <div class="d-flex justify-content-between mb-3">
+        <h3>@ViewData["Title"] for @Model.City.Name</h3>
+        <div>
+            <a asp-page="/Location/Cities/Index" class="btn btn-secondary">Back to Cities</a>
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(var d in Model.Districts)
+            {
+                <tr>
+                    <td>@d.Name</td>
+                    <td>
+                        <a asp-page="/Location/Districts/EditDistrict" asp-route-id="@d.DistrictId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="/Location/Districts/DeleteDistrict" asp-route-id="@d.DistrictId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="/Location/Districts/AddDistrict" class="btn btn-primary">Add District</a>
+</div>
+
