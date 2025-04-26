@@ -11,12 +11,15 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using DPMOPS.Models;
+using DPMOPS.Services.City;
+using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -30,13 +33,17 @@ namespace DPMOPS.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ICityService _cityService;
+        private readonly IDistrictService _districtService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICityService cityService,
+            IDistrictService districtService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +51,8 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _cityService = cityService;
+            _districtService = districtService;
         }
 
         /// <summary>
@@ -52,6 +61,9 @@ namespace DPMOPS.Areas.Identity.Pages.Account
         /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
+
+        public IEnumerable<SelectListItem> CityOptions { get; set; }
+        public IEnumerable<SelectListItem> DistrictOptions { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -98,13 +110,43 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "First Name")]
+            [StringLength(25, ErrorMessage = "Your first name must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string? FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Last Name")]
+            [StringLength(25, ErrorMessage = "Your last name must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            public string? LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Date)]
+            [Display(Name = "Birth Date")]
+            public DateTime DateOfBirth { get; set; }
+
+            [Display(Name = "Location")]
+            [Required]
+            public Guid DistrictId { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            CityOptions = await _cityService.GetCityOptionsAsync();
+            DistrictOptions = Enumerable.Empty<SelectListItem>();
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+
+        public async Task<JsonResult> OnGetDistrictsByCity(Guid cityId)
+        {
+            var districts = await _districtService.GetDistrictOptionsByCityAsync(cityId);
+            return new JsonResult(districts);
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -114,6 +156,12 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.DateOfBirth = Input.DateOfBirth;
+                user.DistrictId = Input.DistrictId;
+                user.DateCreated = DateTime.Now;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -152,6 +200,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+            CityOptions = await _cityService.GetCityOptionsAsync();
             return Page();
         }
 

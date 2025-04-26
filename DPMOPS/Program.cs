@@ -4,6 +4,7 @@ using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using DPMOPS.Services.User;
 
 namespace DPMOPS
 {
@@ -12,6 +13,12 @@ namespace DPMOPS
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAuthorization(options => {
+                options.AddPolicy(
+                    "IsAdmin",
+                    policyBuilder => policyBuilder.RequireClaim("IsAdmin"));
+            });
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -22,11 +29,13 @@ namespace DPMOPS
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => { 
                 options.SignIn.RequireConfirmedAccount = true; 
                 options.Lockout.AllowedForNewUsers = true;
+                options.Password.RequireLowercase = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
 
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<IDistrictService, DistrictService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 

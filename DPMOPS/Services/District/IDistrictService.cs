@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Services.District.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DPMOPS.Services.District
 {
@@ -9,5 +10,6 @@ namespace DPMOPS.Services.District
         Task<bool> CreateDistrictAsync(CreateDistrictDto districtDto);
         Task<bool> UpdateDistrictAsync(UpdateDistrictDto districtDto);
         Task<bool> DeleteDistrictAsync(Guid id);
+        Task<IEnumerable<SelectListItem>> GetDistrictOptionsByCityAsync(Guid cityId);
     }
 }

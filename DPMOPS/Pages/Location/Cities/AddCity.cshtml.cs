@@ -1,10 +1,12 @@
 using DPMOPS.Services.City;
 using DPMOPS.Services.City.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DPMOPS.Pages.Location
 {
+    [Authorize("IsAdmin")]
     public class AddCityModel : PageModel
     {
         private readonly ICityService _cityService;

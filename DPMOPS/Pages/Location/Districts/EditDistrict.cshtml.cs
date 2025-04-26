@@ -1,12 +1,14 @@
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using DPMOPS.Services.District.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DPMOPS.Pages.Location.Districts
 {
+    [Authorize("IsAdmin")]
     public class EditDistrictModel : PageModel
     {
         private readonly IDistrictService _districtService;
@@ -41,6 +43,7 @@ namespace DPMOPS.Pages.Location.Districts
         {
             if (!ModelState.IsValid)
             {
+                CityOptions = await _cityService.GetCityOptionsAsync();
                 return Page();
             }
             DistrictUpdateDto.DistrictId = id;

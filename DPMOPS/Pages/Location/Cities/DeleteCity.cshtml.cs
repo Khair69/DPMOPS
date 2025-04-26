@@ -1,10 +1,12 @@
 using DPMOPS.Services.City;
 using DPMOPS.Services.City.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DPMOPS.Pages.Location.Cities
 {
+    [Authorize("IsAdmin")]
     public class DeleteCityModel : PageModel
     {
         private readonly ICityService _cityService;

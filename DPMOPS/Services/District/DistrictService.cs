@@ -1,5 +1,6 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Services.District.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.District
@@ -91,6 +92,19 @@ namespace DPMOPS.Services.District
 
             var saveResault = await _context.SaveChangesAsync();
             return saveResault == 1;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetDistrictOptionsByCityAsync(Guid cityId)
+        {
+            return await _context.Districts
+                .OrderBy(d => d.Name)
+                .Where(d => d.CityId == cityId)
+                .Select(d => new SelectListItem
+                {
+                    Value = d.DistrictId.ToString(),
+                    Text = d.Name
+                })
+                .ToListAsync();
         }
     }
 }

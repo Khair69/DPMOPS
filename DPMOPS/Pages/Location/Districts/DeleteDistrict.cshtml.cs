@@ -1,10 +1,12 @@
 using DPMOPS.Services.District;
 using DPMOPS.Services.District.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DPMOPS.Pages.Location.Districts
 {
+    [Authorize("IsAdmin")]
     public class DeleteDistrictModel : PageModel
     {
         private readonly IDistrictService _districtService;

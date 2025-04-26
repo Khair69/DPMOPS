@@ -18,6 +18,34 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" aria-required="true" placeholder="First Name" />
+                <label asp-for="Input.FirstName"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" aria-required="true" placeholder="Last Name" />
+                <label asp-for="Input.LastName"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label class="control-label">City:</label>
+                <select asp-items="Model.CityOptions" class="form-control" id="citySelect">
+                    <option value=" ">-- Select City --</option>
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Input.DistrictId" class="control-label">District:</label>
+                <select asp-for="Input.DistrictId" asp-items="Model.DistrictOptions" class="form-control" id="districtSelect" disabled>
+                    <option value=" ">-- Select District --</option>
+                </select>
+                <span asp-validation-for="Input.DistrictId" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.DateOfBirth" class="form-control" aria-required="true" />
+                <label asp-for="Input.DateOfBirth"></label>
+                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                 <label asp-for="Input.Password">Password</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
@@ -64,4 +92,24 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            $('#citySelect').change(function() {
+                var cityId = $(this).val();
+                if (cityId) {
+                    $.getJSON('?handler=DistrictsByCity&cityId=' + cityId, function(data) {
+                        var districtSelect = $('#districtSelect');
+                        districtSelect.empty();
+                        districtSelect.append($('<option/>').val('').text('-- Select District --'));
+                        $.each(data, function(index, item) {
+                            districtSelect.append($('<option/>').val(item.value).text(item.text));
+                        });
+                        districtSelect.prop('disabled', false);
+                    });
+                } else {
+                    $('#districtSelect').empty().prop('disabled', true);
+                }
+            });
+        });
+    </script>
 }
