@@ -5,6 +5,7 @@ using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DPMOPS.Services.User;
+using DPMOPS.Services.ServiceType;
 
 namespace DPMOPS
 {
@@ -36,6 +37,7 @@ namespace DPMOPS
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<IDistrictService, DistrictService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IServiceTypeService, ServiceTypeService>();
 
             var app = builder.Build();
 

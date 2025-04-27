@@ -1,0 +1,16 @@
+﻿@page "{id}"
+@model DPMOPS.Pages.ServiceTypes.DeleteServiceTypeModel
+@{
+    ViewData["Title"] = "Delete service type";
+}
+
+<h2>Delete Confirmation</h2>
+<div class="alert alert-danger">
+    Are you sure you want to delete the service type "@Model.StDto.Name"?
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="stId" value="@Model.StDto.ServiceTypeId" />
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-page="/ServiceTypes/Index" class="btn btn-secondary">Cancel</a>
+</form>

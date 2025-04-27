@@ -1,0 +1,18 @@
+﻿@page
+@model DPMOPS.Pages.ServiceTypes.AddServiceTypeModel
+@{
+    ViewData["Title"] = "Add a service type";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="col-md-4">
+    <form asp-page="AddServiceType">
+        <div class="form-floating mb-3">
+            <input asp-for="StDto.Name" class="form-control" placeholder="Name" />
+            <label asp-for="StDto.Name"></label>
+            <span asp-validation-for="StDto.Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+    </form>
+</div>

@@ -1,0 +1,19 @@
+﻿@page "{id}"
+@model DPMOPS.Pages.ServiceTypes.EditServiceTypeModel
+@{
+    ViewData["Title"] = "Edit the service type's info";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="col-md-4">
+    <form asp-page="EditServiceType">
+        <div class="form-floating mb-3">
+            <input asp-for="StUpdateDto.Name" class="form-control" placeholder="Name" value="@Model.StDto.Name" />
+            <label asp-for="StUpdateDto.Name"></label>
+            <span asp-validation-for="StUpdateDto.Name" class="text-danger"></span>
+            <input type="hidden" asp-for="@Model.StUpdateDto.ServiceTypeId" value="@Model.StDto.ServiceTypeId" />
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+    </form>
+</div>
