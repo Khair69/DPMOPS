@@ -14,6 +14,6 @@ namespace DPMOPS.Models
 
         public Guid CityId { get; set; }
 
-        public virtual City? City { get; set; }
+        public City? City { get; set; }
     }
 }
