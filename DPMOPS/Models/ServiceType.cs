@@ -9,6 +9,6 @@ namespace DPMOPS.Models
         [Required]
         public string? Name { get; set; }
 
-        public ICollection<ServiceProvider> ServiceProviders { get; set; }
+        public ICollection<ServiceProvider>? ServiceProviders { get; set; }
     }
 }

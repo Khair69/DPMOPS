@@ -2,14 +2,13 @@
 
 namespace DPMOPS.Models
 {
-    public class Citizen
+    public class Status
     {
-        public Guid CitizenId { get; set; }
+        public Guid StatusId { get; set; }
 
         [Required]
-        public string? AccountId { get; set; }
+        public string? State { get; set; }
 
-        public ApplicationUser? Account { get; set; }
         public ICollection<ServiceRequest>? ServiceRequests { get; set; }
         public ICollection<ReportRequest>? ReportRequests { get; set; }
     }
