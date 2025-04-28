@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DPMOPS.Services.User;
 using DPMOPS.Services.ServiceType;
 using DPMOPS.Services.Citizen;
+using DPMOPS.Services.ServiceProvider;
 
 namespace DPMOPS
 {
@@ -40,6 +41,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IServiceTypeService, ServiceTypeService>();
             builder.Services.AddScoped<ICitizenService, CitizenService>();
+            builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
 
             var app = builder.Build();
 

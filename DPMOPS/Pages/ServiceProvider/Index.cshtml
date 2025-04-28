@@ -1,0 +1,43 @@
+﻿@page
+@model DPMOPS.Pages.ServiceProvider.IndexModel
+@{
+    ViewData["Title"] = "Service Providers";
+}
+
+<div class="panel panel-default table-panel">
+    <h3>@ViewData["Title"]</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Service Type</th>
+                <th>Email</th>
+                <th>Loacation</th>
+                <th>Service Requests</th>
+                <th>Report Requests</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sp in Model.Providers)
+            {
+                <tr>
+                    <td>@sp.ProviderName</td>
+                    <td>@sp.ServiceType</td>
+                    <td>@sp.ProviderEmail</td>
+                    <td></td>
+                    <td>@sp.NumberOfServiceRequests</td>
+                    <td>@sp.NumberOfReportRequests</td>
+                    <td>
+                        <a class="btn btn-sm btn-warning">Edit</a>
+                        <a class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary">Add</a>
+</div>
+
