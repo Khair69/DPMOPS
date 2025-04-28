@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using DPMOPS.Models;
+using DPMOPS.Services.Citizen;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Authentication;
@@ -35,6 +36,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
+        private readonly ICitizenService _citizenService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -43,7 +45,8 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ICityService cityService,
-            IDistrictService districtService)
+            IDistrictService districtService,
+            ICitizenService citizenService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -53,6 +56,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _cityService = cityService;
             _districtService = districtService;
+            _citizenService = citizenService;
         }
 
         /// <summary>
@@ -172,6 +176,10 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
+                    var addCitSuc = await _citizenService.CreateCitizenAsync(userId);
+                    if (!addCitSuc) return BadRequest("Couldn't make the user a citizen");
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

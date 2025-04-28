@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Pages.Accounts
 {
@@ -19,13 +20,13 @@ namespace DPMOPS.Pages.Accounts
             _districtService = districtService;
         }
 
-        public List<(ApplicationUser user, string location)> Users { get; set; }
+        public List<(ApplicationUser user, string location, string type)> Users { get; set; }
         public List<(ApplicationUser user, string location)> Admins{ get; set; }
 
         public async Task OnGetAsync()
         {
-            var users = _userManager.Users.ToList();
-            Users = new List<(ApplicationUser, string)>();
+            var users = _userManager.Users.Include(u => u.Citizen).Include(u => u.ServiceProvider).ToList();
+            Users = new List<(ApplicationUser, string, string)>();
             Admins = new List<(ApplicationUser, string)>();
 
             foreach (var user in users)
@@ -33,6 +34,19 @@ namespace DPMOPS.Pages.Accounts
                 var district = await _districtService.GetDistrictByIdAsync(user.DistrictId);
                 string loc = district.CityName + ", " + district.Name;
                 var claims = await _userManager.GetClaimsAsync(user);
+                string typ;
+                if (user.Citizen != null)
+                {
+                    typ = "Citizen";
+                }
+                else if (user.ServiceProvider != null)
+                {
+                    typ = "Service Provider";
+                }
+                else
+                {
+                    typ = "None";
+                }
 
                 var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsAdmin");
                 if (isAdminClaim != null)
@@ -41,7 +55,7 @@ namespace DPMOPS.Pages.Accounts
                 }
                 else
                 {
-                    Users.Add((user, loc));
+                    Users.Add((user, loc, typ));
                 }
             }
         }

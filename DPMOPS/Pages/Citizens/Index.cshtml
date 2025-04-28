@@ -1,0 +1,42 @@
+﻿@page
+@model DPMOPS.Pages.Citizens.IndexModel
+@{
+    ViewData["Title"] = "Citizens";
+}
+
+<div class="panel panel-default table-panel">
+    <h3>@ViewData["Title"]</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Loacation</th>
+                <th>Date Of Birth</th>
+                <th>Service Requests</th>
+                <th>Report Requests</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.Citizens)
+            {
+                <tr>
+                    <td>@c.CitizenName</td>
+                    <td>@c.CitizenEmail</td>
+                    <td></td>
+                    <td>@c.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                    <td>@c.NumberOfServiceRequests</td>
+                    <td>@c.NumberOfReportRequests</td>
+                    <td>
+                        <a class="btn btn-sm btn-warning">Edit</a>
+                        <a class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary">Add</a>
+</div>

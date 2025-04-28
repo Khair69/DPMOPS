@@ -13,6 +13,25 @@ namespace DPMOPS.Services.User
             _userManager = userManager;
         }
 
+        public async Task<IList<ApplicationUser>> GetAllAdminsAsync()
+        {
+            var users = _userManager.Users.ToList();
+
+            IList<ApplicationUser> Admins = new List<ApplicationUser>();
+            foreach (var user in users) 
+            {
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsAdmin");
+
+                if (isAdminClaim != null)
+                {
+                    Admins.Add(user);
+                }
+            }
+            return Admins;
+        }
+
         public async Task<bool> MakeAdminAsync(string Id)
         {
             var selUser = await _userManager.FindByIdAsync(Id);

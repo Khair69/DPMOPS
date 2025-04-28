@@ -13,6 +13,7 @@
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
+                    <th>Type</th>
                     <th>Date of Birth</th>
                     <th>Date Created</th>
                     <th>Location</th>
@@ -20,11 +21,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var (user, loc) in Model.Users)
+                @foreach (var (user, loc, typ) in Model.Users)
                 {
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
+                        <td>@typ</td>
                         <td>@user.DateOfBirth.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@loc</td>
