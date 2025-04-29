@@ -30,7 +30,7 @@
                     <td>@c.NumberOfServiceRequests</td>
                     <td>@c.NumberOfReportRequests</td>
                     <td>
-                        <a class="btn btn-sm btn-warning">Edit</a>
+                        <a class="btn btn-sm btn-warning" asp-page="/ServiceProvider/AddServiceProvider" asp-route-id="@c.AccountId">Make Provider</a>
                         <a class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>

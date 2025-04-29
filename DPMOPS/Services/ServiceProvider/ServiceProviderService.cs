@@ -68,7 +68,7 @@ namespace DPMOPS.Services.ServiceProvider
             return spDto;
         }
 
-        public async Task<bool> MakeServiceProvider(CreateServiceProviderDto SpDto)
+        public async Task<bool> MakeServiceProviderAsync(CreateServiceProviderDto SpDto)
         {
             var provider = new Models.ServiceProvider();
             provider.ServiceProviderId = Guid.NewGuid();
@@ -80,7 +80,7 @@ namespace DPMOPS.Services.ServiceProvider
             return res == 1;
         }
 
-        public Task<bool> UpdateServiceProvider(UpdateServiceProviderDto SpDto)
+        public Task<bool> UpdateServiceProviderAsync(UpdateServiceProviderDto SpDto)
         {
             throw new NotImplementedException();
         }
