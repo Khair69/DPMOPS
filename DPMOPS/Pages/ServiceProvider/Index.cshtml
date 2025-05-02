@@ -20,24 +20,24 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var sp in Model.Providers)
+            @foreach (var (sp, loc) in Model.ProvidersWithLocation)
             {
                 <tr>
                     <td>@sp.ProviderName</td>
                     <td>@sp.ServiceType</td>
                     <td>@sp.ProviderEmail</td>
-                    <td></td>
+                    <td>@loc</td>
                     <td>@sp.NumberOfServiceRequests</td>
                     <td>@sp.NumberOfReportRequests</td>
                     <td>
-                        <a class="btn btn-sm btn-warning">Edit</a>
-                        <a class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-page="/ServiceProvider/EditServiceProvider" asp-route-id="@sp.ServiceProviderId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="/ServiceProvider/DeleteServiceProvider" asp-route-id="@sp.ServiceProviderId" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a class="btn btn-primary">Add</a>
+    <a asp-page="/Citizens/Index" class="btn btn-primary">Add</a>
 </div>
 

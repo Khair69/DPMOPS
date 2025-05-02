@@ -1,9 +1,11 @@
 using DPMOPS.Services.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DPMOPS.Pages.Accounts
 {
+    [Authorize("IsAdmin")]
     public class MakeAdminModel : PageModel
     {
         private readonly IUserService _userService;

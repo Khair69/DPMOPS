@@ -12,7 +12,6 @@
             <input asp-for="CityUpdateDto.Name" class="form-control" placeholder="Name" value="@Model.CityDto.Name"/>
             <label asp-for="CityUpdateDto.Name"></label>
             <span asp-validation-for="CityUpdateDto.Name" class="text-danger"></span>
-            <input type="hidden" asp-for="@Model.CityUpdateDto.CityId" value="@Model.CityDto.CityId"/>
         </div>
         <button type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
     </form>

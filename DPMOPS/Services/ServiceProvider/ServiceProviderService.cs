@@ -51,7 +51,7 @@ namespace DPMOPS.Services.ServiceProvider
                 .Include(sp => sp.ServiceRequests)
                 .Include(sp => sp.ReportRequests)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(sp => sp.ServiceTypeId == id);
+                .FirstOrDefaultAsync(sp => sp.ServiceProviderId == id);
 
             ServiceProviderDto spDto = new ServiceProviderDto();
             spDto.ServiceProviderId = provider.ServiceProviderId;
@@ -80,14 +80,33 @@ namespace DPMOPS.Services.ServiceProvider
             return res == 1;
         }
 
-        public Task<bool> UpdateServiceProviderAsync(UpdateServiceProviderDto SpDto)
+        public async Task<bool> UpdateServiceProviderAsync(UpdateServiceProviderDto SpDto)
         {
-            throw new NotImplementedException();
+            var existingProvider = await _context.ServiceProviders
+                .Where(sp => sp.ServiceProviderId == SpDto.ServiceProviderId)
+                .Include(sp => sp.ServiceType)
+                .FirstOrDefaultAsync();
+
+            if (existingProvider == null) return false;
+
+            existingProvider.ServiceTypeId = SpDto.ServiceTypeId;
+
+            var saveResault = await _context.SaveChangesAsync();
+            return saveResault == 1;
         }
 
-        public Task<bool> DeleteServiceProviderAsync(Guid id)
+        public async Task<bool> DeleteServiceProviderAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var existingProvider = await _context.ServiceProviders
+                .Where(sp => sp.ServiceProviderId == id)
+                .FirstOrDefaultAsync();
+
+            if (existingProvider == null) return false;
+
+            _context.ServiceProviders.Remove(existingProvider);
+
+            var saveResault = await _context.SaveChangesAsync();
+            return saveResault == 1;
         }
     }
 }
