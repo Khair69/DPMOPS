@@ -8,6 +8,7 @@ using DPMOPS.Services.User;
 using DPMOPS.Services.ServiceType;
 using DPMOPS.Services.Citizen;
 using DPMOPS.Services.ServiceProvider;
+using DPMOPS.Services.ServiceRequest;
 
 namespace DPMOPS
 {
@@ -42,6 +43,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IServiceTypeService, ServiceTypeService>();
             builder.Services.AddScoped<ICitizenService, CitizenService>();
             builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
+            builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
 
             var app = builder.Build();
 

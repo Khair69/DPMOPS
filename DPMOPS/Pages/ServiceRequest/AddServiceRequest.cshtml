@@ -1,0 +1,71 @@
+﻿@page
+@model DPMOPS.Pages.ServiceRequest.AddServiceRequestModel
+@{
+    ViewData["Title"] = "Add a service request";
+}
+
+<div class="col-md-4">
+    <form asp-page="AddServiceRequest">
+        <div class="form-floating mb-3">
+            <input asp-for="SrDto.LocDescription" class="form-control" placeholder="Location Description" />
+            <label asp-for="SrDto.LocDescription"></label>
+            <span asp-validation-for="SrDto.LocDescription" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="SrDto.Description" class="form-control" placeholder="Description" />
+            <label asp-for="SrDto.Description"></label>
+            <span asp-validation-for="SrDto.Description" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="SrDto.Reason" class="form-control" placeholder="Reason" />
+            <label asp-for="SrDto.Reason"></label>
+            <span asp-validation-for="SrDto.Reason" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="control-label">Service Provider:</label>
+            <select asp-for="SrDto.ServiceProviderId" asp-items="Model.ServiceProviderOptions" class="form-control">
+                <option value=" ">-- Select Service Provider --</option>
+            </select>
+            <span asp-validation-for="SrDto.ServiceProviderId" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-3">
+            <label class="control-label">City:</label>
+            <select asp-items="Model.CityOptions" class="form-control" id="citySelect">
+                <option value=" ">-- Select City --</option>
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="SrDto.DistrictId" class="control-label">District:</label>
+            <select asp-for="SrDto.DistrictId" asp-items="Model.DistrictOptions" class="form-control" id="districtSelect" disabled>
+                <option value=" ">-- Select District --</option>
+            </select>
+            <span asp-validation-for="SrDto.DistrictId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            $('#citySelect').change(function() {
+                var cityId = $(this).val();
+                if (cityId) {
+                    $.getJSON('?handler=DistrictsByCity&cityId=' + cityId, function(data) {
+                        var districtSelect = $('#districtSelect');
+                        districtSelect.empty();
+                        districtSelect.append($('<option/>').val('').text('-- Select District --'));
+                        $.each(data, function(index, item) {
+                            districtSelect.append($('<option/>').val(item.value).text(item.text));
+                        });
+                        districtSelect.prop('disabled', false);
+                    });
+                } else {
+                    $('#districtSelect').empty().prop('disabled', true);
+                }
+            });
+        });
+    </script>
+}

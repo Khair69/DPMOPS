@@ -1,5 +1,6 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Services.ServiceProvider.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.ServiceProvider
@@ -107,6 +108,18 @@ namespace DPMOPS.Services.ServiceProvider
 
             var saveResault = await _context.SaveChangesAsync();
             return saveResault == 1;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetServiceProvidersOptionsAsync()
+        {
+            return await _context.ServiceProviders
+                .Include(sp => sp.Account)
+                .Select(sp => new SelectListItem
+                {
+                    Value = sp.ServiceProviderId.ToString(),
+                    Text = (sp.Account.FirstName +" "+ sp.Account.LastName)
+                })
+                .ToListAsync();
         }
     }
 }

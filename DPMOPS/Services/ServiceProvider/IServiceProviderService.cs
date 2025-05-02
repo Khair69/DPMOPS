@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Services.ServiceProvider.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DPMOPS.Services.ServiceProvider
 {
@@ -9,5 +10,6 @@ namespace DPMOPS.Services.ServiceProvider
         Task<bool> MakeServiceProviderAsync(CreateServiceProviderDto SpDto);
         Task<bool> UpdateServiceProviderAsync(UpdateServiceProviderDto SpDto);
         Task<bool> DeleteServiceProviderAsync(Guid id);
+        Task<IEnumerable<SelectListItem>> GetServiceProvidersOptionsAsync();
     }
 }

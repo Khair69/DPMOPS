@@ -15,7 +15,7 @@ namespace DPMOPS.Models
         public string? Reason {  get; set; }
 
         public Guid CitizenId { get; set; }
-        public Guid? ServiceProviderId { get; set; }
+        public Guid ServiceProviderId { get; set; }
         public Guid DistrictId { get; set; }
         public Guid StatusId { get; set; } = Guid.Parse("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa");
 

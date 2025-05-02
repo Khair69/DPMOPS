@@ -1,0 +1,48 @@
+﻿@page
+@model DPMOPS.Pages.ServiceRequest.IndexModel
+@{
+    ViewData["Title"] = "Service Requests";
+}
+
+<div class="panel panel-default table-panel">
+    <h3>@ViewData["Title"]</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Location Desc</th>
+                <th>Desc</th>
+                <th>Reason</th>
+                <th>Date Reported</th>
+                <th>Citizen Name</th>
+                <th>Provider Name</th>
+                <th>Service Type</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (sr, loc, citName, provName, serType) in Model.RequestsWithInfo)
+            {
+                <tr>
+                    <td>@sr.LocDescription</td>
+                    <td>@sr.Description</td>
+                    <td>@sr.Reason</td>
+                    <td>@sr.DateCreated</td>
+                    <td>@citName</td>
+                    <td>@provName</td>
+                    <td>@serType</td>
+                    <td>@loc</td>
+                    <td>@sr.Status</td>
+                    <td>
+                        <a asp-page="/ServiceRequest/EditServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="/ServiceRequest/DeleteServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="/ServiceRequest/AddServiceRequest" class="btn btn-primary">Add Service Request</a>
+</div>
