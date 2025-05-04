@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
 {
-    [Authorize] //should be citizen
+    [Authorize("IsCitizen")]
     public class AddServiceRequestModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;

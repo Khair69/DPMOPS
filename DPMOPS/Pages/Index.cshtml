@@ -6,7 +6,8 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    @if(Model.isAdmin == "true"){
+    @{
+    if(Model.isAdmin == "true"){
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/Location/Cities/Index">Cities</a>
         <br />
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceTypes/Index">Service Types</a>
@@ -14,6 +15,18 @@
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/Citizens/Index">Citizens</a>
         <br />
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceProvider/Index">Service Providers</a>
+    }
+    else if (Model.isCitizen == "true"){
+        <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/AddServiceRequest">Make Service Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Make Report Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Browse Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Your Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
+    }
+    else if (Model.isProvider == "true"){
+        <a class="btn btn-light mb-3 w-50 fw-bold">Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
+    }
     }
 </div>
 

@@ -22,6 +22,14 @@ namespace DPMOPS
                 options.AddPolicy(
                     "IsAdmin",
                     policyBuilder => policyBuilder.RequireClaim("IsAdmin"));
+
+                options.AddPolicy(
+                    "IsCitizen",
+                    policyBuilder => policyBuilder.RequireClaim("IsCitizen"));
+
+                options.AddPolicy(
+                    "IsProvider",
+                    policyBuilder => policyBuilder.RequireClaim("IsProvider"));
             });
 
             // Add services to the container.
