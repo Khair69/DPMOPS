@@ -1,17 +1,24 @@
 ﻿using DPMOPS.Data;
+using DPMOPS.Models;
 using DPMOPS.Services.ServiceProvider.Dtos;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text;
 
 namespace DPMOPS.Services.ServiceProvider
 {
     public class ServiceProviderService : IServiceProviderService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServiceProviderService(ApplicationDbContext context)
+        public ServiceProviderService(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
-            _context = context;            
+            _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IList<ServiceProviderDto>> GetAllProvidersAsync()
@@ -78,6 +85,17 @@ namespace DPMOPS.Services.ServiceProvider
 
             _context.ServiceProviders.Add(provider);
             var res = await _context.SaveChangesAsync();
+
+            if (res == 1)
+            {
+                var selUser = await _userManager.FindByIdAsync(SpDto.AccountId);
+                if (selUser == null) return false;
+                var claim = new Claim("IsProvider", "true");
+                var resault = await _userManager.AddClaimAsync(selUser, claim);
+                if (resault != null) return true;
+                return false;
+            }
+
             return res == 1;
         }
 
@@ -104,9 +122,24 @@ namespace DPMOPS.Services.ServiceProvider
 
             if (existingProvider == null) return false;
 
+            string AccId = existingProvider.AccountId;
+
             _context.ServiceProviders.Remove(existingProvider);
 
             var saveResault = await _context.SaveChangesAsync();
+
+            if (saveResault == 1)
+            {
+                var selUser = await _userManager.FindByIdAsync(AccId);
+                if (selUser == null) return false;
+                var providerClaims = await _userManager.GetClaimsAsync(selUser);
+                var isProviderClaims = providerClaims.Where(c => c.Type == "IsProvider" && c.Value == "true").ToList();
+
+                var res = await _userManager.RemoveClaimsAsync(selUser, isProviderClaims);
+                if (res != null) return true;
+                return false;
+            }
+
             return saveResault == 1;
         }
 

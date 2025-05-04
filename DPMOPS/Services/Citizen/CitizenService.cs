@@ -1,17 +1,24 @@
 ﻿using DPMOPS.Data;
+using DPMOPS.Models;
 using DPMOPS.Services.Citizen.Dtos;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using System.Security.Claims;
 
 namespace DPMOPS.Services.Citizen
 {
     public class CitizenService : ICitizenService
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CitizenService(ApplicationDbContext context)
+        public CitizenService(ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<bool> CreateCitizenAsync(string AccId)
@@ -22,6 +29,17 @@ namespace DPMOPS.Services.Citizen
 
             _context.Citizens.Add(citizen);
             var res = await _context.SaveChangesAsync();
+
+            if (res == 1)
+            {
+                var selUser = await _userManager.FindByIdAsync(AccId);
+                if (selUser == null) return false;
+                var claim = new Claim("IsCitizen", "true");
+                var resault = await _userManager.AddClaimAsync(selUser, claim);
+                if (resault != null) return true;
+                return false;
+            }
+
             return res == 1;
         }
 
@@ -33,9 +51,24 @@ namespace DPMOPS.Services.Citizen
 
             if (existingCitizen == null) return false;
 
+            string AccId = existingCitizen.AccountId;
+
             _context.Citizens.Remove(existingCitizen);
 
             var saveResault = await _context.SaveChangesAsync();
+
+            if (saveResault == 1)
+            {
+                var selUser = await _userManager.FindByIdAsync(AccId);
+                if (selUser == null) return false;
+                var citizenClaims = await _userManager.GetClaimsAsync(selUser);
+                var isCitizenClaims = citizenClaims.Where(c => c.Type == "IsCitizen" && c.Value == "true").ToList();
+
+                var res = await _userManager.RemoveClaimsAsync(selUser, isCitizenClaims);
+                if (res != null) return true;
+                return false;
+            }
+
             return saveResault == 1;
         }
 

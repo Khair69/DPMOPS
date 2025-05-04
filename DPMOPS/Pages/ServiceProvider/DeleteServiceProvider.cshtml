@@ -11,7 +11,7 @@
 </div>
 
 <form method="post">
-    <input type="hidden" asp-for="spId" value="@Model.SpDto.ServiceTypeId" />
+    <input type="hidden" asp-for="spId" value="@Model.SpDto.ServiceProviderId" />
     <button type="submit" class="btn btn-danger">Confirm Delete</button>
     <a asp-page="/ServiceProvider/Index" class="btn btn-secondary">Cancel</a>
 </form>
