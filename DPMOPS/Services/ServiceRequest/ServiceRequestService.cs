@@ -73,5 +73,35 @@ namespace DPMOPS.Services.ServiceRequest
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(Guid id)
+        {
+            var requests = await _context.ServiceRequests
+                .Where(r => r.CitizenId == id)
+                .Include(r => r.Citizen)
+                .Include(r => r.ServiceProvider)
+                .Include(r => r.District)
+                .Include(r => r.Status)
+                .AsNoTracking()
+                .ToListAsync();
+            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
+            foreach (var request in requests)
+            {
+                ServiceRequestDto srdto = new ServiceRequestDto();
+                srdto.ServiceRequestId = request.ServiceRequestId;
+                srdto.LocDescription = request.LocDescription;
+                srdto.DateCreated = request.DateCreated;
+                srdto.Description = request.Description;
+                srdto.Reason = request.Reason;
+                srdto.DistrictId = request.DistrictId;
+                srdto.Status = request.Status.State;
+                srdto.CitizenId = request.CitizenId;
+                srdto.ServiceProviderId = request.ServiceProviderId;
+                srdto.StatusId = request.StatusId;
+
+                SrDto.Add(srdto);
+            }
+            return SrDto;
+        }
     }
 }
