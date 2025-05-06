@@ -117,5 +117,43 @@ namespace DPMOPS.Services.ServiceRequest
             }
             return SrDto;
         }
+
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByProviderAsync(Guid id)
+        {
+            var requests = await _context.ServiceRequests
+                .Where(r => r.ServiceProviderId == id)
+                .Include(r => r.Citizen)
+                .ThenInclude(r => r.Account)
+                .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.Account)
+                .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.ServiceType)
+                .Include(r => r.District)
+                .ThenInclude(r => r.City)
+                .AsNoTracking()
+                .ToListAsync();
+            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
+            foreach (var request in requests)
+            {
+                ServiceRequestDto srdto = new ServiceRequestDto();
+                srdto.ServiceRequestId = request.ServiceRequestId;
+                srdto.LocDescription = request.LocDescription;
+                srdto.DateCreated = request.DateCreated;
+                srdto.Description = request.Description;
+                srdto.Reason = request.Reason;
+                srdto.DistrictId = request.DistrictId;
+                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
+                srdto.Status = (Status)request.StatusId;
+                srdto.CitizenId = request.CitizenId;
+                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
+                srdto.ServiceProviderId = request.ServiceProviderId;
+                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
+
+                SrDto.Add(srdto);
+            }
+            return SrDto;
+
+        }
     }
 }

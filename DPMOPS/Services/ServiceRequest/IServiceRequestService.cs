@@ -10,5 +10,6 @@ namespace DPMOPS.Services.ServiceRequest
         Task<bool> UpdateServiceRequestAsync(UpdateServiceRequestDto srDto);
         Task<bool> DeleteServiceRequestAsync(Guid id);
         Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(Guid id);
+        Task<IList<ServiceRequestDto>> GetServiceRequestsByProviderAsync(Guid id);
     }
 }
