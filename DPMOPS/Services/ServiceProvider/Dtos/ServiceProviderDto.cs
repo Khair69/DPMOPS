@@ -21,7 +21,5 @@
         public DateTime DateOfBirth { get; set; }
 
         public int NumberOfServiceRequests { get; set; }
-
-        public int NumberOfReportRequests { get; set; }
     }
 }

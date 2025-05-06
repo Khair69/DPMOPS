@@ -18,13 +18,13 @@
     }
     else if (Model.isCitizen == "true"){
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/AddServiceRequest">Make Service Requests</a>
-        <a class="btn btn-light mb-3 w-50 fw-bold">Make Report Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Index">Browse Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/ServiceRequestsByCitizen">Your Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
     }
     else if (Model.isProvider == "true"){
-        <a class="btn btn-light mb-3 w-50 fw-bold">Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold">Your Requests</a>
+        <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Index">Browse Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
     }
     else {

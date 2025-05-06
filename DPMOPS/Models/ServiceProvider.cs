@@ -15,6 +15,5 @@ namespace DPMOPS.Models
         public ApplicationUser? Account { get; set; }
         public ServiceType? ServiceType { get; set; }
         public ICollection<ServiceRequest>? ServiceRequests { get; set; }
-        public ICollection<ReportRequest>? ReportRequests { get; set; }
     }
 }

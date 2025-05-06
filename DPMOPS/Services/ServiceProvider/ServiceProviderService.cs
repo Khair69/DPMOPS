@@ -30,7 +30,6 @@ namespace DPMOPS.Services.ServiceProvider
                 .ThenInclude(a => a.City)
                 .Include(sp => sp.ServiceType)
                 .Include(sp => sp.ServiceRequests)
-                .Include(sp => sp.ReportRequests)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -48,7 +47,6 @@ namespace DPMOPS.Services.ServiceProvider
                 spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
                 spDto.DateOfBirth = provider.Account.DateOfBirth;
                 spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
-                spDto.NumberOfReportRequests = provider.ReportRequests.Count();
                 SpDto.Add(spDto);
 
             }
@@ -63,7 +61,6 @@ namespace DPMOPS.Services.ServiceProvider
                 .ThenInclude(a => a.City)
                 .Include(sp => sp.ServiceType)
                 .Include(sp => sp.ServiceRequests)
-                .Include(sp => sp.ReportRequests)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(sp => sp.ServiceProviderId == id);
 
@@ -78,7 +75,6 @@ namespace DPMOPS.Services.ServiceProvider
             spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
             spDto.DateOfBirth = provider.Account.DateOfBirth;
             spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
-            spDto.NumberOfReportRequests = provider.ReportRequests.Count();
 
             return spDto;
         }

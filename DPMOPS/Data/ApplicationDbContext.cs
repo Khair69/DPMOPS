@@ -17,7 +17,6 @@ namespace DPMOPS.Data
         public DbSet<Models.ServiceProvider> ServiceProviders { get; set; }
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
-        public DbSet<ReportRequest> ReportRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,30 +74,7 @@ namespace DPMOPS.Data
                    .HasForeignKey(sr => sr.DistrictId)
             );
 
-            modelBuilder.Entity<ReportRequest>(entity =>
-                   entity.HasOne(rr => rr.Citizen)
-                   .WithMany(c => c.ReportRequests)
-                   .HasForeignKey(rr => rr.CitizenId)
-            );
-
-            modelBuilder.Entity<ReportRequest>(entity =>
-                   entity.HasOne(rr => rr.ServiceProvider)
-                   .WithMany(sp => sp.ReportRequests)
-                   .HasForeignKey(rr => rr.ServiceProviderId)
-                   .OnDelete(DeleteBehavior.Restrict)
-            );
-
-            modelBuilder.Entity<ReportRequest>(entity =>
-                   entity.HasOne(rr => rr.District)
-                   .WithMany(d => d.ReportRequests)
-                   .HasForeignKey(rr => rr.ServiceProviderId)
-            );
-
             modelBuilder.Entity<ServiceRequest>()
-                .Property(e => e.StatusId)
-                .HasConversion<int>();
-
-            modelBuilder.Entity<ReportRequest>()
                 .Property(e => e.StatusId)
                 .HasConversion<int>();
         }

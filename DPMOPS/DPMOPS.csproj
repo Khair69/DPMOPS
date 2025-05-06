@@ -148,8 +148,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\ReportRequest\" />
-  </ItemGroup>
-
 </Project>

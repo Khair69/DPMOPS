@@ -15,7 +15,6 @@
                 <th>Email</th>
                 <th>Loacation</th>
                 <th>Service Requests</th>
-                <th>Report Requests</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,7 +27,6 @@
                     <td>@sp.ProviderEmail</td>
                     <td>@sp.Address</td>
                     <td>@sp.NumberOfServiceRequests</td>
-                    <td>@sp.NumberOfReportRequests</td>
                     <td>
                         <a asp-page="/ServiceProvider/EditServiceProvider" asp-route-id="@sp.ServiceProviderId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-page="/ServiceProvider/DeleteServiceProvider" asp-route-id="@sp.ServiceProviderId" class="btn btn-sm btn-danger">Delete</a>

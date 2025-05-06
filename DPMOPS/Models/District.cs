@@ -17,6 +17,5 @@ namespace DPMOPS.Models
         public City? City { get; set; }
         public ICollection<ApplicationUser>? Users { get; set; }
         public ICollection<ServiceRequest>? ServiceRequests { get; set; }
-        public ICollection<ReportRequest>? ReportRequests { get; set; }
     }
 }

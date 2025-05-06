@@ -79,7 +79,6 @@ namespace DPMOPS.Services.Citizen
                 .ThenInclude(a => a.District)
                 .ThenInclude(a => a.City)
                 .Include(c => c.ServiceRequests)
-                .Include(c => c.ReportRequests)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -95,7 +94,6 @@ namespace DPMOPS.Services.Citizen
                 citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
                 citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
                 citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
-                citizenDto.NumberOfReportRequests = citizen.ReportRequests.Count();
                 CitizensDto.Add(citizenDto);
             }
             return CitizensDto;
@@ -108,7 +106,6 @@ namespace DPMOPS.Services.Citizen
                 .ThenInclude(a => a.District)
                 .ThenInclude(a => a.City)
                 .Include(c => c.ServiceRequests)
-                .Include(c => c.ReportRequests)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.CitizenId == id);
 
@@ -121,7 +118,6 @@ namespace DPMOPS.Services.Citizen
             citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
             citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
             citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
-            citizenDto.NumberOfReportRequests = citizen.ReportRequests.Count();
 
             return citizenDto;
         }
