@@ -1,5 +1,6 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Models;
+using DPMOPS.Services.Citizen.Dtos;
 using DPMOPS.Services.ServiceProvider.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,6 +26,8 @@ namespace DPMOPS.Services.ServiceProvider
         {
             var providers = await _context.ServiceProviders
                 .Include(sp => sp.Account)
+                .ThenInclude(a => a.District)
+                .ThenInclude(a => a.City)
                 .Include(sp => sp.ServiceType)
                 .Include(sp => sp.ServiceRequests)
                 .Include(sp => sp.ReportRequests)
@@ -42,6 +45,7 @@ namespace DPMOPS.Services.ServiceProvider
                 spDto.ServiceType = provider.ServiceType.Name;
                 spDto.ProviderEmail = provider.Account.Email;
                 spDto.DistrictId = provider.Account.DistrictId;
+                spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
                 spDto.DateOfBirth = provider.Account.DateOfBirth;
                 spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
                 spDto.NumberOfReportRequests = provider.ReportRequests.Count();
@@ -55,6 +59,8 @@ namespace DPMOPS.Services.ServiceProvider
         {
             var provider = await _context.ServiceProviders
                 .Include(sp => sp.Account)
+                .ThenInclude(a => a.District)
+                .ThenInclude(a => a.City)
                 .Include(sp => sp.ServiceType)
                 .Include(sp => sp.ServiceRequests)
                 .Include(sp => sp.ReportRequests)
@@ -69,6 +75,7 @@ namespace DPMOPS.Services.ServiceProvider
             spDto.ServiceType = provider.ServiceType.Name;
             spDto.ProviderEmail = provider.Account.Email;
             spDto.DistrictId = provider.Account.DistrictId;
+            spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
             spDto.DateOfBirth = provider.Account.DateOfBirth;
             spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
             spDto.NumberOfReportRequests = provider.ReportRequests.Count();

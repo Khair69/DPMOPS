@@ -76,6 +76,8 @@ namespace DPMOPS.Services.Citizen
         {
             var citizens = await _context.Citizens
                 .Include(c => c.Account)
+                .ThenInclude(a => a.District)
+                .ThenInclude(a => a.City)
                 .Include(c => c.ServiceRequests)
                 .Include(c => c.ReportRequests)
                 .AsNoTracking()
@@ -90,6 +92,7 @@ namespace DPMOPS.Services.Citizen
                 citizenDto.CitizenName = (citizen.Account.FirstName +" "+ citizen.Account.LastName);
                 citizenDto.CitizenEmail = citizen.Account.Email;
                 citizenDto.DistrictId = citizen.Account.DistrictId;
+                citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
                 citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
                 citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
                 citizenDto.NumberOfReportRequests = citizen.ReportRequests.Count();
@@ -102,6 +105,8 @@ namespace DPMOPS.Services.Citizen
         {
             var citizen = await _context.Citizens
                 .Include(c => c.Account)
+                .ThenInclude(a => a.District)
+                .ThenInclude(a => a.City)
                 .Include(c => c.ServiceRequests)
                 .Include(c => c.ReportRequests)
                 .AsNoTracking()
@@ -113,6 +118,7 @@ namespace DPMOPS.Services.Citizen
             citizenDto.CitizenName = (citizen.Account.FirstName +" "+ citizen.Account.LastName);
             citizenDto.CitizenEmail = citizen.Account.Email;
             citizenDto.DistrictId = citizen.Account.DistrictId;
+            citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
             citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
             citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
             citizenDto.NumberOfReportRequests = citizen.ReportRequests.Count();

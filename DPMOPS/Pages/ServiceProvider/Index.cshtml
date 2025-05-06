@@ -20,13 +20,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var (sp, loc) in Model.ProvidersWithLocation)
+            @foreach (var sp in Model.Providers)
             {
                 <tr>
                     <td>@sp.ProviderName</td>
                     <td>@sp.ServiceType</td>
                     <td>@sp.ProviderEmail</td>
-                    <td>@loc</td>
+                    <td>@sp.Address</td>
                     <td>@sp.NumberOfServiceRequests</td>
                     <td>@sp.NumberOfReportRequests</td>
                     <td>

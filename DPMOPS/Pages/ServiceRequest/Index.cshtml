@@ -23,17 +23,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var (sr, loc, citName, provName, serType) in Model.RequestsWithInfo)
+            @foreach (var sr in Model.ServiceRequests)
             {
                 <tr>
                     <td>@sr.LocDescription</td>
                     <td>@sr.Description</td>
                     <td>@sr.Reason</td>
                     <td>@sr.DateCreated</td>
-                    <td>@citName</td>
-                    <td>@provName</td>
-                    <td>@serType</td>
-                    <td>@loc</td>
+                    <td>@sr.CitizenName</td>
+                    <td>@sr.ProviderName</td>
+                    <td>@sr.ServiceType</td>
+                    <td>@sr.Address</td>
                     <td>@sr.Status</td>
                     <td>
                         <a asp-page="/ServiceRequest/EditServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-warning">Edit</a>

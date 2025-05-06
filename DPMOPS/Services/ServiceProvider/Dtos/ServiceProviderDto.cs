@@ -16,6 +16,8 @@
 
         public Guid DistrictId { get; set; }
 
+        public string? Address { get; set; }
+
         public DateTime DateOfBirth { get; set; }
 
         public int NumberOfServiceRequests { get; set; }

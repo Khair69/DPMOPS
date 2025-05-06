@@ -18,8 +18,13 @@ namespace DPMOPS.Services.ServiceRequest
         {
             var requests = await _context.ServiceRequests
                 .Include(r => r.Citizen)
+                .ThenInclude(r => r.Account)
                 .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.Account)
+                .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
+                .ThenInclude(r => r.City)
                 .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
@@ -33,9 +38,13 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Description = request.Description;
                 srdto.Reason = request.Reason;
                 srdto.DistrictId = request.DistrictId;
+                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 srdto.Status = request.Status.State;
                 srdto.CitizenId = request.CitizenId;
+                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.ServiceProviderId = request.ServiceProviderId;
+                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
                 srdto.StatusId = request.StatusId;
 
                 SrDto.Add(srdto);
@@ -79,8 +88,13 @@ namespace DPMOPS.Services.ServiceRequest
             var requests = await _context.ServiceRequests
                 .Where(r => r.CitizenId == id)
                 .Include(r => r.Citizen)
+                .ThenInclude(r => r.Account)
                 .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.Account)
+                .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
+                .ThenInclude(r => r.City)
                 .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
@@ -94,9 +108,13 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Description = request.Description;
                 srdto.Reason = request.Reason;
                 srdto.DistrictId = request.DistrictId;
+                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 srdto.Status = request.Status.State;
                 srdto.CitizenId = request.CitizenId;
+                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.ServiceProviderId = request.ServiceProviderId;
+                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
                 srdto.StatusId = request.StatusId;
 
                 SrDto.Add(srdto);

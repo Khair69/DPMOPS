@@ -20,12 +20,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var (c, loc) in Model.CitizensWithLocation)
+            @foreach (var c in Model.Citizens)
             {
                 <tr>
                     <td>@c.CitizenName</td>
                     <td>@c.CitizenEmail</td>
-                    <td>@loc</td>
+                    <td>@c.Address</td>
                     <td>@c.DateOfBirth.ToString("dd/MM/yyyy")</td>
                     <td>@c.NumberOfServiceRequests</td>
                     <td>@c.NumberOfReportRequests</td>

@@ -12,50 +12,39 @@ namespace DPMOPS.Pages.Accounts
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDistrictService _districtService;
 
-        public IndexModel(UserManager<ApplicationUser> userManager, IDistrictService districtService)
+        public IndexModel(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _districtService = districtService;
         }
 
-        public List<(ApplicationUser user, string location, string type)> Users { get; set; }
-        public List<(ApplicationUser user, string location)> Admins{ get; set; }
+        public List<ApplicationUser> Users { get; set; }
+        public List<ApplicationUser> Admins{ get; set; }
 
         public async Task OnGetAsync()
         {
-            var users = _userManager.Users.Include(u => u.Citizen).Include(u => u.ServiceProvider).ToList();
-            Users = new List<(ApplicationUser, string, string)>();
-            Admins = new List<(ApplicationUser, string)>();
+            var users = _userManager.Users
+                .Include(u => u.Citizen)
+                .Include(u => u.ServiceProvider)
+                .ThenInclude(u => u.ServiceType)
+                .Include(u => u.District)
+                .ThenInclude(u => u.City)
+                .ToList();
+            Users = new List<ApplicationUser>();
+            Admins = new List<ApplicationUser>();
 
             foreach (var user in users)
             {
-                var district = await _districtService.GetDistrictByIdAsync(user.DistrictId);
-                string loc = district.CityName + ", " + district.Name;
                 var claims = await _userManager.GetClaimsAsync(user);
-                string typ;
-                if (user.Citizen != null)
-                {
-                    typ = "Citizen";
-                }
-                else if (user.ServiceProvider != null)
-                {
-                    typ = "Service Provider";
-                }
-                else
-                {
-                    typ = "None";
-                }
 
                 var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsAdmin");
                 if (isAdminClaim != null)
                 {
-                    Admins.Add((user, loc));
+                    Admins.Add(user);
                 }
                 else
                 {
-                    Users.Add((user, loc, typ));
+                    Users.Add(user);
                 }
             }
         }

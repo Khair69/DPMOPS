@@ -21,15 +21,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var (user, loc, typ) in Model.Users)
+                @foreach (var user in Model.Users)
                 {
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
-                        <td>@typ</td>
+                        <td>
+                            @if (user.Citizen != null)
+                            {
+                                @:Citizen
+                            }
+                            else if (user.ServiceProvider != null)
+                            {
+                                @:Service Provider
+                            }
+                        </td>
                         <td>@user.DateOfBirth.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@loc</td>
+                        <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/MakeAdmin" asp-route-id=@user.Id class="w-100 btn btn-primary">Make Admin</a></td>
                     </tr>
                 }
@@ -59,14 +68,14 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var (user, loc) in Model.Admins)
+                @foreach (var user in Model.Admins)
                 {
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
                         <td>@user.DateOfBirth.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@loc</td>
+                        <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/RemoveAdmin" asp-route-id=@user.Id class="w-100 btn btn-danger btn-danger">Remove Admin</a></td>
                     </tr>
                 }

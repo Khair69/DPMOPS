@@ -17,8 +17,13 @@ namespace DPMOPS.Services.ReportRequest
         {
             var requests = await _context.ReportRequests
                 .Include(r => r.Citizen)
+                .ThenInclude(r => r.Account)
                 .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.Account)
+                .Include(r => r.ServiceProvider)
+                    .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
+                .ThenInclude(r => r.City)
                 .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
@@ -32,9 +37,13 @@ namespace DPMOPS.Services.ReportRequest
                 rrdto.Description = request.Description;
                 rrdto.Reason = request.Reason;
                 rrdto.DistrictId = request.DistrictId;
+                rrdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 rrdto.Status = request.Status.State;
                 rrdto.CitizenId = request.CitizenId;
+                rrdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 rrdto.ServiceProviderId = request.ServiceProviderId;
+                rrdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
+                rrdto.ServiceType = request.ServiceProvider.ServiceType.Name;
                 rrdto.StatusId = request.StatusId;
 
                 RrDto.Add(rrdto);
