@@ -16,7 +16,7 @@ using System.Security.Claims;
 namespace DPMOPS.Pages.ServiceRequest
 {
     [Authorize("IsCitizen")]
-    public class AddServiceRequestModel : PageModel
+    public class AddRequestModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,7 +24,7 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IDistrictService _districtService;
         private readonly IServiceProviderService _serviceProviderService;
 
-        public AddServiceRequestModel(IServiceRequestService serviceRequestService,
+        public AddRequestModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager,
             ICityService cityService,
             IDistrictService districtService,
