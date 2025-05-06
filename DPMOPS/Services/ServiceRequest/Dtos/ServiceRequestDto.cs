@@ -1,4 +1,6 @@
-﻿namespace DPMOPS.Services.ServiceRequest.Dtos
+﻿using DPMOPS.Models;
+
+namespace DPMOPS.Services.ServiceRequest.Dtos
 {
     public class ServiceRequestDto
     {
@@ -11,7 +13,7 @@
 
         public Guid DistrictId { get; set; }
         public string? Address { get; set; }
-        public string? Status { get; set; }
+        public Status Status { get; set; }
 
         public string? CitizenName { get; set; }
         public string? ProviderName { get; set; }
@@ -19,6 +21,5 @@
 
         public Guid CitizenId { get; set; }
         public Guid ServiceProviderId { get; set; }
-        public Guid StatusId { get; set; }
     }
 }

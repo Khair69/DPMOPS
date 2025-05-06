@@ -4,6 +4,7 @@ using DPMOPS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DPMOPS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506112314_ConvertStatusToEnum")]
+    partial class ConvertStatusToEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,7 +126,7 @@ namespace DPMOPS.Data.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("Citizens", (string)null);
+                    b.ToTable("Citizens");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.City", b =>
@@ -139,7 +142,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasKey("CityId");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.District", b =>
@@ -160,7 +163,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Districts", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.ReportRequest", b =>
@@ -202,7 +205,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasIndex("ServiceProviderId");
 
-                    b.ToTable("ReportRequests", (string)null);
+                    b.ToTable("ReportRequests");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.ServiceProvider", b =>
@@ -225,7 +228,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasIndex("ServiceTypeId");
 
-                    b.ToTable("ServiceProviders", (string)null);
+                    b.ToTable("ServiceProviders");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.ServiceRequest", b =>
@@ -269,7 +272,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasIndex("ServiceProviderId");
 
-                    b.ToTable("ServiceRequests", (string)null);
+                    b.ToTable("ServiceRequests");
                 });
 
             modelBuilder.Entity("DPMOPS.Models.ServiceType", b =>
@@ -284,7 +287,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasKey("ServiceTypeId");
 
-                    b.ToTable("ServiceTypes", (string)null);
+                    b.ToTable("ServiceTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

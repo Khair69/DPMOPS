@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Data;
+using DPMOPS.Models;
 using DPMOPS.Services.ReportRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,6 @@ namespace DPMOPS.Services.ReportRequest
                     .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
                 .ThenInclude(r => r.City)
-                .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ReportRequestDto> RrDto = new List<ReportRequestDto>();
@@ -38,13 +38,12 @@ namespace DPMOPS.Services.ReportRequest
                 rrdto.Reason = request.Reason;
                 rrdto.DistrictId = request.DistrictId;
                 rrdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                rrdto.Status = request.Status.State;
+                rrdto.Status = (Status)request.StatusId;
                 rrdto.CitizenId = request.CitizenId;
                 rrdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 rrdto.ServiceProviderId = request.ServiceProviderId;
                 rrdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
                 rrdto.ServiceType = request.ServiceProvider.ServiceType.Name;
-                rrdto.StatusId = request.StatusId;
 
                 RrDto.Add(rrdto);
             }

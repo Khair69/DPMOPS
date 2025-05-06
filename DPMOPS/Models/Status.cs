@@ -1,15 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DPMOPS.Models
+﻿namespace DPMOPS.Models
 {
-    public class Status
+    public enum Status
     {
-        public Guid StatusId { get; set; }
-
-        [Required]
-        public string? State { get; set; }
-
-        public ICollection<ServiceRequest>? ServiceRequests { get; set; }
-        public ICollection<ReportRequest>? ReportRequests { get; set; }
+        Pending = 1,
+        Approved = 2,
+        InProgress = 3,
+        Suspended = 4,
+        Rejected = 5,
+        Completed = 6
     }
 }

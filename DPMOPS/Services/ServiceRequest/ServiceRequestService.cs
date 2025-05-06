@@ -25,7 +25,6 @@ namespace DPMOPS.Services.ServiceRequest
                     .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
                 .ThenInclude(r => r.City)
-                .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
@@ -39,13 +38,12 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Reason = request.Reason;
                 srdto.DistrictId = request.DistrictId;
                 srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = request.Status.State;
+                srdto.Status = (Status)request.StatusId;
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.ServiceProviderId = request.ServiceProviderId;
                 srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
                 srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
-                srdto.StatusId = request.StatusId;
 
                 SrDto.Add(srdto);
             }
@@ -95,7 +93,6 @@ namespace DPMOPS.Services.ServiceRequest
                     .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
                 .ThenInclude(r => r.City)
-                .Include(r => r.Status)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
@@ -109,13 +106,12 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Reason = request.Reason;
                 srdto.DistrictId = request.DistrictId;
                 srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = request.Status.State;
+                srdto.Status = (Status)request.StatusId;
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.ServiceProviderId = request.ServiceProviderId;
                 srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
                 srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
-                srdto.StatusId = request.StatusId;
 
                 SrDto.Add(srdto);
             }

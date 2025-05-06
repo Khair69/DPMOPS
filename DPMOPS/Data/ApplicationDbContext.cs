@@ -18,7 +18,6 @@ namespace DPMOPS.Data
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<ReportRequest> ReportRequests { get; set; }
-        public DbSet<Status> Statuss { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,14 +94,13 @@ namespace DPMOPS.Data
                    .HasForeignKey(rr => rr.ServiceProviderId)
             );
 
-            modelBuilder.Entity<Status>().HasData(
-                new Status { StatusId = Guid.Parse("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa"), State = "Pending" },     
-                new Status { StatusId = Guid.Parse("bbbbbbbb-2222-bbbb-2222-bbbbbbbbbbbb"), State = "Approved" },     
-                new Status { StatusId = Guid.Parse("cccccccc-3333-cccc-3333-cccccccccccc"), State = "InProgress" },       
-                new Status { StatusId = Guid.Parse("dddddddd-4444-dddd-4444-dddddddddddd"), State = "Suspended" },     
-                new Status { StatusId = Guid.Parse("eeeeeeee-5555-eeee-5555-eeeeeeeeeeee"), State = "Rejected" },     
-                new Status { StatusId = Guid.Parse("ffffffff-6666-ffff-6666-ffffffffffff"), State = "Completed" } 
-            );
+            modelBuilder.Entity<ServiceRequest>()
+                .Property(e => e.StatusId)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<ReportRequest>()
+                .Property(e => e.StatusId)
+                .HasConversion<int>();
         }
     }
 }

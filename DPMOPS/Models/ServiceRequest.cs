@@ -17,12 +17,11 @@ namespace DPMOPS.Models
         public Guid CitizenId { get; set; }
         public Guid ServiceProviderId { get; set; }
         public Guid DistrictId { get; set; }
-        public Guid StatusId { get; set; } = Guid.Parse("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa");
+        public int StatusId { get; set; } = (int)Status.Pending;
 
         public Citizen? Citizen { get; set; }
         public ServiceProvider? ServiceProvider { get; set; }
         public District? District { get; set; }
-        public Status? Status { get; set; }
 
         // possible add ons:
         // public DateTime? DateCompleted { get; set; }
