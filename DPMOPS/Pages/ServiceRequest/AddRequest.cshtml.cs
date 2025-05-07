@@ -65,7 +65,6 @@ namespace DPMOPS.Pages.ServiceRequest
                 Include(u => u.Citizen)
                 .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
             SrDto.CitizenId = user.Citizen.CitizenId;
-            Console.WriteLine(SrDto.CitizenId);
             
             var successful = await _serviceRequestService.CreateServiceRequestAsync(SrDto);
 

@@ -9,6 +9,8 @@ using DPMOPS.Services.ServiceType;
 using DPMOPS.Services.Citizen;
 using DPMOPS.Services.ServiceProvider;
 using DPMOPS.Services.ServiceRequest;
+using DPMOPS.Services.UserClaim;
+using DPMOPS.Strategies.Factories;
 
 namespace DPMOPS
 {
@@ -52,6 +54,8 @@ namespace DPMOPS
             builder.Services.AddScoped<ICitizenService, CitizenService>();
             builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
+            builder.Services.AddScoped<IUserClaimService, UserClaimService>();
+            builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
 
             var app = builder.Build();
 

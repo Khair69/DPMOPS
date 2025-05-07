@@ -1,11 +1,14 @@
-﻿@page
-@model DPMOPS.Pages.ServiceRequest.IndexModel
+﻿@using DPMOPS.Services.ServiceRequest.Dtos
 @{
-    ViewData["Title"] = "Service Requests";
-}
+    var data = ViewData["UserData"] as IList<ServiceRequestDto>;
 
+
+if (data.Count() == 0){
+    <h3>You havn't made any service request</h3>
+}
+else if (data!=null){
 <div class="panel panel-default table-panel">
-    <h3>@ViewData["Title"]</h3>
+    <h3>Your Service Requests</h3>
 
     <table class="table table-hover">
         <thead>
@@ -19,10 +22,11 @@
                 <th>Provider Name</th>
                 <th>Date Reported</th>
                 <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var sr in Model.ServiceRequests)
+            @foreach (var sr in data)
             {
                 <tr>
                     <td>@sr.Description</td>
@@ -35,11 +39,16 @@
                     <td>@sr.DateCreated</td>
                     <td>@sr.Status</td>
                     <td>
+                        <a asp-page="/ServiceRequest/EditServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="/ServiceRequest/DeleteServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a asp-page="/ServiceRequest/AddRequest" class="btn btn-primary">Add Service Request</a>
 </div>
+}
+    <a asp-page="/ServiceRequest/AddRequest" class="btn btn-primary">Add Service Request</a>
+    <a asp-page="/ServiceRequest/Index" class="btn btn-primary">View All Service Requests</a>
+}

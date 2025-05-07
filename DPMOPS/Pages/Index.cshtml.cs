@@ -1,3 +1,4 @@
+using DPMOPS.Strategies.Factories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Reflection.Metadata.Ecma335;
@@ -6,14 +7,17 @@ namespace DPMOPS.Pages
 {
     public class IndexModel : PageModel
     {
-        public string? isAdmin { get; set; }
-        public string? isCitizen { get; set; }
-        public string? isProvider { get; set; }
-        public void OnGet()
+        private readonly IHomePageStrategyFactory _strategyFactory;
+
+        public IndexModel(IHomePageStrategyFactory strategyFactory)
         {
-            isAdmin = User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value;
-            isCitizen = User.Claims.FirstOrDefault(x => x.Type == "IsCitizen")?.Value;
-            isProvider = User.Claims.FirstOrDefault(x => x.Type == "IsProvider")?.Value;
+            _strategyFactory = strategyFactory;
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var strategy = await _strategyFactory.CreateStrategyAsync(User);
+            return await strategy.GetPageResult(this);
         }
     }
 }
