@@ -71,9 +71,16 @@ namespace DPMOPS.Services.ServiceRequest
             return res == 1;
         }
 
-        public Task<bool> UpdateServiceRequestAsync(UpdateServiceRequestDto srDto)
+        public async Task<bool> ChangeRequestStatusAsync(ChangeRequestStatusDto srDto)
         {
-            throw new NotImplementedException();
+            var existingRequest = await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == srDto.ServiceRequestId)
+                .FirstOrDefaultAsync();
+
+            existingRequest.StatusId = srDto.StatusId;
+
+            var saveResault = await _context.SaveChangesAsync();
+            return saveResault == 1;
         }
 
         public Task<bool> DeleteServiceRequestAsync(Guid id)

@@ -8,6 +8,7 @@
     <h1 class="display-4">Welcome</h1>
     @{
     if(Model.isAdmin == "true"){
+        <h1 class="display-4">You Are An Admin</h1>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/Location/Cities/Index">Cities</a>
         <br />
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceTypes/Index">Service Types</a>
@@ -17,12 +18,14 @@
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceProvider/Index">Service Providers</a>
     }
     else if (Model.isCitizen == "true"){
+        <h1 class="display-4">You Are A Citizen</h1>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/AddRequest">Make Service Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Index">Browse Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/RequestsByCitizen">Your Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
     }
     else if (Model.isProvider == "true"){
+        <h1 class="display-4">You Are A Service Provider</h1>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/RequestsByProvider">Your Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Index">Browse Requests</a>
         <a class="btn btn-light mb-3 w-50 fw-bold">Notifications</a>
