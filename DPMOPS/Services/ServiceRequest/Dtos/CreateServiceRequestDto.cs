@@ -23,10 +23,10 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public string? Reason { get; set; }
 
         [Required]
-        public Guid CitizenId { get; set; }
+        public Guid? CitizenId { get; set; }
         [Required]
-        public Guid ServiceProviderId { get; set; }
+        public Guid? ServiceProviderId { get; set; }
         [Required]
-        public Guid DistrictId { get; set; }
+        public Guid? DistrictId { get; set; }
     }
 }

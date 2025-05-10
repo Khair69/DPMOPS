@@ -26,6 +26,7 @@ namespace DPMOPS.Data
                 entity.HasMany(c => c.Districts)
                       .WithOne(d => d.City)
                       .HasForeignKey(d => d.CityId)
+                      .OnDelete(DeleteBehavior.Cascade)
             );
 
             modelBuilder.Entity<ApplicationUser>(entity =>
@@ -35,7 +36,7 @@ namespace DPMOPS.Data
                       .OnDelete(DeleteBehavior.Restrict)
             );
 
-            modelBuilder.Entity<Citizen>(entity => 
+            modelBuilder.Entity<Citizen>(entity =>
                 entity.HasOne(c => c.Account)
                 .WithOne(u => u.Citizen)
                 .HasForeignKey<Citizen>(c => c.AccountId)
@@ -53,26 +54,27 @@ namespace DPMOPS.Data
                     entity.HasOne(sp => sp.ServiceType)
                     .WithMany(st => st.ServiceProviders)
                     .HasForeignKey(sp => sp.ServiceTypeId)
+                    .OnDelete(DeleteBehavior.Restrict)
             );
 
             modelBuilder.Entity<ServiceRequest>(entity =>
-                   entity.HasOne(sr => sr.Citizen)
-                   .WithMany(c => c.ServiceRequests)
-                   .HasForeignKey(sr => sr.CitizenId)
-            );
+            {
+                entity.Property(e => e.CitizenId).IsRequired(false);
+                entity.Property(e => e.ServiceProviderId).IsRequired(false);
+                //entity.Property(e => e.EmployeeId).IsRequired(false);
 
-            modelBuilder.Entity<ServiceRequest>(entity =>
-                   entity.HasOne(sr => sr.ServiceProvider)
-                   .WithMany(sp => sp.ServiceRequests)
-                   .HasForeignKey(sr => sr.ServiceProviderId)
-                   .OnDelete(DeleteBehavior.Restrict)
-            );
+                entity.HasOne(sr => sr.Citizen)
+                .WithMany(c => c.ServiceRequests)
+                .HasForeignKey(sr => sr.CitizenId);
 
-            modelBuilder.Entity<ServiceRequest>(entity =>
-                   entity.HasOne(sr => sr.District)
-                   .WithMany(d => d.ServiceRequests)
-                   .HasForeignKey(sr => sr.DistrictId)
-            );
+                entity.HasOne(sr => sr.ServiceProvider)
+                .WithMany(sp => sp.ServiceRequests)
+                .HasForeignKey(sr => sr.ServiceProviderId);
+
+                entity.HasOne(sr => sr.District)
+                .WithMany(d => d.ServiceRequests)
+                .HasForeignKey(sr => sr.DistrictId);
+            });
 
             modelBuilder.Entity<ServiceRequest>()
                 .Property(e => e.StatusId)

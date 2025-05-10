@@ -14,9 +14,9 @@ namespace DPMOPS.Models
         [Required]
         public string? Reason {  get; set; }
 
-        public Guid CitizenId { get; set; }
-        public Guid ServiceProviderId { get; set; }
-        public Guid DistrictId { get; set; }
+        public Guid? CitizenId { get; set; }
+        public Guid? ServiceProviderId { get; set; }
+        public Guid? DistrictId { get; set; }
         public int StatusId { get; set; } = (int)Status.Pending;
 
         public Citizen? Citizen { get; set; }
