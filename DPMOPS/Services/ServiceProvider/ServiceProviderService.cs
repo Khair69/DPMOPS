@@ -26,10 +26,10 @@ namespace DPMOPS.Services.ServiceProvider
         {
             var providers = await _context.ServiceProviders
                 .Include(sp => sp.Account)
-                .ThenInclude(a => a.District)
-                .ThenInclude(a => a.City)
+                    .ThenInclude(a => a.District)
+                        .ThenInclude(d => d.City)
                 .Include(sp => sp.ServiceType)
-                .Include(sp => sp.ServiceRequests)
+                .Include(sp => sp.Employees)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -46,7 +46,7 @@ namespace DPMOPS.Services.ServiceProvider
                 spDto.DistrictId = provider.Account.DistrictId;
                 spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
                 spDto.DateOfBirth = provider.Account.DateOfBirth;
-                spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
+                spDto.NumberOfEmployees = provider.Employees.Count();
                 SpDto.Add(spDto);
 
             }
@@ -60,7 +60,7 @@ namespace DPMOPS.Services.ServiceProvider
                 .ThenInclude(a => a.District)
                 .ThenInclude(a => a.City)
                 .Include(sp => sp.ServiceType)
-                .Include(sp => sp.ServiceRequests)
+                .Include(sp => sp.Employees)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(sp => sp.ServiceProviderId == id);
 
@@ -74,12 +74,12 @@ namespace DPMOPS.Services.ServiceProvider
             spDto.DistrictId = provider.Account.DistrictId;
             spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
             spDto.DateOfBirth = provider.Account.DateOfBirth;
-            spDto.NumberOfServiceRequests = provider.ServiceRequests.Count();
+            spDto.NumberOfEmployees = provider.Employees.Count();
 
             return spDto;
         }
 
-        public async Task<bool> MakeServiceProviderAsync(CreateServiceProviderDto SpDto)
+        public async Task<bool> AddServiceProviderAsync(CreateServiceProviderDto SpDto)
         {
             var provider = new Models.ServiceProvider();
             provider.ServiceProviderId = Guid.NewGuid();
@@ -94,8 +94,8 @@ namespace DPMOPS.Services.ServiceProvider
                 var selUser = await _userManager.FindByIdAsync(SpDto.AccountId);
                 if (selUser == null) return false;
                 var claim = new Claim("IsProvider", "true");
-                var resault = await _userManager.AddClaimAsync(selUser, claim);
-                if (resault != null) return true;
+                var result = await _userManager.AddClaimAsync(selUser, claim);
+                if (result != null) return true;
                 return false;
             }
 
@@ -113,8 +113,8 @@ namespace DPMOPS.Services.ServiceProvider
 
             existingProvider.ServiceTypeId = SpDto.ServiceTypeId;
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<bool> DeleteServiceProviderAsync(Guid id)
@@ -129,9 +129,9 @@ namespace DPMOPS.Services.ServiceProvider
 
             _context.ServiceProviders.Remove(existingProvider);
 
-            var saveResault = await _context.SaveChangesAsync();
+            var saveresult = await _context.SaveChangesAsync();
 
-            if (saveResault == 1)
+            if (saveresult == 1)
             {
                 var selUser = await _userManager.FindByIdAsync(AccId);
                 if (selUser == null) return false;
@@ -143,7 +143,7 @@ namespace DPMOPS.Services.ServiceProvider
                 return false;
             }
 
-            return saveResault == 1;
+            return saveresult == 1;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetServiceProvidersOptionsAsync()

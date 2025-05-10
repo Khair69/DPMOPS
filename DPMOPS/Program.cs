@@ -11,6 +11,7 @@ using DPMOPS.Services.ServiceProvider;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
 using DPMOPS.Strategies.Factories;
+using DPMOPS.Services.Employee;
 
 namespace DPMOPS
 {
@@ -54,6 +55,7 @@ namespace DPMOPS
             builder.Services.AddScoped<ICitizenService, CitizenService>();
             builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
             builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
 

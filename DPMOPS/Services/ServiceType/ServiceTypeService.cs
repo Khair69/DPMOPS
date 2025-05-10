@@ -69,8 +69,8 @@ namespace DPMOPS.Services.ServiceType
 
             existingSt.Name = stDto.Name;
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<bool> DeleteServiceTypeAsync(Guid id)
@@ -83,8 +83,8 @@ namespace DPMOPS.Services.ServiceType
 
             _context.ServiceTypes.Remove(existingSt);
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetServiceTypeOptionsAsync()

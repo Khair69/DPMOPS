@@ -17,6 +17,7 @@ namespace DPMOPS.Data
         public DbSet<Models.ServiceProvider> ServiceProviders { get; set; }
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +44,13 @@ namespace DPMOPS.Data
                 .OnDelete(DeleteBehavior.Cascade)
             );
 
+            modelBuilder.Entity<Employee>(entity =>
+            entity.HasOne(e => e.Account)
+            .WithOne(u => u.Employee)
+            .HasForeignKey<Employee>(e => e.AccountId)
+            .OnDelete(DeleteBehavior.Cascade)
+            );
+
             modelBuilder.Entity<Models.ServiceProvider>(entity =>
                 entity.HasOne(sp => sp.Account)
                 .WithOne(u => u.ServiceProvider)
@@ -51,25 +59,30 @@ namespace DPMOPS.Data
             );
 
             modelBuilder.Entity<Models.ServiceProvider>(entity =>
-                    entity.HasOne(sp => sp.ServiceType)
-                    .WithMany(st => st.ServiceProviders)
-                    .HasForeignKey(sp => sp.ServiceTypeId)
-                    .OnDelete(DeleteBehavior.Restrict)
-            );
+            {
+                entity.HasOne(sp => sp.ServiceType)
+                .WithMany(st => st.ServiceProviders)
+                .HasForeignKey(sp => sp.ServiceTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(sp => sp.Employees)
+                .WithOne(e => e.ServiceProvider)
+                .HasForeignKey(e => e.ServiceProviderId)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
 
             modelBuilder.Entity<ServiceRequest>(entity =>
             {
                 entity.Property(e => e.CitizenId).IsRequired(false);
-                entity.Property(e => e.ServiceProviderId).IsRequired(false);
-                //entity.Property(e => e.EmployeeId).IsRequired(false);
+                entity.Property(e => e.EmployeeId).IsRequired(false);
 
                 entity.HasOne(sr => sr.Citizen)
                 .WithMany(c => c.ServiceRequests)
                 .HasForeignKey(sr => sr.CitizenId);
 
-                entity.HasOne(sr => sr.ServiceProvider)
+                entity.HasOne(sr => sr.Employee)
                 .WithMany(sp => sp.ServiceRequests)
-                .HasForeignKey(sr => sr.ServiceProviderId);
+                .HasForeignKey(sr => sr.EmployeeId);
 
                 entity.HasOne(sr => sr.District)
                 .WithMany(d => d.ServiceRequests)

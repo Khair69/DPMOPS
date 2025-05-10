@@ -76,8 +76,8 @@ namespace DPMOPS.Services.District
             existingDistrict.Name = districtDto.Name;
             existingDistrict.CityId = districtDto.CityId;
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<bool> DeleteDistrictAsync(Guid id)
@@ -90,8 +90,8 @@ namespace DPMOPS.Services.District
 
             _context.Districts.Remove(exsistingDistrict);
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetDistrictOptionsByCityAsync(Guid cityId)

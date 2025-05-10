@@ -17,9 +17,10 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
 
         public string? CitizenName { get; set; }
         public string? ProviderName { get; set; }
+        public string? EmployeeName { get; set; }
         public string? ServiceType { get; set; }
 
         public Guid? CitizenId { get; set; }
-        public Guid? ServiceProviderId { get; set; }
+        public Guid? EmployeeId { get; set; }
     }
 }

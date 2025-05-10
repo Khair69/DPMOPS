@@ -76,7 +76,7 @@ namespace DPMOPS.Pages.ServiceProvider
 
             SpDto.AccountId = Account.Id;
 
-            var success = await _serviceProviderService.MakeServiceProviderAsync(SpDto);
+            var success = await _serviceProviderService.AddServiceProviderAsync(SpDto);
             if (!success) return BadRequest();
 
             return RedirectToPage("Index");

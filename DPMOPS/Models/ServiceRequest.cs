@@ -15,12 +15,12 @@ namespace DPMOPS.Models
         public string? Reason {  get; set; }
 
         public Guid? CitizenId { get; set; }
-        public Guid? ServiceProviderId { get; set; }
+        public Guid? EmployeeId { get; set; }
         public Guid? DistrictId { get; set; }
         public int StatusId { get; set; } = (int)Status.Pending;
 
         public Citizen? Citizen { get; set; }
-        public ServiceProvider? ServiceProvider { get; set; }
+        public Employee? Employee { get; set; }
         public District? District { get; set; }
 
         // possible add ons:

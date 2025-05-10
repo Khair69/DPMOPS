@@ -19,12 +19,16 @@ namespace DPMOPS.Services.ServiceRequest
             var requests = await _context.ServiceRequests
                 .Include(r => r.Citizen)
                 .ThenInclude(r => r.Account)
-                .Include(r => r.ServiceProvider)
+                .Include(r => r.Employee)
                     .ThenInclude(sp => sp.Account)
-                .Include(r => r.ServiceProvider)
-                    .ThenInclude(sp => sp.ServiceType)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
-                .ThenInclude(r => r.City)
+                    .ThenInclude(d => d.City)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
@@ -41,9 +45,10 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Status = (Status)request.StatusId;
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.ServiceProviderId = request.ServiceProviderId;
-                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
+                srdto.EmployeeId = request.EmployeeId;
+                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
+                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
 
                 SrDto.Add(srdto);
             }
@@ -63,7 +68,7 @@ namespace DPMOPS.Services.ServiceRequest
             Sr.Description = srDto.Description;
             Sr.Reason = srDto.Reason;
             Sr.CitizenId = srDto.CitizenId;
-            Sr.ServiceProviderId = srDto.ServiceProviderId;
+            Sr.EmployeeId = srDto.EmployeeId;
             Sr.DistrictId = srDto.DistrictId;
 
             _context.ServiceRequests.Add(Sr);
@@ -79,8 +84,8 @@ namespace DPMOPS.Services.ServiceRequest
 
             existingRequest.StatusId = srDto.StatusId;
 
-            var saveResault = await _context.SaveChangesAsync();
-            return saveResault == 1;
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public Task<bool> DeleteServiceRequestAsync(Guid id)
@@ -93,13 +98,17 @@ namespace DPMOPS.Services.ServiceRequest
             var requests = await _context.ServiceRequests
                 .Where(r => r.CitizenId == id)
                 .Include(r => r.Citizen)
-                .ThenInclude(r => r.Account)
-                .Include(r => r.ServiceProvider)
+                    .ThenInclude(r => r.Account)
+                .Include(r => r.Employee)
                     .ThenInclude(sp => sp.Account)
-                .Include(r => r.ServiceProvider)
-                    .ThenInclude(sp => sp.ServiceType)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
-                .ThenInclude(r => r.City)
+                    .ThenInclude(d => d.City)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
@@ -116,27 +125,32 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Status = (Status)request.StatusId;
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.ServiceProviderId = request.ServiceProviderId;
-                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
+                srdto.EmployeeId = request.EmployeeId;
+                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
+                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
 
                 SrDto.Add(srdto);
             }
             return SrDto;
         }
 
-        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByProviderAsync(Guid id)
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(Guid id)
         {
             var requests = await _context.ServiceRequests
-                .Where(r => r.ServiceProviderId == id)
+                .Where(r => r.EmployeeId == id)
                 .Include(r => r.Citizen)
-                .ThenInclude(r => r.Account)
-                .Include(r => r.ServiceProvider)
+                    .ThenInclude(r => r.Account)
+                .Include(r => r.Employee)
                     .ThenInclude(sp => sp.Account)
-                .Include(r => r.ServiceProvider)
-                    .ThenInclude(sp => sp.ServiceType)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.ServiceType)
                 .Include(r => r.District)
-                .ThenInclude(r => r.City)
+                    .ThenInclude(d => d.City)
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
@@ -153,9 +167,10 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.Status = (Status)request.StatusId;
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.ServiceProviderId = request.ServiceProviderId;
-                srdto.ProviderName = (request.ServiceProvider.Account.FirstName + " " + request.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.ServiceProvider.ServiceType.Name;
+                srdto.EmployeeId = request.EmployeeId;
+                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
+                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
+                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
 
                 SrDto.Add(srdto);
             }

@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DPMOPS.Services.ServiceProvider.Dtos
+namespace DPMOPS.Services.Employee.Dtos
 {
-    public class CreateServiceProviderDto
+    public class CreateEmployeeDto
     {
         [Required]
         public string? AccountId { get; set; }
 
         [Required]
-        public Guid ServiceTypeId { get; set; }
+        public Guid ServiceProviderId { get; set; }
     }
 }

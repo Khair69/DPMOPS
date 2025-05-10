@@ -34,5 +34,6 @@ namespace DPMOPS.Models
         public District? District { get; set; }
         public Citizen? Citizen { get; set; }
         public ServiceProvider? ServiceProvider { get; set; }
+        public Employee? Employee { get; set; }
     }
 }

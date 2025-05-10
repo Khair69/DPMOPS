@@ -25,7 +25,7 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         [Required]
         public Guid? CitizenId { get; set; }
         [Required]
-        public Guid? ServiceProviderId { get; set; }
+        public Guid? EmployeeId { get; set; }
         [Required]
         public Guid? DistrictId { get; set; }
     }

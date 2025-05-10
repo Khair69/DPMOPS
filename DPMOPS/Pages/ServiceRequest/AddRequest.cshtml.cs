@@ -1,7 +1,7 @@
 using DPMOPS.Models;
 using DPMOPS.Services.City;
-using DPMOPS.Services.City.Dtos;
 using DPMOPS.Services.District;
+using DPMOPS.Services.Employee;
 using DPMOPS.Services.ServiceProvider;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
@@ -22,24 +22,24 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
-        private readonly IServiceProviderService _serviceProviderService;
+        private readonly IEmployeeService _employeeService;
 
         public AddRequestModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager,
             ICityService cityService,
             IDistrictService districtService,
-            IServiceProviderService serviceProviderService)
+            IEmployeeService employeeService)
         {
             _serviceRequestService = serviceRequestService;
             _userManager = userManager;
             _cityService = cityService;
             _districtService = districtService;
-            _serviceProviderService = serviceProviderService;
+            _employeeService = employeeService;
         }
 
         public IEnumerable<SelectListItem> CityOptions { get; set; }
         public IEnumerable<SelectListItem> DistrictOptions { get; set; }
-        public IEnumerable<SelectListItem> ServiceProviderOptions { get; set; }
+        public IEnumerable<SelectListItem> EmployeesOptions { get; set; }
 
         [BindProperty]
         public CreateServiceRequestDto SrDto { get; set; }
@@ -48,7 +48,7 @@ namespace DPMOPS.Pages.ServiceRequest
         {
             CityOptions = await _cityService.GetCityOptionsAsync();
             DistrictOptions = Enumerable.Empty<SelectListItem>();
-            ServiceProviderOptions = await _serviceProviderService.GetServiceProvidersOptionsAsync();
+            EmployeesOptions = await _employeeService.GetEmployeesOptionsAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -57,7 +57,7 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 CityOptions = await _cityService.GetCityOptionsAsync();
                 DistrictOptions = Enumerable.Empty<SelectListItem>();
-                ServiceProviderOptions = await _serviceProviderService.GetServiceProvidersOptionsAsync();
+                EmployeesOptions = await _employeeService.GetEmployeesOptionsAsync();
                 return Page();
             }
 

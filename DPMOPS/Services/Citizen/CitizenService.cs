@@ -35,8 +35,8 @@ namespace DPMOPS.Services.Citizen
                 var selUser = await _userManager.FindByIdAsync(AccId);
                 if (selUser == null) return false;
                 var claim = new Claim("IsCitizen", "true");
-                var resault = await _userManager.AddClaimAsync(selUser, claim);
-                if (resault != null) return true;
+                var result = await _userManager.AddClaimAsync(selUser, claim);
+                if (result != null) return true;
                 return false;
             }
 
@@ -55,9 +55,9 @@ namespace DPMOPS.Services.Citizen
 
             _context.Citizens.Remove(existingCitizen);
 
-            var saveResault = await _context.SaveChangesAsync();
+            var saveresult = await _context.SaveChangesAsync();
 
-            if (saveResault == 1)
+            if (saveresult == 1)
             {
                 var selUser = await _userManager.FindByIdAsync(AccId);
                 if (selUser == null) return false;
@@ -69,7 +69,7 @@ namespace DPMOPS.Services.Citizen
                 return false;
             }
 
-            return saveResault == 1;
+            return saveresult == 1;
         }
 
         public async Task<IList<CitizenDto>> GetAllCitizensAsync()

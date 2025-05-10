@@ -7,7 +7,7 @@ namespace DPMOPS.Services.ServiceProvider
     {
         Task<IList<ServiceProviderDto>> GetAllProvidersAsync();
         Task<ServiceProviderDto> GetProviderByIdAsync(Guid id);
-        Task<bool> MakeServiceProviderAsync(CreateServiceProviderDto SpDto);
+        Task<bool> AddServiceProviderAsync(CreateServiceProviderDto SpDto);
         Task<bool> UpdateServiceProviderAsync(UpdateServiceProviderDto SpDto);
         Task<bool> DeleteServiceProviderAsync(Guid id);
         Task<IEnumerable<SelectListItem>> GetServiceProvidersOptionsAsync();

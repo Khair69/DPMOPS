@@ -1,10 +1,14 @@
-﻿namespace DPMOPS.Services.ServiceProvider.Dtos
+﻿namespace DPMOPS.Services.Employee.Dtos
 {
-    public class ServiceProviderDto
+    public class EmployeeDto
     {
-        public Guid ServiceProviderId { get; set; }
+        public Guid EmployeeId { get; set; }
 
         public string? AccountId { get; set; }
+
+        public string? EmployeeName { get; set; }
+
+        public Guid ServiceProviderId { get; set; }
 
         public string? ProviderName { get; set; }
 
@@ -12,7 +16,7 @@
 
         public string? ServiceType { get; set; }
 
-        public string? ProviderEmail { get; set; }
+        public string? EmployeeEmail { get; set; }
 
         public Guid DistrictId { get; set; }
 
@@ -20,6 +24,6 @@
 
         public DateTime DateOfBirth { get; set; }
 
-        public int NumberOfEmployees { get; set; }
+        public int NumberOfServiceRequests { get; set; }
     }
 }
