@@ -7,5 +7,6 @@ namespace DPMOPS.Services.UserClaim
         bool IsAdmin(ClaimsPrincipal user);
         bool IsProvider(ClaimsPrincipal user);
         bool IsCitizen(ClaimsPrincipal user);
+        bool IsEmployee(ClaimsPrincipal user);
     }
 }

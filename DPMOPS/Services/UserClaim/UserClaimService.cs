@@ -14,10 +14,14 @@ namespace DPMOPS.Services.UserClaim
             return user.HasClaim(x => x.Type == "IsCitizen" && x.Value == "true");
         }
 
+        public bool IsEmployee(ClaimsPrincipal user)
+        {
+            return user.HasClaim(x => x.Type == "IsEmployee" && x.Value == "true");
+        }
+
         public bool IsProvider(ClaimsPrincipal user)
         {
             return user.HasClaim(x => x.Type == "IsProvider" && x.Value == "true");
         }
-
     }
 }
