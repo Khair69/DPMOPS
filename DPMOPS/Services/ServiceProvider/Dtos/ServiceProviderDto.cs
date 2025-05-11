@@ -18,8 +18,6 @@
 
         public string? Address { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
-
         public int NumberOfEmployees { get; set; }
     }
 }

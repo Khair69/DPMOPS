@@ -1,8 +1,8 @@
 using DPMOPS.Models;
 using DPMOPS.Services.Citizen;
+using DPMOPS.Services.Employee;
+using DPMOPS.Services.Employee.Dtos;
 using DPMOPS.Services.ServiceProvider;
-using DPMOPS.Services.ServiceProvider.Dtos;
-using DPMOPS.Services.ServiceType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,38 +10,33 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
+using System.Security.Claims;
 
-namespace DPMOPS.Pages.ServiceProvider
+namespace DPMOPS.Pages.Employees
 {
-    [Authorize("IsAdmin")]
-    public class AddServiceProviderModel : PageModel
+    [Authorize("IsProvider")]
+    public class AddEmployeeModel : PageModel
     {
         private readonly ICitizenService _citizenService;
-        private readonly IServiceProviderService _serviceProviderService;
+        private readonly IEmployeeService _employeeService;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IServiceTypeService _serviceTypeService;
 
-        public AddServiceProviderModel(ICitizenService citizenService,
-            IServiceProviderService serviceProviderService,
-            UserManager<ApplicationUser> userManager,
-            IServiceTypeService serviceTypeService)
+        public AddEmployeeModel(ICitizenService citizenService,
+            IEmployeeService employeeService,
+            UserManager<ApplicationUser> userManager)
         {
             _citizenService = citizenService;
-            _serviceProviderService = serviceProviderService;
+            _employeeService = employeeService;
             _userManager = userManager;
-            _serviceTypeService = serviceTypeService;
         }
 
-        public IEnumerable<SelectListItem> ServiceTypeOptions { get; set; }
         public IEnumerable<SelectListItem> CitizensOptions { get; set; }
 
         [BindProperty]
-        public CreateServiceProviderDto SpDto { get; set; }
+        public CreateEmployeeDto EmployeeDto { get; set; }
 
         public async Task OnGetAsync()
         {
-            ServiceTypeOptions = await _serviceTypeService.GetServiceTypeOptionsAsync();
             CitizensOptions = await _citizenService.GetCitizensOptionsAsync();
         }
 
@@ -49,14 +44,13 @@ namespace DPMOPS.Pages.ServiceProvider
         {
             if (!ModelState.IsValid)
             {
-                ServiceTypeOptions = await _serviceTypeService.GetServiceTypeOptionsAsync();
                 CitizensOptions = await _citizenService.GetCitizensOptionsAsync();
                 return Page();
             }
 
             var Account = await _userManager.Users
                 .Include(u => u.Citizen)
-                .FirstOrDefaultAsync(u => u.Id == SpDto.AccountId);
+                .FirstOrDefaultAsync(u => u.Id == EmployeeDto.AccountId);
             if (Account == null) return NotFound();
 
             if (Account.Citizen != null)
@@ -66,7 +60,12 @@ namespace DPMOPS.Pages.ServiceProvider
                 if (!suc) return BadRequest();
             }
 
-            var success = await _serviceProviderService.AddServiceProviderAsync(SpDto);
+            var user = await _userManager.Users.
+                Include(u => u.ServiceProvider)
+                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            EmployeeDto.ServiceProviderId = user.ServiceProvider.ServiceProviderId;
+
+            var success = await _employeeService.AddEmployeeAsync(EmployeeDto);
             if (!success) return BadRequest();
 
             return RedirectToPage("Index");

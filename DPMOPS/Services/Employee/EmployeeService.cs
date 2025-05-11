@@ -37,7 +37,7 @@ namespace DPMOPS.Services.Employee
                 .ToListAsync();
 
             IList<EmployeeDto> EmpDto = new List<EmployeeDto>();
-            foreach (var employee in employees) 
+            foreach (var employee in employees)
             {
                 EmployeeDto employeeDto = new EmployeeDto();
                 employeeDto.EmployeeId = employee.EmployeeId;
@@ -50,7 +50,6 @@ namespace DPMOPS.Services.Employee
                 employeeDto.EmployeeEmail = employee.Account.Email;
                 employeeDto.DistrictId = employee.Account.DistrictId;
                 employeeDto.Address = (employee.Account.District.City.Name + ", " + employee.Account.District.Name);
-                employeeDto.DateOfBirth = employee.Account.DateOfBirth;
                 employeeDto.NumberOfServiceRequests = employee.ServiceRequests.Count();
                 EmpDto.Add(employeeDto);
             }
@@ -97,9 +96,44 @@ namespace DPMOPS.Services.Employee
                 .Select(e => new SelectListItem
                 {
                     Value = e.EmployeeId.ToString(),
-                    Text = (e.Account.FirstName +" "+e.Account.LastName)
+                    Text = (e.Account.FirstName + " " + e.Account.LastName)
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IList<EmployeeDto>> GetAllEmployeesByProviderAsync(Guid id)
+        {
+            var employees = await _context.Employees
+                .Where(e => e.ServiceProviderId == id)
+                .Include(e => e.Account)
+                    .ThenInclude(a => a.District)
+                        .ThenInclude(c => c.City)
+                .Include(e => e.ServiceProvider)
+                    .ThenInclude(sp => sp.ServiceType)
+                 .Include(e => e.ServiceProvider)
+                    .ThenInclude(sp => sp.Account)
+                .Include(e => e.ServiceRequests)
+                .AsNoTracking()
+                .ToListAsync();
+
+            IList<EmployeeDto> EmpDto = new List<EmployeeDto>();
+            foreach (var employee in employees)
+            {
+                EmployeeDto employeeDto = new EmployeeDto();
+                employeeDto.EmployeeId = employee.EmployeeId;
+                employeeDto.AccountId = employee.AccountId;
+                employeeDto.EmployeeName = (employee.Account.FirstName + " " + employee.Account.LastName);
+                employeeDto.ServiceProviderId = employee.ServiceProviderId;
+                employeeDto.ProviderName = employee.ServiceProvider.Account.FirstName;
+                employeeDto.ServiceTypeId = employee.ServiceProvider.ServiceTypeId;
+                employeeDto.ServiceType = employee.ServiceProvider.ServiceType.Name;
+                employeeDto.EmployeeEmail = employee.Account.Email;
+                employeeDto.DistrictId = employee.Account.DistrictId;
+                employeeDto.Address = (employee.Account.District.City.Name + ", " + employee.Account.District.Name);
+                employeeDto.NumberOfServiceRequests = employee.ServiceRequests.Count();
+                EmpDto.Add(employeeDto);
+            }
+            return EmpDto;
         }
     }
 }

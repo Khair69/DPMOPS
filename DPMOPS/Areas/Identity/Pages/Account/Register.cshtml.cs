@@ -127,11 +127,6 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             [StringLength(25, ErrorMessage = "Your last name must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             public string? LastName { get; set; }
 
-            [Required]
-            [DataType(DataType.Date)]
-            [Display(Name = "Birth Date")]
-            public DateTime DateOfBirth { get; set; }
-
             [Display(Name = "Location")]
             [Required]
             public Guid DistrictId { get; set; }
@@ -163,7 +158,6 @@ namespace DPMOPS.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.DateOfBirth = Input.DateOfBirth;
                 user.DistrictId = Input.DistrictId;
                 user.DateCreated = DateTime.Now;
 

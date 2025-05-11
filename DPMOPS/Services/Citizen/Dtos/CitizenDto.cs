@@ -14,8 +14,6 @@
 
         public string? Address { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
-
         public int NumberOfServiceRequests { get; set; }
     }
 }

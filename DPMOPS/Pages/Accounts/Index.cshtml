@@ -14,7 +14,6 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Type</th>
-                    <th>Date of Birth</th>
                     <th>Date Created</th>
                     <th>Location</th>
                     <th></th>
@@ -36,7 +35,6 @@
                                 @:Service Provider
                             }
                         </td>
-                        <td>@user.DateOfBirth.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/MakeAdmin" asp-route-id=@user.Id class="w-100 btn btn-primary">Make Admin</a></td>
@@ -61,7 +59,6 @@ else
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Date of Birth</th>
                     <th>Date Created</th>
                     <th>Location</th>
                     <th></th>
@@ -73,7 +70,6 @@ else
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
-                        <td>@user.DateOfBirth.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/RemoveAdmin" asp-route-id=@user.Id class="w-100 btn btn-danger btn-danger">Remove Admin</a></td>

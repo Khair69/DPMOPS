@@ -1,4 +1,3 @@
-using DPMOPS.Services.Citizen.Dtos;
 using DPMOPS.Services.District;
 using DPMOPS.Services.ServiceProvider;
 using DPMOPS.Services.ServiceProvider.Dtos;
@@ -13,8 +12,7 @@ namespace DPMOPS.Pages.ServiceProvider
     {
         private readonly IServiceProviderService _serviceProviderService;
 
-        public IndexModel(IServiceProviderService serviceProviderService,
-             IDistrictService districtService)
+        public IndexModel(IServiceProviderService serviceProviderService)
         {
             _serviceProviderService = serviceProviderService;
         }

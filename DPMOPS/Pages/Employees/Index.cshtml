@@ -1,7 +1,7 @@
 ﻿@page
-@model DPMOPS.Pages.Citizens.IndexModel
+@model DPMOPS.Pages.Employees.IndexModel
 @{
-    ViewData["Title"] = "Citizens";
+    ViewData["Title"] = "Employees";
 }
 
 <div class="panel panel-default table-panel">
@@ -13,19 +13,20 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Loacation</th>
-                <th>Service Requests</th>
+                <th>Requests</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var c in Model.Citizens)
+            @foreach (var e in Model.Employees)
             {
                 <tr>
-                    <td>@c.CitizenName</td>
-                    <td>@c.CitizenEmail</td>
-                    <td>@c.Address</td>
-                    <td>@c.NumberOfServiceRequests</td>
+                    <td>@e.EmployeeName</td>
+                    <td>@e.EmployeeEmail</td>
+                    <td>@e.Address</td>
+                    <td>@e.NumberOfServiceRequests</td>
                     <td>
+                        <a class="btn btn-sm btn-warning">Edit</a>
                         <a class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
@@ -33,5 +34,6 @@
         </tbody>
     </table>
 
-@*     <a class="btn btn-primary">Add</a>*@
+    <a asp-page="/Employees/AddEmployee" class="btn btn-primary">Add</a>
 </div>
+

@@ -20,11 +20,6 @@ namespace DPMOPS.Models
         [Required]
         [PersonalData]
         [DataType(DataType.DateTime)]
-        public DateTime DateOfBirth { get; set; }
-
-        [Required]
-        [PersonalData]
-        [DataType(DataType.DateTime)]
         public DateTime DateCreated { get; set; }
 
         [Required]

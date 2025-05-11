@@ -45,7 +45,6 @@ namespace DPMOPS.Services.ServiceProvider
                 spDto.ProviderEmail = provider.Account.Email;
                 spDto.DistrictId = provider.Account.DistrictId;
                 spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
-                spDto.DateOfBirth = provider.Account.DateOfBirth;
                 spDto.NumberOfEmployees = provider.Employees.Count();
                 SpDto.Add(spDto);
 
@@ -73,7 +72,6 @@ namespace DPMOPS.Services.ServiceProvider
             spDto.ProviderEmail = provider.Account.Email;
             spDto.DistrictId = provider.Account.DistrictId;
             spDto.Address = (provider.Account.District.City.Name + ", " + provider.Account.District.Name);
-            spDto.DateOfBirth = provider.Account.DateOfBirth;
             spDto.NumberOfEmployees = provider.Employees.Count();
 
             return spDto;

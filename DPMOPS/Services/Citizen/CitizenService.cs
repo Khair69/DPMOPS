@@ -2,6 +2,7 @@
 using DPMOPS.Models;
 using DPMOPS.Services.Citizen.Dtos;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -92,7 +93,6 @@ namespace DPMOPS.Services.Citizen
                 citizenDto.CitizenEmail = citizen.Account.Email;
                 citizenDto.DistrictId = citizen.Account.DistrictId;
                 citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
-                citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
                 citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
                 CitizensDto.Add(citizenDto);
             }
@@ -116,10 +116,21 @@ namespace DPMOPS.Services.Citizen
             citizenDto.CitizenEmail = citizen.Account.Email;
             citizenDto.DistrictId = citizen.Account.DistrictId;
             citizenDto.Address = (citizen.Account.District.City.Name + ", " + citizen.Account.District.Name);
-            citizenDto.DateOfBirth = citizen.Account.DateOfBirth;
             citizenDto.NumberOfServiceRequests = citizen.ServiceRequests.Count();
 
             return citizenDto;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetCitizensOptionsAsync()
+        {
+            return await _context.Citizens
+                .Include(c => c.Account)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.AccountId,
+                    Text = (c.Account.FirstName + " " + c.Account.LastName)
+                })
+                .ToListAsync();
         }
     }
 }
