@@ -7,12 +7,12 @@ namespace DPMOPS.Models
         public Guid ServiceRequestId { get; set; }
 
         [Required]
-        public string? LocDescription { get; set; }
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public string? Title {  get; set; }
         [Required]
         public string? Description { get; set; }
         [Required]
-        public string? Reason {  get; set; }
+        public string? LocDescription { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         public Guid? CitizenId { get; set; }
         public Guid? EmployeeId { get; set; }

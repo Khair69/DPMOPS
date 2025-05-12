@@ -13,8 +13,8 @@ else if (data!=null){
     <table class="table table-hover">
         <thead>
             <tr>
+                <th>Title</th>
                 <th>Desc</th>
-                <th>Reason</th>
                 <th>Location</th>
                 <th>Location Desc</th>
                 <th>Service Type</th>
@@ -29,8 +29,8 @@ else if (data!=null){
             @foreach (var sr in data)
             {
                 <tr>
+                    <td>@sr.Title</td>
                     <td>@sr.Description</td>
-                    <td>@sr.Reason</td>
                     <td>@sr.Address</td>
                     <td>@sr.LocDescription</td>
                     <td>@sr.ServiceType</td>

@@ -6,22 +6,22 @@
 
 <div class="col-md-4">
     <form asp-page="AddRequest">
-        <div class="form-group mb-3">
-            <label class="control-label">Service Provider:</label>
-            <select asp-for="SrDto.EmployeeId" asp-items="Model.EmployeesOptions" class="form-control">
-                <option value=" ">-- Select Employee --</option>
-            </select>
-            <span asp-validation-for="SrDto.EmployeeId" class="text-danger"></span>
+        <div class="form-floating mb-3">
+            <input asp-for="SrDto.Title" class="form-control" placeholder="Title" />
+            <label asp-for="SrDto.Title"></label>
+            <span asp-validation-for="SrDto.Title" class="text-danger"></span>
         </div>
         <div class="form-floating mb-3">
             <input asp-for="SrDto.Description" class="form-control" placeholder="Description" />
             <label asp-for="SrDto.Description"></label>
             <span asp-validation-for="SrDto.Description" class="text-danger"></span>
         </div>
-        <div class="form-floating mb-3">
-            <input asp-for="SrDto.Reason" class="form-control" placeholder="Reason" />
-            <label asp-for="SrDto.Reason"></label>
-            <span asp-validation-for="SrDto.Reason" class="text-danger"></span>
+        <div class="form-group mb-3">
+            <label asp-for="SrDto.EmployeeId" class="control-label">Type:</label>
+            <select asp-for="SrDto.EmployeeId" asp-items="Model.EmployeesOptions" class="form-control">
+                <option value=" ">-- Select Type --</option>
+            </select>
+            <span asp-validation-for="SrDto.EmployeeId" class="text-danger"></span>
         </div>
 
         <div class="form-group mb-3">

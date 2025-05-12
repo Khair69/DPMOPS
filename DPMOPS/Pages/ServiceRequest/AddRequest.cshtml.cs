@@ -73,7 +73,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 return BadRequest();
             }
 
-            return RedirectToPage("Index");
+            return RedirectToPage("/Index");
         }
 
         public async Task<JsonResult> OnGetDistrictsByCity(Guid cityId)

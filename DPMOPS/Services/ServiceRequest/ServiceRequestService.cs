@@ -39,7 +39,7 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.LocDescription = request.LocDescription;
                 srdto.DateCreated = request.DateCreated;
                 srdto.Description = request.Description;
-                srdto.Reason = request.Reason;
+                srdto.Title = request.Title;
                 srdto.DistrictId = request.DistrictId;
                 srdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 srdto.Status = (Status)request.StatusId;
@@ -66,7 +66,7 @@ namespace DPMOPS.Services.ServiceRequest
             Sr.ServiceRequestId = Guid.NewGuid();
             Sr.LocDescription = srDto.LocDescription;
             Sr.Description = srDto.Description;
-            Sr.Reason = srDto.Reason;
+            Sr.Title= srDto.Title;
             Sr.CitizenId = srDto.CitizenId;
             Sr.EmployeeId = srDto.EmployeeId;
             Sr.DistrictId = srDto.DistrictId;
@@ -119,7 +119,7 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.LocDescription = request.LocDescription;
                 srdto.DateCreated = request.DateCreated;
                 srdto.Description = request.Description;
-                srdto.Reason = request.Reason;
+                srdto.Title = request.Title;
                 srdto.DistrictId = request.DistrictId;
                 srdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 srdto.Status = (Status)request.StatusId;
@@ -161,7 +161,7 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.LocDescription = request.LocDescription;
                 srdto.DateCreated = request.DateCreated;
                 srdto.Description = request.Description;
-                srdto.Reason = request.Reason;
+                srdto.Title = request.Title;
                 srdto.DistrictId = request.DistrictId;
                 srdto.Address = (request.District.City.Name + ", " + request.District.Name);
                 srdto.Status = (Status)request.StatusId;
