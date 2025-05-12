@@ -26,9 +26,9 @@ namespace DPMOPS.Pages.Accounts
             var users = _userManager.Users
                 .Include(u => u.Citizen)
                 .Include(u => u.ServiceProvider)
-                .ThenInclude(u => u.ServiceType)
+                .Include(u => u.Employee)
                 .Include(u => u.District)
-                .ThenInclude(u => u.City)
+                    .ThenInclude(u => u.City)
                 .ToList();
             Users = new List<ApplicationUser>();
             Admins = new List<ApplicationUser>();

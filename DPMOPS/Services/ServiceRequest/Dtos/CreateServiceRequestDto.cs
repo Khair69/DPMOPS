@@ -21,7 +21,6 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public string? Title { get; set; }
 
         public Guid? CitizenId { get; set; }
-        [Required(ErrorMessage = "the service type field is required")]
         public Guid? EmployeeId { get; set; }
         [Required(ErrorMessage = "the district field is required")]
         public Guid? DistrictId { get; set; }

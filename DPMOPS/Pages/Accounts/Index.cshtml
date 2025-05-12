@@ -34,6 +34,10 @@
                             {
                                 @:Service Provider
                             }
+                            else if (user.Employee != null)
+                            {
+                                @:Emplyee
+                            }
                         </td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>

@@ -44,7 +44,7 @@ namespace DPMOPS.Services.Employee
                 employeeDto.AccountId = employee.AccountId;
                 employeeDto.EmployeeName = (employee.Account.FirstName + " " + employee.Account.LastName);
                 employeeDto.ServiceProviderId = employee.ServiceProviderId;
-                employeeDto.ProviderName = employee.ServiceProvider.Account.FirstName;
+                employeeDto.ProviderName = (employee.ServiceProvider.Account.FirstName + " " + employee.ServiceProvider.Account.LastName);
                 employeeDto.ServiceTypeId = employee.ServiceProvider.ServiceTypeId;
                 employeeDto.ServiceType = employee.ServiceProvider.ServiceType.Name;
                 employeeDto.EmployeeEmail = employee.Account.Email;
@@ -124,7 +124,7 @@ namespace DPMOPS.Services.Employee
                 employeeDto.AccountId = employee.AccountId;
                 employeeDto.EmployeeName = (employee.Account.FirstName + " " + employee.Account.LastName);
                 employeeDto.ServiceProviderId = employee.ServiceProviderId;
-                employeeDto.ProviderName = employee.ServiceProvider.Account.FirstName;
+                employeeDto.ProviderName = (employee.ServiceProvider.Account.FirstName + " " + employee.ServiceProvider.Account.LastName);
                 employeeDto.ServiceTypeId = employee.ServiceProvider.ServiceTypeId;
                 employeeDto.ServiceType = employee.ServiceProvider.ServiceType.Name;
                 employeeDto.EmployeeEmail = employee.Account.Email;

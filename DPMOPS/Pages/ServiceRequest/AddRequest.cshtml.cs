@@ -1,16 +1,17 @@
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
-using DPMOPS.Services.Employee;
-using DPMOPS.Services.ServiceProvider;
+using DPMOPS.Services.EmployeePicker;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
+using DPMOPS.Services.ServiceType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
@@ -22,33 +23,40 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
-        private readonly IEmployeeService _employeeService;
+        private readonly IEmployeePicker _employeePicker;
+        private readonly IServiceTypeService _serviceTypeService;
 
         public AddRequestModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager,
             ICityService cityService,
             IDistrictService districtService,
-            IEmployeeService employeeService)
+            IEmployeePicker employeePicker,
+            IServiceTypeService serviceTypeService)
         {
             _serviceRequestService = serviceRequestService;
             _userManager = userManager;
             _cityService = cityService;
             _districtService = districtService;
-            _employeeService = employeeService;
+            _employeePicker = employeePicker;
+            _serviceTypeService = serviceTypeService;
         }
 
         public IEnumerable<SelectListItem> CityOptions { get; set; }
         public IEnumerable<SelectListItem> DistrictOptions { get; set; }
-        public IEnumerable<SelectListItem> EmployeesOptions { get; set; }
+        public IEnumerable<SelectListItem> ServiceTypesOptions { get; set; }
 
         [BindProperty]
         public CreateServiceRequestDto SrDto { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "The service type field is required")]
+        public Guid ServiceTypeId { get; set; }
 
         public async Task OnGetAsync()
         {
             CityOptions = await _cityService.GetCityOptionsAsync();
             DistrictOptions = Enumerable.Empty<SelectListItem>();
-            EmployeesOptions = await _employeeService.GetEmployeesOptionsAsync();
+            ServiceTypesOptions = await _serviceTypeService.GetServiceTypeOptionsAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -57,7 +65,7 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 CityOptions = await _cityService.GetCityOptionsAsync();
                 DistrictOptions = Enumerable.Empty<SelectListItem>();
-                EmployeesOptions = await _employeeService.GetEmployeesOptionsAsync();
+                ServiceTypesOptions = await _serviceTypeService.GetServiceTypeOptionsAsync();
                 return Page();
             }
 
@@ -65,6 +73,10 @@ namespace DPMOPS.Pages.ServiceRequest
                 Include(u => u.Citizen)
                 .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
             SrDto.CitizenId = user.Citizen.CitizenId;
+
+            var CityId = await _districtService.GetCityIdByDistrictAsync((Guid)SrDto.DistrictId);
+
+            SrDto.EmployeeId = await _employeePicker.PickAsync(ServiceTypeId,CityId);
             
             var successful = await _serviceRequestService.CreateServiceRequestAsync(SrDto);
 

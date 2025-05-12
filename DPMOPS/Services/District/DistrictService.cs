@@ -106,5 +106,13 @@ namespace DPMOPS.Services.District
                 })
                 .ToListAsync();
         }
+
+        public async Task<Guid> GetCityIdByDistrictAsync(Guid id)
+        {
+            var dis = await _context.Districts
+                .Where(d => d.DistrictId == id)
+                .FirstOrDefaultAsync();
+            return dis.CityId;
+        }
     }
 }

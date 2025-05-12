@@ -46,9 +46,9 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
-                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
+                srdto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
+                srdto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
+                srdto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
 
                 SrDto.Add(srdto);
             }
@@ -126,9 +126,9 @@ namespace DPMOPS.Services.ServiceRequest
                 srdto.CitizenId = request.CitizenId;
                 srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
                 srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
-                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
+                srdto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
+                srdto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
+                srdto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
 
                 SrDto.Add(srdto);
             }
