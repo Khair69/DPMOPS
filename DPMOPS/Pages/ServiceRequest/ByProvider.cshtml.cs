@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace DPMOPS.Pages.ServiceProvider
+namespace DPMOPS.Pages.ServiceRequest
 {
     [Authorize("IsProvider")]
-    public class RequestsModel : PageModel
+    public class ByProviderModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RequestsModel(IServiceRequestService serviceRequestService,
+        public ByProviderModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager)
         {
             _serviceRequestService = serviceRequestService;
