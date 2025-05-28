@@ -1,53 +1,41 @@
 ﻿@using DPMOPS.Services.ServiceRequest.Dtos
+@using Humanizer
+
+<div class="container py-4">
 @{
     var data = ViewData["UserData"] as IList<ServiceRequestDto>;
 
 
 if (data.Count() == 0){
-    <h3>You havn't made any service request</h3>
+    <h2 class="fw-bold mb-4">You havn't made any service request</h2>
 }
 else if (data!=null){
-<div class="panel panel-default table-panel">
-    <h3>Your Service Requests</h3>
+            <h2 class="fw-bold mb-4">Your Recent Requests</h2>
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Desc</th>
-                <th>Location</th>
-                <th>Location Desc</th>
-                <th>Service Type</th>
-                <th>Citizen Name</th>
-                <th>Provider</th>
-                <th>Employee</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var sr in data)
-            {
-                <tr>
-                    <td>@sr.Title</td>
-                    <td>@sr.Description</td>
-                    <td>@sr.Address</td>
-                    <td>@sr.LocDescription</td>
-                    <td>@sr.ServiceType</td>
-                    <td>@sr.CitizenName</td>
-                    <td>@sr.ProviderName</td>
-                    <td>@sr.EmployeeName</td>
-                    <td>@sr.Status</td>
-                    <td>
-                        <a asp-page="/ServiceRequest/EditServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-page="/ServiceRequest/DeleteServiceRequest" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
+            @foreach (var sr in data){
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="/placeholder.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="image didn't load correctly">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title fw-semibold">@sr.Title</h5>
+                            <p class="card-text">@sr.Description</p>
+                            <p class="card-text"><small class="text-muted">
+                                @sr.Address, @sr.LocDescription <br />
+                                @sr.DateCreated.Humanize() <br />
+                                Status: @sr.Status <br />
+                                Category: @sr.ServiceType
+                            </small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             }
-        </tbody>
-    </table>
 
-</div>
+
 }
     <a asp-page="/ServiceRequest/AddRequest" class="btn btn-primary">Add Service Request</a>
 }
+</div>
