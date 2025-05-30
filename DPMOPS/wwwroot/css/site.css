@@ -24,3 +24,7 @@ body {
 div.table-panel {
     margin-top: 15px;
 }
+
+.object-fit-cover {
+    object-fit: cover;
+}

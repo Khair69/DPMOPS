@@ -2,11 +2,11 @@
 @using Humanizer
 @model DPMOPS.Pages.ServiceRequest.ByProviderModel
 @{
-
+    ViewData["Title"] = "Requests by Provider";
 }
 <div class="container py-4">
 @if (Model.Requests.Count() == 0){
-<h2 class="fw-bold mb-4">You havn't made any service request</h2>
+<h2 class="fw-bold mb-4">You havn't received any service requests</h2>
 }
 else if (Model.Requests!=null){
 <h2 class="fw-bold mb-4">Your Recent Requests</h2>

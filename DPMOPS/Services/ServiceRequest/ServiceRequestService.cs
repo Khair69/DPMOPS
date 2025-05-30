@@ -32,7 +32,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .AsNoTracking()
                 .ToListAsync();
             IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
-            foreach(var request in requests)
+            foreach (var request in requests)
             {
                 ServiceRequestDto srdto = new ServiceRequestDto();
                 srdto.ServiceRequestId = request.ServiceRequestId;
@@ -55,9 +55,42 @@ namespace DPMOPS.Services.ServiceRequest
             return SrDto;
         }
 
-        public Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
+        public async Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var request = await _context.ServiceRequests
+                .Where(r => r.ServiceRequestId == id)
+                .Include(r => r.Citizen)
+                .ThenInclude(r => r.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(sp => sp.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.Account)
+                .Include(r => r.Employee)
+                    .ThenInclude(e => e.ServiceProvider)
+                        .ThenInclude(sp => sp.ServiceType)
+                .Include(r => r.District)
+                    .ThenInclude(d => d.City)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            ServiceRequestDto SrDto = new ServiceRequestDto();
+
+            SrDto.ServiceRequestId = request.ServiceRequestId;
+            SrDto.LocDescription = request.LocDescription;
+            SrDto.DateCreated = request.DateCreated;
+            SrDto.Description = request.Description;
+            SrDto.Title = request.Title;
+            SrDto.DistrictId = request.DistrictId;
+            SrDto.Address = (request.District.City.Name + ", " + request.District.Name);
+            SrDto.Status = (Status)request.StatusId;
+            SrDto.CitizenId = request.CitizenId;
+            SrDto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
+            SrDto.EmployeeId = request.EmployeeId;
+            SrDto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
+            SrDto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
+            SrDto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
+
+            return SrDto;
         }
 
         public async Task<bool> CreateServiceRequestAsync(CreateServiceRequestDto srDto)
@@ -66,7 +99,7 @@ namespace DPMOPS.Services.ServiceRequest
             Sr.ServiceRequestId = Guid.NewGuid();
             Sr.LocDescription = srDto.LocDescription;
             Sr.Description = srDto.Description;
-            Sr.Title= srDto.Title;
+            Sr.Title = srDto.Title;
             Sr.CitizenId = srDto.CitizenId;
             Sr.EmployeeId = srDto.EmployeeId;
             Sr.DistrictId = srDto.DistrictId;
