@@ -1,13 +1,14 @@
-﻿@page
-@model DPMOPS.Pages.Accounts.IndexModel
+﻿@page "{id}"
+@model DPMOPS.Pages.Organization.Employees.IndexModel
 @{
-    ViewData["Title"] = "Manage Accounts";
+    ViewData["Title"] = "Manage Employees";
+
 }
 
-@if (Model.Users.Any())
+@if (Model.Employees.Any())
 {
     <div class="panel panel-default table-panel">
-        <div class="panel-heading"><h3>Regular Accounts:</h3></div>
+        <div class="panel-heading"><h3>Employee Accounts:</h3></div>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -20,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var user in Model.Users)
+                @foreach (var user in Model.Employees)
                 {
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
@@ -37,7 +38,7 @@
                         </td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="/Accounts/MakeAdmin" asp-route-id="@user.Id" class="w-100 btn btn-primary">Make Admin</a></td>
+                        <td><a asp-page="" class="w-100 btn btn-primary">Make Admin</a></td>
                     </tr>
                 }
             </tbody>
@@ -46,9 +47,11 @@
 }
 else
 {
-    <div class="panel-heading"><h3>Regular Accounts:</h3></div>
+    <div class="panel-heading"><h3>Employee Accounts:</h3></div>
     <div class="alert alert-info">No users found.</div>
 }
+
+<a asp-area="Identity" asp-page="/Account/RegisterEmployee" asp-route-orgId="@Model.OrgId" class="btn btn-sm btn-primary">Add Employee</a>
 
 @if (Model.Admins.Any())
 {
@@ -72,7 +75,7 @@ else
                         <td>@user.Email</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="/Accounts/RemoveAdmin" asp-route-id="@user.Id" class="w-100 btn btn-danger btn-danger">Remove Admin</a></td>
+                        <td><a asp-page="" class="w-100 btn btn-danger btn-danger">Remove Admin</a></td>
                     </tr>
                 }
             </tbody>
@@ -85,3 +88,4 @@ else
     <div class="alert alert-info">No users found.</div>
 }
 
+<a asp-area="Identity" asp-page="/Account/RegisterOrgAdmin" asp-route-orgId="@Model.OrgId" class="btn btn-sm btn-primary">Add Admin</a>

@@ -1,14 +1,12 @@
 using DPMOPS.Models;
-using DPMOPS.Services.District;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPMOPS.Pages.Accounts
+namespace DPMOPS.Pages.Organization.Employees
 {
-    [Authorize("IsAdmin")]
+    //Auth is in this org
     public class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -18,30 +16,33 @@ namespace DPMOPS.Pages.Accounts
             _userManager = userManager;
         }
 
-        public List<ApplicationUser> Users { get; set; }
-        public List<ApplicationUser> Admins{ get; set; }
+        public List<ApplicationUser> Employees { get; set; }
+        public List<ApplicationUser> Admins { get; set; }
+        public Guid OrgId { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(Guid id)
         {
+            OrgId = id;
             var users = await _userManager.Users
+                .Where(u => u.OrganizationId == id)
                 .Include(u => u.District)
                     .ThenInclude(u => u.City)
                 .ToListAsync();
-            Users = new List<ApplicationUser>();
+            Employees = new List<ApplicationUser>();
             Admins = new List<ApplicationUser>();
 
             foreach (var user in users)
             {
                 var claims = await _userManager.GetClaimsAsync(user);
 
-                var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsAdmin");
+                var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsOrgAdmin");
                 if (isAdminClaim != null)
                 {
                     Admins.Add(user);
                 }
                 else
                 {
-                    Users.Add(user);
+                    Employees.Add(user);
                 }
             }
         }

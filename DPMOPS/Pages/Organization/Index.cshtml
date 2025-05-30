@@ -24,7 +24,7 @@
                     <td>@o.CityName</td>
                     <td>@o.NumberOfEmployees</td>
                     <td>
-                        <a asp-area="Identity" asp-page="/Account/RegisterOrgAdmin" asp-route-orgId="@o.OrganizationId" class="btn btn-sm btn-secondary">Manage Admin</a>
+                        <a asp-page="Employees/Index" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-secondary">Manage Employees</a>
                         <a asp-page="EditOrganization" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-page="" asp-route-id="" class="btn btn-sm btn-danger">Delete</a>
                     </td>
