@@ -27,17 +27,17 @@
                 <label asp-for="Input.LastName"></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div class="form-group mb-3">
-                <label class="control-label">City:</label>
-                <select asp-items="Model.CityOptions" class="form-control" id="citySelect">
+            <div class="form-floating mb-3">
+                <select asp-items="Model.CityOptions" class="form-select" id="citySelect">
                     <option value=" ">-- Select City --</option>
                 </select>
+                <label class="control-label">City</label>
             </div>
-            <div class="form-group mb-3">
-                <label asp-for="Input.DistrictId" class="control-label">District:</label>
-                <select asp-for="Input.DistrictId" asp-items="Model.DistrictOptions" class="form-control" id="districtSelect" disabled>
+            <div class="form-floating mb-3">
+                <select asp-for="Input.DistrictId" asp-items="Model.DistrictOptions" class="form-select" id="districtSelect" disabled>
                     <option value=" ">-- Select District --</option>
                 </select>
+                <label asp-for="Input.DistrictId" class="control-label">District:</label>
                 <span asp-validation-for="Input.DistrictId" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
