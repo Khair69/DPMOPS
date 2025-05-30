@@ -8,7 +8,7 @@ using DPMOPS.Services.User;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
 using DPMOPS.Strategies.Factories;
-using DPMOPS.Services.EmployeePicker;
+using DPMOPS.Services.Organization;
 
 namespace DPMOPS
 {
@@ -43,6 +43,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
             builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
+            builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
             var app = builder.Build();
 

@@ -1,0 +1,25 @@
+﻿@page
+@model DPMOPS.Pages.Organization.AddOrganizationModel
+@{
+    ViewData["Title"] = "Add an organization";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="col-md-4">
+    <form asp-page="AddOrganization">
+        <div class="form-floating mb-3">
+            <input asp-for="OrgDto.Name" class="form-control" placeholder="Name" />
+            <label asp-for="OrgDto.Name"></label>
+            <span asp-validation-for="OrgDto.Name" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select asp-for="OrgDto.CityId" asp-items="Model.CityOptions" class="form-select">
+                <option value=" ">-- Select City --</option>
+            </select>
+            <label asp-for="OrgDto.CityId" class="control-label"></label>
+            <span asp-validation-for="OrgDto.CityId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+    </form>
+</div>

@@ -1,0 +1,37 @@
+﻿@page
+@model DPMOPS.Pages.Organization.IndexModel
+@{
+    ViewData["Title"] = "Organizations";
+}
+
+<div class="panel panel-default table-panel">
+    <h3>@ViewData["Title"]</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Employees</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model.Organizations)
+            {
+                <tr>
+                    <td>@o.Name</td>
+                    <td>@o.CityName</td>
+                    <td>@o.NumberOfEmployees</td>
+                    <td>
+                        <a asp-page="" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-secondary">Manage Employees</a>
+                        <a asp-page="EditOrganization" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="" asp-route-id="" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="AddOrganization" class="btn btn-primary">Add Organization</a>
+</div>
