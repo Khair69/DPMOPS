@@ -14,7 +14,6 @@
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Type</th>
                     <th>Date Created</th>
                     <th>Location</th>
                     <th></th>
@@ -26,16 +25,6 @@
                     <tr>
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
-                        <td>
-                            @if (user.OrganizationId == null)
-                            {
-                                @:Citizen
-                            }
-                            else if (user.OrganizationId != null)
-                            {
-                                @:Employee
-                            }
-                        </td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="" class="w-100 btn btn-primary">Make Admin</a></td>
