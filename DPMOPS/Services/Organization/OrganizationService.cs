@@ -1,5 +1,6 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Services.Organization.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Organization
@@ -58,6 +59,17 @@ namespace DPMOPS.Services.Organization
                     NumberOfEmployees = o.Employees.Count()
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetOrganizationOptionsAsync()
+        {
+            return await _context.Organizations
+                .Select(o => new SelectListItem
+                {
+                    Text = o.Name,
+                    Value = o.OrganizationId.ToString()
+                })
+                .ToListAsync();
         }
 
         public async Task<bool> UpdateOrganizationAsync(UpdateOrganizationDto orgDto)
