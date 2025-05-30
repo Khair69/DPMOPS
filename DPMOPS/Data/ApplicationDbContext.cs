@@ -13,11 +13,8 @@ namespace DPMOPS.Data
 
         public DbSet<City> Cities { get; set; }
         public DbSet<District> Districts { get; set; }
-        public DbSet<Citizen> Citizens { get; set; }
-        public DbSet<Models.ServiceProvider> ServiceProviders { get; set; }
-        public DbSet<ServiceType> ServiceTypes { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
-        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,63 +28,46 @@ namespace DPMOPS.Data
             );
 
             modelBuilder.Entity<ApplicationUser>(entity =>
+            {
                 entity.HasOne(u => u.District)
                       .WithMany(d => d.Users)
                       .HasForeignKey(u => u.DistrictId)
-                      .OnDelete(DeleteBehavior.Restrict)
-            );
+                      .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Citizen>(entity =>
-                entity.HasOne(c => c.Account)
-                .WithOne(u => u.Citizen)
-                .HasForeignKey<Citizen>(c => c.AccountId)
-                .OnDelete(DeleteBehavior.Cascade)
-            );
-
-            modelBuilder.Entity<Employee>(entity =>
-            entity.HasOne(e => e.Account)
-            .WithOne(u => u.Employee)
-            .HasForeignKey<Employee>(e => e.AccountId)
-            .OnDelete(DeleteBehavior.Cascade)
-            );
-
-            modelBuilder.Entity<Models.ServiceProvider>(entity =>
-                entity.HasOne(sp => sp.Account)
-                .WithOne(u => u.ServiceProvider)
-                .HasForeignKey<Models.ServiceProvider>(sp => sp.AccountId)
-                .OnDelete(DeleteBehavior.Cascade)
-            );
-
-            modelBuilder.Entity<Models.ServiceProvider>(entity =>
-            {
-                entity.HasOne(sp => sp.ServiceType)
-                .WithMany(st => st.ServiceProviders)
-                .HasForeignKey(sp => sp.ServiceTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(sp => sp.Employees)
-                .WithOne(e => e.ServiceProvider)
-                .HasForeignKey(e => e.ServiceProviderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(u => u.Organization)
+                    .WithMany(o => o.Employees)
+                    .HasForeignKey(u => u.OrganizationId)
+                    .IsRequired(false);
             });
+
 
             modelBuilder.Entity<ServiceRequest>(entity =>
             {
-                entity.Property(e => e.CitizenId).IsRequired(false);
                 entity.Property(e => e.EmployeeId).IsRequired(false);
 
                 entity.HasOne(sr => sr.Citizen)
-                .WithMany(c => c.ServiceRequests)
+                .WithMany(c => c.CitizinServiceRequests)
                 .HasForeignKey(sr => sr.CitizenId);
 
+                entity.HasOne(sr => sr.Organization)
+                .WithMany(o => o.ServiceRequests)
+                .HasForeignKey(sr => sr.OrganizationId);
+
                 entity.HasOne(sr => sr.Employee)
-                .WithMany(sp => sp.ServiceRequests)
-                .HasForeignKey(sr => sr.EmployeeId);
+                .WithMany(e => e.EmployeeServiceRequests)
+                .HasForeignKey(sr => sr.EmployeeId)
+                .IsRequired(false);
 
                 entity.HasOne(sr => sr.District)
                 .WithMany(d => d.ServiceRequests)
                 .HasForeignKey(sr => sr.DistrictId);
             });
+
+            modelBuilder.Entity<Organization>(entity =>
+                entity.HasOne(o => o.City)
+                .WithMany(c => c.Organizations)
+                .HasForeignKey(o => o.CityId)
+            );
 
             modelBuilder.Entity<ServiceRequest>()
                 .Property(e => e.StatusId)

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using DPMOPS.Models;
+using System.Security.Claims;
 
 namespace DPMOPS.Services.UserClaim
 {
@@ -19,9 +20,9 @@ namespace DPMOPS.Services.UserClaim
             return user.HasClaim(x => x.Type == "IsEmployee" && x.Value == "true");
         }
 
-        public bool IsProvider(ClaimsPrincipal user)
+        public bool IsOrganizationAdmin(ApplicationUser user, ClaimsPrincipal claims)
         {
-            return user.HasClaim(x => x.Type == "IsProvider" && x.Value == "true");
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Models
 {
@@ -14,13 +15,16 @@ namespace DPMOPS.Models
         public string? LocDescription { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
-        public Guid? CitizenId { get; set; }
-        public Guid? EmployeeId { get; set; }
+        public string? CitizenId { get; set; }
+        public Guid? OrganizationId { get; set; }
+        [AllowNull]
+        public string? EmployeeId { get; set; }
         public Guid? DistrictId { get; set; }
         public int StatusId { get; set; } = (int)Status.Pending;
 
-        public Citizen? Citizen { get; set; }
-        public Employee? Employee { get; set; }
+        public ApplicationUser? Citizen { get; set; }
+        public ApplicationUser? Employee { get; set; }
+        public Organization? Organization { get; set; }
         public District? District { get; set; }
 
         // possible add ons:

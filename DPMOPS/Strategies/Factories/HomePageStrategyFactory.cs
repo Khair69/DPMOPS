@@ -29,11 +29,6 @@ namespace DPMOPS.Strategies.Factories
                 return ActivatorUtilities.CreateInstance<AdminHomeStrategy>(_serviceProvider);
             }
 
-            if (_claimService.IsProvider(user))
-            {
-                return ActivatorUtilities.CreateInstance<ProviderHomeStrategy>(_serviceProvider);
-            }
-
             if (_claimService.IsCitizen(user))
             {
                 return ActivatorUtilities.CreateInstance<CitizenHomeStrategy>(_serviceProvider);

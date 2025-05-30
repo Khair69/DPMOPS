@@ -5,13 +5,9 @@ using DPMOPS.Services.District;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DPMOPS.Services.User;
-using DPMOPS.Services.ServiceType;
-using DPMOPS.Services.Citizen;
-using DPMOPS.Services.ServiceProvider;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
 using DPMOPS.Strategies.Factories;
-using DPMOPS.Services.Employee;
 using DPMOPS.Services.EmployeePicker;
 
 namespace DPMOPS
@@ -26,14 +22,6 @@ namespace DPMOPS
                 options.AddPolicy(
                     "IsAdmin",
                     policyBuilder => policyBuilder.RequireClaim("IsAdmin"));
-
-                options.AddPolicy(
-                    "IsCitizen",
-                    policyBuilder => policyBuilder.RequireClaim("IsCitizen"));
-
-                options.AddPolicy(
-                    "IsProvider",
-                    policyBuilder => policyBuilder.RequireClaim("IsProvider"));
             });
 
             // Add services to the container.
@@ -52,14 +40,9 @@ namespace DPMOPS
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<IDistrictService, DistrictService>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IServiceTypeService, ServiceTypeService>();
-            builder.Services.AddScoped<ICitizenService, CitizenService>();
-            builder.Services.AddScoped<IServiceProviderService, ServiceProviderService>();
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
-            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
             builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
-            builder.Services.AddScoped<IEmployeePicker, LeastBusy>();
 
             var app = builder.Build();
 

@@ -16,11 +16,11 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public Status Status { get; set; }
 
         public string? CitizenName { get; set; }
-        public string? ProviderName { get; set; }
+        public string? OrganizationName { get; set; }
         public string? EmployeeName { get; set; }
-        public string? ServiceType { get; set; }
 
-        public Guid? CitizenId { get; set; }
-        public Guid? EmployeeId { get; set; }
+        public string? CitizenId { get; set; }
+        public Guid? OrganizationId { get; set; }
+        public string? EmployeeId { get; set; }
     }
 }

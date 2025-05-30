@@ -27,11 +27,11 @@ namespace DPMOPS.Pages.ServiceRequest
 
         public async Task OnGetAsync()
         {
-            var user = await _userManager.Users.
-                Include(u => u.ServiceProvider)
-                .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid PId = user.ServiceProvider.ServiceProviderId;
-            Requests = await _serviceRequestService.GetServiceRequestsByProviderAsync(PId);
+            //var user = await _userManager.Users.
+            //    Include(u => u.ServiceProvider)
+            //    .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //Guid PId = user.ServiceProvider.ServiceProviderId;
+            //Requests = await _serviceRequestService.GetServiceRequestsByProviderAsync(PId);
         }
     }
 }

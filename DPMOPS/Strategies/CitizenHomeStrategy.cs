@@ -23,15 +23,15 @@ namespace DPMOPS.Strategies
 
         public async Task<IActionResult> GetPageResult(PageModel pageModel)
         {
-            var user = await _userManager.Users.
-                Include(u => u.Citizen)
-                .FirstOrDefaultAsync(u => u.Id == pageModel.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid CId = user.Citizen.CitizenId;
+            //var user = await _userManager.Users.
+            //    Include(u => u.Citizen)
+            //    .FirstOrDefaultAsync(u => u.Id == pageModel.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            //Guid CId = user.Citizen.CitizenId;
 
-            var data = await _serviceRequestService.GetServiceRequestsByCitizenAsync(CId);
+            //var data = await _serviceRequestService.GetServiceRequestsByCitizenAsync(CId);
 
             pageModel.ViewData["UserType"] = "Citizen";
-            pageModel.ViewData["UserData"] = data;
+            //pageModel.ViewData["UserData"] = data;
 
             return pageModel.Page();
         }

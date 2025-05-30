@@ -2,6 +2,6 @@
 {
     public interface IEmployeePicker
     {
-        Task<Guid?> PickAsync(Guid type, Guid city);
+        Task<Guid?> PickAsync(Guid organizationId, Guid cityId);
     }
 }

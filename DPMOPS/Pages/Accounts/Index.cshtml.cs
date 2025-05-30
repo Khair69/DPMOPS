@@ -24,9 +24,9 @@ namespace DPMOPS.Pages.Accounts
         public async Task OnGetAsync()
         {
             var users = _userManager.Users
-                .Include(u => u.Citizen)
-                .Include(u => u.ServiceProvider)
-                .Include(u => u.Employee)
+                //.Include(u => u.Citizen)
+                //.Include(u => u.ServiceProvider)
+                //.Include(u => u.Employee)
                 .Include(u => u.District)
                     .ThenInclude(u => u.City)
                 .ToList();

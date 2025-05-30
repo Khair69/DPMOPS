@@ -13,5 +13,6 @@ namespace DPMOPS.Models
         public string? Name { get; set; }
 
         public ICollection<District>? Districts { get; set; }
+        public ICollection<Organization>? Organizations { get; set; }
     }
 }

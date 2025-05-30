@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Services.ServiceRequest.Dtos
 {
@@ -20,8 +21,11 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         [StringLength(150, ErrorMessage = "The title can't be shorter than {2} and longer than {1}", MinimumLength = 3)]
         public string? Title { get; set; }
 
-        public Guid? CitizenId { get; set; }
-        public Guid? EmployeeId { get; set; }
+        [Required]
+        public string? CitizenId { get; set; }
+        [AllowNull]
+        public string? EmployeeId { get; set; }
+        public Guid OrganizationId { get; set; }
         [Required(ErrorMessage = "the district field is required")]
         public Guid? DistrictId { get; set; }
     }

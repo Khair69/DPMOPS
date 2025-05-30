@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Models
 {
@@ -26,9 +27,13 @@ namespace DPMOPS.Models
         [PersonalData]
         public Guid DistrictId { get; set; }
 
+        [PersonalData]
+        [AllowNull]
+        public Guid? OrganizationId { get; set; }
+
         public District? District { get; set; }
-        public Citizen? Citizen { get; set; }
-        public ServiceProvider? ServiceProvider { get; set; }
-        public Employee? Employee { get; set; }
+        public Organization? Organization { get; set; }
+        public ICollection<ServiceRequest>? CitizinServiceRequests { get; set; }
+        public ICollection<ServiceRequest>? EmployeeServiceRequests { get; set; }
     }
 }

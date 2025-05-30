@@ -16,91 +16,50 @@ namespace DPMOPS.Services.ServiceRequest
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
         {
-            var requests = await _context.ServiceRequests
-                .Include(r => r.Citizen)
-                .ThenInclude(r => r.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.ServiceType)
-                .Include(r => r.District)
+            return await _context.ServiceRequests
+                .OrderBy(sr => sr.DateCreated)
+                .Include(sr => sr.District)
                     .ThenInclude(d => d.City)
-                .AsNoTracking()
-                .ToListAsync();
-            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
-            foreach (var request in requests)
-            {
-                ServiceRequestDto srdto = new ServiceRequestDto();
-                srdto.ServiceRequestId = request.ServiceRequestId;
-                srdto.LocDescription = request.LocDescription;
-                srdto.DateCreated = request.DateCreated;
-                srdto.Description = request.Description;
-                srdto.Title = request.Title;
-                srdto.DistrictId = request.DistrictId;
-                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = (Status)request.StatusId;
-                srdto.CitizenId = request.CitizenId;
-                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
-                srdto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
-                srdto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
 
-                SrDto.Add(srdto);
-            }
-            return SrDto;
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .ToListAsync();
         }
 
-        public async Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
+        public Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
         {
-            var request = await _context.ServiceRequests
-                .Where(r => r.ServiceRequestId == id)
-                .Include(r => r.Citizen)
-                .ThenInclude(r => r.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.ServiceType)
-                .Include(r => r.District)
-                    .ThenInclude(d => d.City)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-            ServiceRequestDto SrDto = new ServiceRequestDto();
-
-            SrDto.ServiceRequestId = request.ServiceRequestId;
-            SrDto.LocDescription = request.LocDescription;
-            SrDto.DateCreated = request.DateCreated;
-            SrDto.Description = request.Description;
-            SrDto.Title = request.Title;
-            SrDto.DistrictId = request.DistrictId;
-            SrDto.Address = (request.District.City.Name + ", " + request.District.Name);
-            SrDto.Status = (Status)request.StatusId;
-            SrDto.CitizenId = request.CitizenId;
-            SrDto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-            SrDto.EmployeeId = request.EmployeeId;
-            SrDto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
-            SrDto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
-            SrDto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
-
-            return SrDto;
+            throw new NotImplementedException();
         }
 
         public async Task<bool> CreateServiceRequestAsync(CreateServiceRequestDto srDto)
         {
             var Sr = new Models.ServiceRequest();
             Sr.ServiceRequestId = Guid.NewGuid();
-            Sr.LocDescription = srDto.LocDescription;
-            Sr.Description = srDto.Description;
             Sr.Title = srDto.Title;
+            Sr.Description = srDto.Description;
+            Sr.LocDescription = srDto.LocDescription;
             Sr.CitizenId = srDto.CitizenId;
+            Sr.OrganizationId = srDto.OrganizationId;
             Sr.EmployeeId = srDto.EmployeeId;
             Sr.DistrictId = srDto.DistrictId;
 
@@ -126,132 +85,19 @@ namespace DPMOPS.Services.ServiceRequest
             throw new NotImplementedException();
         }
 
-        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(Guid id)
+        public Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(Guid id)
         {
-            var requests = await _context.ServiceRequests
-                .Where(r => r.CitizenId == id)
-                .Include(r => r.Citizen)
-                    .ThenInclude(r => r.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.ServiceType)
-                .Include(r => r.District)
-                    .ThenInclude(d => d.City)
-                .AsNoTracking()
-                .ToListAsync();
-            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
-            foreach (var request in requests)
-            {
-                ServiceRequestDto srdto = new ServiceRequestDto();
-                srdto.ServiceRequestId = request.ServiceRequestId;
-                srdto.LocDescription = request.LocDescription;
-                srdto.DateCreated = request.DateCreated;
-                srdto.Description = request.Description;
-                srdto.Title = request.Title;
-                srdto.DistrictId = request.DistrictId;
-                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = (Status)request.StatusId;
-                srdto.CitizenId = request.CitizenId;
-                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee?.Account?.FirstName + " " + request.Employee?.Account?.LastName);
-                srdto.ProviderName = (request.Employee?.ServiceProvider?.Account?.FirstName + " " + request.Employee?.ServiceProvider?.Account?.LastName);
-                srdto.ServiceType = request.Employee?.ServiceProvider?.ServiceType?.Name;
-
-                SrDto.Add(srdto);
-            }
-            return SrDto;
+            throw new NotImplementedException();
         }
 
-        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(Guid id)
+        public Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(Guid id)
         {
-            var requests = await _context.ServiceRequests
-                .Where(r => r.EmployeeId == id)
-                .Include(r => r.Citizen)
-                    .ThenInclude(r => r.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.ServiceType)
-                .Include(r => r.District)
-                    .ThenInclude(d => d.City)
-                .AsNoTracking()
-                .ToListAsync();
-            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
-            foreach (var request in requests)
-            {
-                ServiceRequestDto srdto = new ServiceRequestDto();
-                srdto.ServiceRequestId = request.ServiceRequestId;
-                srdto.LocDescription = request.LocDescription;
-                srdto.DateCreated = request.DateCreated;
-                srdto.Description = request.Description;
-                srdto.Title = request.Title;
-                srdto.DistrictId = request.DistrictId;
-                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = (Status)request.StatusId;
-                srdto.CitizenId = request.CitizenId;
-                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
-                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
-
-                SrDto.Add(srdto);
-            }
-            return SrDto;
-
+            throw new NotImplementedException();
         }
 
-        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByProviderAsync(Guid id)
+        public Task<IList<ServiceRequestDto>> GetServiceRequestsByOrganizationAsync(Guid id)
         {
-            var requests = await _context.ServiceRequests
-                .Include(r => r.Employee)
-                .Where(r => r.Employee.ServiceProviderId == id)
-                .Include(r => r.Citizen)
-                    .ThenInclude(r => r.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.Account)
-                .Include(r => r.Employee)
-                    .ThenInclude(e => e.ServiceProvider)
-                        .ThenInclude(sp => sp.ServiceType)
-                .Include(r => r.District)
-                    .ThenInclude(d => d.City)
-                .AsNoTracking()
-                .ToListAsync();
-            IList<ServiceRequestDto> SrDto = new List<ServiceRequestDto>();
-            foreach (var request in requests)
-            {
-                ServiceRequestDto srdto = new ServiceRequestDto();
-                srdto.ServiceRequestId = request.ServiceRequestId;
-                srdto.LocDescription = request.LocDescription;
-                srdto.DateCreated = request.DateCreated;
-                srdto.Description = request.Description;
-                srdto.Title = request.Title;
-                srdto.DistrictId = request.DistrictId;
-                srdto.Address = (request.District.City.Name + ", " + request.District.Name);
-                srdto.Status = (Status)request.StatusId;
-                srdto.CitizenId = request.CitizenId;
-                srdto.CitizenName = (request.Citizen.Account.FirstName + " " + request.Citizen.Account.LastName);
-                srdto.EmployeeId = request.EmployeeId;
-                srdto.EmployeeName = (request.Employee.Account.FirstName + " " + request.Employee.Account.LastName);
-                srdto.ProviderName = (request.Employee.ServiceProvider.Account.FirstName + " " + request.Employee.ServiceProvider.Account.LastName);
-                srdto.ServiceType = request.Employee.ServiceProvider.ServiceType.Name;
-
-                SrDto.Add(srdto);
-            }
-            return SrDto;
+            throw new NotImplementedException();
         }
     }
 }

@@ -26,7 +26,7 @@
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
                         <td>
-                            @if (user.Citizen != null)
+@*                             @if (user.Citizen != null)
                             {
                                 @:Citizen
                             }
@@ -37,7 +37,7 @@
                             else if (user.Employee != null)
                             {
                                 @:Emplyee
-                            }
+                            } *@
                         </td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>

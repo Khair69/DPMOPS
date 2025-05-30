@@ -1,18 +1,18 @@
 ﻿@if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value != null)
 {
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-page="/Location/Cities/Index">Cities</a>
+        <a class="nav-link" asp-page="/Location/Cities/Index">Cities</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-page="/ServiceTypes/Index">ServiceTypes</a>
+        <a class="nav-link" asp-page="">Citizens</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-page="/Citizens/Index">Citizens</a>
+        <a class="nav-link" asp-page="">Organization</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-page="/ServiceProvider/Index">ServiceProviders</a>
-    </li>
+        <a class="nav-link" asp-page="">Employees</a>
+    </li>    
     <li class="nav-item">
-        <a class="nav-link" asp-area="" asp-page="/Employees/AllEmployees">Employees</a>
+        <a class="nav-link" asp-page="">Requests</a>
     </li>
 }
