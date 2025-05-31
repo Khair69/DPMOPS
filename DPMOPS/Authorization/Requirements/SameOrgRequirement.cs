@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace DPMOPS.Authorization.Handlers
+namespace DPMOPS.Authorization.Requirements
 {
     public class SameOrgRequirement : IAuthorizationRequirement
     {

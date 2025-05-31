@@ -9,7 +9,6 @@ using System.Text.Encodings.Web;
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
-using DPMOPS.Services.Organization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +20,6 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace DPMOPS.Areas.Identity.Pages.Account
 {
-    [Authorize("IsOrgAdmin")]
     public class RegisterEmployeeModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -131,12 +129,11 @@ namespace DPMOPS.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(Guid OrgId, string returnUrl = null)
         {
-            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, OrgId, "SameOrg");
+            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, OrgId, "IsAdminOrOrgAdmin");
             if (!authResult.Succeeded)
             {
                 return new ForbidResult();
             }
-
 
             CityOptions = await _cityService.GetCityOptionsAsync();
             DistrictOptions = Enumerable.Empty<SelectListItem>();

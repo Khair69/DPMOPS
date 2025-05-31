@@ -2,7 +2,6 @@ using DPMOPS.Data;
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using DPMOPS.Services.User;
 using DPMOPS.Services.ServiceRequest;
@@ -35,12 +34,16 @@ namespace DPMOPS
 
                 options.AddPolicy("SameOrg", policy =>
                 policy.AddRequirements(new SameOrgRequirement()));
+
+                options.AddPolicy("IsAdminOrOrgAdmin", policy =>
+                policy.AddRequirements(new AdminOrOrgAdminInOrgRequirement()));
             });
 
             builder.Services.AddScoped<IAuthorizationHandler, AdminHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, OrgAdminHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, EmployeeHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, SameOrgHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, AdminOrOrgAdminInOrgHandler>();
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

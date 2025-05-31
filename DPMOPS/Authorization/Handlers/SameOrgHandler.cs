@@ -1,10 +1,9 @@
-﻿using DPMOPS.Authorization.Handlers;
+﻿using DPMOPS.Authorization.Requirements;
 using DPMOPS.Models;
-using DPMOPS.Services.Organization.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
-namespace DPMOPS.Authorization.Requirements
+namespace DPMOPS.Authorization.Handlers
 {
     public class SameOrgHandler : AuthorizationHandler<SameOrgRequirement, Guid>
     {
