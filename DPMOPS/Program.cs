@@ -32,11 +32,15 @@ namespace DPMOPS
 
                 options.AddPolicy("IsEmployee", policy =>
                     policy.Requirements.Add(new EmployeeRequirement()));
+
+                options.AddPolicy("SameOrg", policy =>
+                policy.AddRequirements(new SameOrgRequirement()));
             });
 
             builder.Services.AddScoped<IAuthorizationHandler, AdminHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, OrgAdminHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, EmployeeHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, SameOrgHandler>();
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

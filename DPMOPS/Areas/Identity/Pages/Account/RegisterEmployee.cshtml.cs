@@ -9,6 +9,7 @@ using System.Text.Encodings.Web;
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
+using DPMOPS.Services.Organization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
+        private readonly IAuthorizationService _authService;
 
         public RegisterEmployeeModel(
             UserManager<ApplicationUser> userManager,
@@ -39,7 +41,8 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ICityService cityService,
-            IDistrictService districtService)
+            IDistrictService districtService,
+            IAuthorizationService authService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,6 +52,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _cityService = cityService;
             _districtService = districtService;
+            _authService = authService;
         }
 
         /// <summary>
@@ -125,13 +129,22 @@ namespace DPMOPS.Areas.Identity.Pages.Account
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(Guid OrgId, string returnUrl = null)
         {
+            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, OrgId, "SameOrg");
+            if (!authResult.Succeeded)
+            {
+                return new ForbidResult();
+            }
+
+
             CityOptions = await _cityService.GetCityOptionsAsync();
             DistrictOptions = Enumerable.Empty<SelectListItem>();
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            return Page();
         }
 
         public async Task<JsonResult> OnGetDistrictsByCity(Guid cityId)
