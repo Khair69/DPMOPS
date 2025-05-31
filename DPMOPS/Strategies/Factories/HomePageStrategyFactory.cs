@@ -39,6 +39,11 @@ namespace DPMOPS.Strategies.Factories
                 return ActivatorUtilities.CreateInstance<EmployeeHomeStrategy>(_serviceProvider);
             }
 
+            if (_claimService.IsOrganizationAdmin(user))
+            {
+                return ActivatorUtilities.CreateInstance<OrgAdminHomeStrategy>(_serviceProvider);
+            }
+
             return new AnonymousHomeStrategy();
         }
     }

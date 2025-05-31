@@ -8,7 +8,7 @@ namespace DPMOPS.Strategies
     {
         public async Task<IActionResult> GetPageResult(PageModel pageModel)
         {
-            return await Task.FromResult(pageModel.Page());
+            return pageModel.Page();
         }
     }
 }

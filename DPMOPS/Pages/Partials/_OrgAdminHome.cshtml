@@ -1,0 +1,10 @@
+﻿@using DPMOPS.Services.Organization.Dtos
+
+@{
+    var data = ViewData["UserData"] as OrganizationDto;
+}
+<div class="text-center">
+    <h1 class="display-4">You Are An Admin Of @data.Name</h1>
+    <hr />
+    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/Organization/Employees/Index" asp-route-id="@data.OrganizationId">Employees</a>
+</div>

@@ -12,17 +12,17 @@ namespace DPMOPS.Services.UserClaim
 
         public bool IsCitizen(ClaimsPrincipal user)
         {
-            return user.HasClaim(x => x.Type == "IsCitizen" && x.Value == "true");
+            return !user.HasClaim(x => x.Type == "OrganizationId");
         }
 
         public bool IsEmployee(ClaimsPrincipal user)
         {
-            return user.HasClaim(x => x.Type == "IsEmployee" && x.Value == "true");
+            return (user.HasClaim(x => x.Type == "OrganizationId") && !user.HasClaim(x => x.Type == "IsOrgAdmin" && x.Value == "true"));
         }
 
-        public bool IsOrganizationAdmin(ApplicationUser user, ClaimsPrincipal claims)
+        public bool IsOrganizationAdmin(ClaimsPrincipal user)
         {
-            throw new NotImplementedException();
+            return user.HasClaim(x => x.Type == "IsOrgAdmin" && x.Value == "true");
         }
     }
 }
