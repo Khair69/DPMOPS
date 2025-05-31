@@ -61,9 +61,10 @@ namespace DPMOPS.Services.Organization
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetOrganizationOptionsAsync()
+        public async Task<IEnumerable<SelectListItem>> GetOrganizationOptionsByCityAsync(Guid id)
         {
             return await _context.Organizations
+                .Where(o => o.CityId == id)
                 .Select(o => new SelectListItem
                 {
                     Text = o.Name,

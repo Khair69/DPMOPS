@@ -16,3 +16,22 @@
         }
     });
 });
+
+$(document).ready(function () {
+    $('#citySelect').change(function () {
+        var cityId = $(this).val();
+        if (cityId) {
+            $.getJSON('?handler=OrgsByCity&cityId=' + cityId, function (data) {
+                var orgSelect = $('#orgSelect');
+                orgSelect.empty();
+                orgSelect.append($('<option/>').val('').text('-- Select Organization --'));
+                $.each(data, function (index, item) {
+                    orgSelect.append($('<option/>').val(item.value).text(item.text));
+                });
+                orgSelect.prop('disabled', false);
+            });
+        } else {
+            $('#orgSelect').empty().prop('disabled', true);
+        }
+    });
+});

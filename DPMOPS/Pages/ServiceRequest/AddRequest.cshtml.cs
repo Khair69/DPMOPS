@@ -2,6 +2,7 @@ using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using DPMOPS.Services.EmployeePicker;
+using DPMOPS.Services.Organization;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -22,32 +23,33 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
+        private readonly IOrganizationService _organizationService;
 
         public AddRequestModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager,
             ICityService cityService,
-            IDistrictService districtService)
+            IDistrictService districtService,
+            IOrganizationService organizationService)
         {
             _serviceRequestService = serviceRequestService;
             _userManager = userManager;
             _cityService = cityService;
             _districtService = districtService;
+            _organizationService = organizationService;
         }
 
         public IEnumerable<SelectListItem> CityOptions { get; set; }
         public IEnumerable<SelectListItem> DistrictOptions { get; set; }
+        public IEnumerable<SelectListItem> OrganizationOptions { get; set; }
 
         [BindProperty]
         public CreateServiceRequestDto SrDto { get; set; }
-
-        [BindProperty]
-        [Required(ErrorMessage = "The service type field is required")]
-        public Guid ServiceTypeId { get; set; }
 
         public async Task OnGetAsync()
         {
             CityOptions = await _cityService.GetCityOptionsAsync();
             DistrictOptions = Enumerable.Empty<SelectListItem>();
+            OrganizationOptions = Enumerable.Empty<SelectListItem>();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -56,17 +58,14 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 CityOptions = await _cityService.GetCityOptionsAsync();
                 DistrictOptions = Enumerable.Empty<SelectListItem>();
+                OrganizationOptions = Enumerable.Empty<SelectListItem>();
                 return Page();
             }
 
-            //var user = await _userManager.Users.
-            //    Include(u => u.Citizen)
-            //    .FirstOrDefaultAsync(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier));
-            //SrDto.CitizenId = user.Citizen.CitizenId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            SrDto.CitizenId = userId;
 
-            var CityId = await _districtService.GetCityIdByDistrictAsync((Guid)SrDto.DistrictId);
-
-            //SrDto.EmployeeId = await _employeePicker.PickAsync(ServiceTypeId,CityId);
+            //for now i left the employee null
             
             var successful = await _serviceRequestService.CreateServiceRequestAsync(SrDto);
 
@@ -82,6 +81,12 @@ namespace DPMOPS.Pages.ServiceRequest
         {
             var districts = await _districtService.GetDistrictOptionsByCityAsync(cityId);
             return new JsonResult(districts);
+        }
+
+        public async Task<JsonResult> OnGetOrgsByCity(Guid cityId)
+        {
+            var orgs = await _organizationService.GetOrganizationOptionsByCityAsync(cityId);
+            return new JsonResult(orgs);
         }
     }
 }
