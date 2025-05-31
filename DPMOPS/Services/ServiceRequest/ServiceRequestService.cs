@@ -85,19 +85,103 @@ namespace DPMOPS.Services.ServiceRequest
             throw new NotImplementedException();
         }
 
-        public Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(Guid id)
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceRequests
+                .Where(sr => sr.CitizenId == id)
+                .OrderBy(sr => sr.DateCreated)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .ToListAsync();
         }
 
-        public Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(Guid id)
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(string id)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceRequests
+                .Where(sr => sr.EmployeeId == id)
+                .OrderBy(sr => sr.DateCreated)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .ToListAsync();
         }
 
-        public Task<IList<ServiceRequestDto>> GetServiceRequestsByOrganizationAsync(Guid id)
+        public async Task<IList<ServiceRequestDto>> GetServiceRequestsByOrganizationAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceRequests
+                .Where(sr => sr.OrganizationId == id)
+                .OrderBy(sr => sr.DateCreated)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .ToListAsync();
         }
     }
 }

@@ -22,24 +22,20 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
-        private readonly IEmployeePicker _employeePicker;
 
         public AddRequestModel(IServiceRequestService serviceRequestService,
             UserManager<ApplicationUser> userManager,
             ICityService cityService,
-            IDistrictService districtService,
-            IEmployeePicker employeePicker)
+            IDistrictService districtService)
         {
             _serviceRequestService = serviceRequestService;
             _userManager = userManager;
             _cityService = cityService;
             _districtService = districtService;
-            _employeePicker = employeePicker;
         }
 
         public IEnumerable<SelectListItem> CityOptions { get; set; }
         public IEnumerable<SelectListItem> DistrictOptions { get; set; }
-        public IEnumerable<SelectListItem> ServiceTypesOptions { get; set; }
 
         [BindProperty]
         public CreateServiceRequestDto SrDto { get; set; }
