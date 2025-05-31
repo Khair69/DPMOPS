@@ -9,6 +9,9 @@ using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
 using DPMOPS.Strategies.Factories;
 using DPMOPS.Services.Organization;
+using DPMOPS.Authorization.Requirements;
+using DPMOPS.Authorization.Handlers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DPMOPS
 {
@@ -18,11 +21,22 @@ namespace DPMOPS
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddAuthorization(options => {
-                options.AddPolicy(
-                    "IsAdmin",
-                    policyBuilder => policyBuilder.RequireClaim("IsAdmin"));
+            //Authorization
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsAdmin", policy =>
+                    policy.Requirements.Add(new AdminRequirement()));
+
+                options.AddPolicy("IsOrgAdmin", policy =>
+                    policy.Requirements.Add(new OrgAdminRequirement()));
+
+                options.AddPolicy("IsEmployee", policy =>
+                    policy.Requirements.Add(new EmployeeRequirement()));
             });
+
+            builder.Services.AddScoped<IAuthorizationHandler, AdminHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, OrgAdminHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, EmployeeHandler>();
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

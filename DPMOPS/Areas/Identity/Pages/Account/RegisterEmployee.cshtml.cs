@@ -9,7 +9,6 @@ using System.Text.Encodings.Web;
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
-using DPMOPS.Services.Organization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +20,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace DPMOPS.Areas.Identity.Pages.Account
 {
-    [Authorize("IsAdmin")] //TEMPORARY
+    [Authorize("IsOrgAdmin")]
     public class RegisterEmployeeModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -162,6 +161,9 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    var OrgIdClaim = new Claim("OrganizationId", user.OrganizationId.ToString());
+                    await _userManager.AddClaimAsync(user, OrgIdClaim);
 
                     var userId = await _userManager.GetUserIdAsync(user);
 

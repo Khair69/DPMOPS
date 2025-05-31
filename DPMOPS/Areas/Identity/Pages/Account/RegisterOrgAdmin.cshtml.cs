@@ -165,6 +165,8 @@ namespace DPMOPS.Areas.Identity.Pages.Account
 
                     var claim = new Claim("IsOrgAdmin", "true");
                     await _userManager.AddClaimAsync(user, claim);
+                    var OrgIdClaim = new Claim("OrganizationId", user.OrganizationId.ToString());
+                    await _userManager.AddClaimAsync(user, OrgIdClaim);
 
                     var userId = await _userManager.GetUserIdAsync(user);
 
