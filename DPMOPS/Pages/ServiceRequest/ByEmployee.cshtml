@@ -1,15 +1,15 @@
 ﻿@page
-@model DPMOPS.Pages.ServiceRequest.ByOrgModel
+@model DPMOPS.Pages.ServiceRequest.ByEmployeeModel
 @{
     ViewData["Title"] = "Service Requests";
 }
 
 <div class="panel panel-default table-panel">
     @if (Model.ServiceRequests.Count() == 0) {
-        <h2 class="fw-bold mb-4">Your organization hasn't recieved any service request</h2>
+        <h2 class="fw-bold mb-4">You havn't recieved any service request</h2>
     }
     else if (Model.ServiceRequests!=null){
-    <h3>All The Service Requests Submited To Our Organization</h3>
+    <h3>All The Service Requests Submited To You</h3>
 
     <table class="table table-hover">
         <thead>
@@ -19,7 +19,6 @@
                 <th>Location</th>
                 <th>Location Desc</th>
                 <th>Citizen</th>
-                <th>Employee</th>
                 <th>Date Reported</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -34,7 +33,6 @@
                     <td>@sr.Address</td>
                     <td>@sr.LocDescription</td>
                     <td>@sr.CitizenName</td>
-                    <td>@sr.EmployeeName</td>
                     <td>@sr.DateCreated</td>
                     <td>@sr.Status</td>
                     <td>
