@@ -17,14 +17,14 @@ namespace DPMOPS.Authorization.Handlers
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminOrOrgAdminInOrgRequirement requirement, Guid resource)
         {
-            // 1. Admins bypass org check
+            //Admins bypass org check
             if (context.User.HasClaim("IsAdmin", "true"))
             {
                 context.Succeed(requirement);
                 return;
             }
 
-            // 2. Check for OrgAdmin claim and matching OrganizationId
+            //Check for OrgAdmin claim and matching OrganizationId
             if (context.User.HasClaim("IsOrgAdmin", "true"))
             {
                 var appUser = await _userManager.GetUserAsync(context.User);
