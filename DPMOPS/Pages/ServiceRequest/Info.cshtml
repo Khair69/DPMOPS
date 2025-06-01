@@ -32,10 +32,8 @@
 }
 
 @if(Model.DeleteVisible){
-    @*are you sureeeee!!*@
-    <form asp-page="Info" asp-page-handler="Delete">
-        <button type="submit" class="w-100 btn btn-danger">Delete</button>
-    </form>
+    @*are you sureeeee js!!*@
+    <a asp-page="Delete" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="w-100 btn btn-danger">Delete</a>
 }
 
 @*(idea) make button to transfer to another employee if you're the admin*@

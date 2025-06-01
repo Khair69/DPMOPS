@@ -41,7 +41,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 return new ForbidResult();
             }
 
-            if (ServiceRequest.EmployeeId == null && !User.HasClaim("IsOrgAdmin", "true"))
+            if (ServiceRequest.EmployeeId == null && !User.HasClaim("IsOrgAdmin", "true") && User.FindFirst("OrganizationId")?.Value != null)
             {
                 ClaimVisible = true;
             }
@@ -75,23 +75,6 @@ namespace DPMOPS.Pages.ServiceRequest
 
             ChangeStatus.ServiceRequestId = id;
             var success = await _serviceRequestService.ChangeRequestStatusAsync(ChangeStatus);
-            if (!success)
-            {
-                return BadRequest();
-            }
-
-            return RedirectToPage("Info");
-        }
-
-        public async Task<IActionResult> OnPostDelete(Guid id)
-        {
-            //should make a page called delete and put some authorization in it... then return to the page that sent you somehow
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var success = await _serviceRequestService.DeleteServiceRequestAsync(id);
             if (!success)
             {
                 return BadRequest();
