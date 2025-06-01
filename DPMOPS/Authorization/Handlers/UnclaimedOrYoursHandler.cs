@@ -25,8 +25,8 @@ namespace DPMOPS.Authorization.Handlers
                 return;
             }
 
-            //if it's unclaimed and in the same organization as you
-            if (resource.EmployeeId == null)
+            //if it's unclaimed and in the same organization as you or if you're the org admin and it's in the same org
+            if (resource.EmployeeId == null || context.User.HasClaim("IsOrgAdmin", "true"))
             {
                 var appUser = await _userManager.GetUserAsync(context.User);
 

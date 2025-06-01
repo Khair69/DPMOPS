@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
 {
@@ -21,6 +22,8 @@ namespace DPMOPS.Pages.ServiceRequest
         }
 
         public ServiceRequestDto ServiceRequest { get; set; }
+        public bool ClaimVisible { get; set; } = false;
+        public bool StatusVisible { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -30,6 +33,15 @@ namespace DPMOPS.Pages.ServiceRequest
             if (!authResult.Succeeded)
             {
                 return new ForbidResult();
+            }
+
+            if (ServiceRequest.EmployeeId == null && !User.HasClaim("IsOrgAdmin", "true"))
+            {
+                ClaimVisible = true;
+            }
+            if (ServiceRequest.EmployeeId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                StatusVisible = true;
             }
 
             return Page();
@@ -43,6 +55,12 @@ namespace DPMOPS.Pages.ServiceRequest
             if (!ModelState.IsValid)
             {
                 return Page();
+            }
+
+            ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != ServiceRequest.EmployeeId)
+            {
+                return new ForbidResult();
             }
 
             ChangeStatus.ServiceRequestId = id;
