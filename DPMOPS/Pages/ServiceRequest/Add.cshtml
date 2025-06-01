@@ -1,11 +1,11 @@
 ﻿@page
-@model DPMOPS.Pages.ServiceRequest.AddRequestModel
+@model DPMOPS.Pages.ServiceRequest.AddModel
 @{
     ViewData["Title"] = "make a service request";
 }
 
 <div class="col-md-4">
-    <form asp-page="AddRequest">
+    <form asp-page="Add">
         <div class="form-floating mb-3">
             <input asp-for="SrDto.Title" class="form-control" placeholder="Title" />
             <label asp-for="SrDto.Title"></label>

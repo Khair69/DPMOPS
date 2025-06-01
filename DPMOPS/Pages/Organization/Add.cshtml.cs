@@ -10,12 +10,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace DPMOPS.Pages.Organization
 {
     [Authorize("IsAdmin")]
-    public class AddOrganizationModel : PageModel
+    public class AddModel : PageModel
     {
         private readonly IOrganizationService _organizationService;
         private readonly ICityService _cityService;
 
-        public AddOrganizationModel(IOrganizationService organizationService,
+        public AddModel(IOrganizationService organizationService,
             ICityService cityService)
         {
             _organizationService = organizationService;

@@ -1,5 +1,5 @@
 ﻿@page "{id}"
-@model DPMOPS.Pages.Organization.EditOrganizationModel
+@model DPMOPS.Pages.Organization.EditModel
 @{
     ViewData["Title"] = "Edit organization's info";
 }
@@ -7,7 +7,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="col-md-4">
-    <form asp-page="EditOrganization">
+    <form asp-page="Edit">
         <div class="form-floating mb-3">
             <input asp-for="OrgUpdateDto.Name" class="form-control" placeholder="Name" value="@Model.OrgDto.Name" />
             <label asp-for="OrgUpdateDto.Name"></label>

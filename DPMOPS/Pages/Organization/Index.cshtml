@@ -25,7 +25,7 @@
                     <td>@o.NumberOfEmployees</td>
                     <td>
                         <a asp-page="Employees/Index" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-secondary">Manage Employees</a>
-                        <a asp-page="EditOrganization" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-page="Edit" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-page="" asp-route-id="" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a asp-page="AddOrganization" class="btn btn-primary">Add Organization</a>
+    <a asp-page="Add" class="btn btn-primary">Add Organization</a>
 </div>

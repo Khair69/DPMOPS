@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace DPMOPS.Pages.Organization
 {
     [Authorize("IsAdmin")]
-    public class EditOrganizationModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly IOrganizationService _organizationService;
 
-        public EditOrganizationModel(IOrganizationService organizationService)
+        public EditModel(IOrganizationService organizationService)
         {
             _organizationService = organizationService;
         }
