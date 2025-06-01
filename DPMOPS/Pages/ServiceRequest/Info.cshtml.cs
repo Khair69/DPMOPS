@@ -34,5 +34,25 @@ namespace DPMOPS.Pages.ServiceRequest
 
             return Page();
         }
+
+        [BindProperty]
+        public ChangeRequestStatusDto ChangeStatus { get; set; }
+
+        public async Task<IActionResult> OnPostStatusAsync(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            ChangeStatus.ServiceRequestId = id;
+            var success = await _serviceRequestService.ChangeRequestStatusAsync(ChangeStatus);
+            if (!success)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToPage("Info");
+        }
     }
 }

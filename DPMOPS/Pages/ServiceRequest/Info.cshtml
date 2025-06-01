@@ -16,3 +16,14 @@
 
 @*should remove if claimed (should be dynamic)*@
 <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId">Claim</a>
+
+@*should be removed if not claimed*@
+<form asp-page="Info" asp-page-handler="Status">
+    <div class="form-floating mb-3">
+        <select asp-for="ChangeStatus.StatusId" asp-items="Html.GetEnumSelectList<Models.Status>()" class="form-select">
+        </select>
+        <label asp-for="ChangeStatus.StatusId"></label>
+        <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+</form>
