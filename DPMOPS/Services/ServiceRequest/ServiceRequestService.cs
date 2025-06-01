@@ -25,6 +25,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,
@@ -57,6 +58,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,
@@ -109,9 +111,18 @@ namespace DPMOPS.Services.ServiceRequest
             return saveresult == 1;
         }
 
-        public Task<bool> DeleteServiceRequestAsync(Guid id)
+        public async Task<bool> DeleteServiceRequestAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var existingReq = await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == id)
+                .FirstOrDefaultAsync();
+
+            if (existingReq == null || existingReq.StatusId != 1) return false;
+
+            _context.ServiceRequests.Remove(existingReq);
+
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
 
         public async Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(string id)
@@ -124,6 +135,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,
@@ -157,6 +169,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,
@@ -190,6 +203,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,
@@ -223,6 +237,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
                     ServiceRequestId = sr.ServiceRequestId,

@@ -24,10 +24,16 @@ namespace DPMOPS.Pages.ServiceRequest
         public ServiceRequestDto ServiceRequest { get; set; }
         public bool ClaimVisible { get; set; } = false;
         public bool StatusVisible { get; set; } = false;
+        public bool DeleteVisible { get; set; } = false;
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
+
+            if (ServiceRequest == null)
+            {
+                return NotFound();
+            }
 
             AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "IsUnclaimedOrYours");
             if (!authResult.Succeeded)
@@ -42,6 +48,10 @@ namespace DPMOPS.Pages.ServiceRequest
             if (ServiceRequest.EmployeeId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 StatusVisible = true;
+            }
+            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                DeleteVisible = true;
             }
 
             return Page();
@@ -65,6 +75,23 @@ namespace DPMOPS.Pages.ServiceRequest
 
             ChangeStatus.ServiceRequestId = id;
             var success = await _serviceRequestService.ChangeRequestStatusAsync(ChangeStatus);
+            if (!success)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToPage("Info");
+        }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            //should make a page called delete and put some authorization in it... then return to the page that sent you somehow
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            var success = await _serviceRequestService.DeleteServiceRequestAsync(id);
             if (!success)
             {
                 return BadRequest();

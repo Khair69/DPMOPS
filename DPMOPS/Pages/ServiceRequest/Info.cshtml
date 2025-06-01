@@ -31,4 +31,11 @@
     </form>
 }
 
+@if(Model.DeleteVisible){
+    @*are you sureeeee!!*@
+    <form asp-page="Info" asp-page-handler="Delete">
+        <button type="submit" class="w-100 btn btn-danger">Delete</button>
+    </form>
+}
+
 @*(idea) make button to transfer to another employee if you're the admin*@

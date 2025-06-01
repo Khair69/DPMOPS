@@ -25,6 +25,12 @@ namespace DPMOPS.Authorization.Handlers
                 return;
             }
 
+            if (resource.CitizenId == context.User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                context.Succeed(requirement);
+                return;
+            }
+
             //if it's unclaimed and in the same organization as you or if you're the org admin and it's in the same org
             if (resource.EmployeeId == null || context.User.HasClaim("IsOrgAdmin", "true"))
             {
