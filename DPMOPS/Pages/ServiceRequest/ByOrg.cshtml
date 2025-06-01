@@ -1,0 +1,48 @@
+﻿@page
+@model DPMOPS.Pages.ServiceRequest.ByOrgModel
+@{
+    ViewData["Title"] = "Service Requests";
+}
+
+<div class="panel panel-default table-panel">
+    @if (Model.ServiceRequests.Count() == 0) {
+        <h2 class="fw-bold mb-4">Your organization hasn't recieved any service request</h2>
+    }
+    else if (Model.ServiceRequests!=null){
+    <h3>All The Service Requests In Submited To Our Organization</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Location Desc</th>
+                <th>Citizen</th>
+                <th>Employee</th>
+                <th>Date Reported</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sr in Model.ServiceRequests)
+            {
+                <tr>
+                    <td>@sr.Title</td>
+                    <td>@sr.Description</td>
+                    <td>@sr.Address</td>
+                    <td>@sr.LocDescription</td>
+                    <td>@sr.CitizenName</td>
+                    <td>@sr.EmployeeName</td>
+                    <td>@sr.DateCreated</td>
+                    <td>@sr.Status</td>
+                    <td>
+                            <a class="btn btn-sm btn-secondary">Info</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+</div>
