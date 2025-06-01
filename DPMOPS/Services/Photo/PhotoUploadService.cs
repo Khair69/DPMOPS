@@ -1,4 +1,7 @@
-﻿
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Jpeg;
+
 namespace DPMOPS.Services.Photo
 {
     public class PhotoUploadService : IPhotoUploadService
@@ -16,6 +19,7 @@ namespace DPMOPS.Services.Photo
             {
                 throw new ArgumentNullException(nameof(photo));
             }
+
             var extension = Path.GetExtension(photo.FileName).ToLowerInvariant();
             var allowedExt = new[] { ".jpg", ".jpeg", ".png" };
             var allowedMime = new[] { "image/jpeg", "image/png" };
@@ -23,19 +27,51 @@ namespace DPMOPS.Services.Photo
             if (!allowedExt.Contains(extension) || !allowedMime.Contains(photo.ContentType))
                 throw new InvalidOperationException("Invalid file type.");
 
-            if (photo.Length > 2 * 1024 * 1024)
-                throw new InvalidOperationException("File too large.");
-
-            var fileName = $"{Guid.NewGuid()}{extension}";
+            var fileName = $"{Guid.NewGuid()}.jpg"; //save everything as .jpg
             var relativePath = Path.Combine("uploads", fileName);
             var absolutePath = Path.Combine(_env.WebRootPath, relativePath);
 
             Directory.CreateDirectory(Path.GetDirectoryName(absolutePath)!);
 
 
-            using var stream = new FileStream(absolutePath, FileMode.Create);
-            await photo.CopyToAsync(stream);
+            using var stream = photo.OpenReadStream();
+            using var image = await Image.LoadAsync(stream);
 
+            //Crop to 4:3
+            var aspectRatio = 4f / 3f;
+            int targetWidth = image.Width;
+            int targetHeight = (int)(targetWidth / aspectRatio);
+
+            if (targetHeight > image.Height)
+            {
+                targetHeight = image.Height;
+                targetWidth = (int)(targetHeight * aspectRatio);
+            }
+
+            var cropRectangle = new Rectangle(
+                (image.Width - targetWidth) / 2,
+                (image.Height - targetHeight) / 2,
+                targetWidth,
+                targetHeight
+            );
+
+            image.Mutate(x =>
+            {
+                x.Crop(cropRectangle);
+                x.Resize(new ResizeOptions
+                {
+                    Size = new Size(800, 600), // Final size, 4:3
+                    Mode = ResizeMode.Max
+                });
+            });
+
+            //Compress as JPEG
+            var encoder = new JpegEncoder
+            {
+                Quality = 75 // Adjust quality if needed
+            };
+
+            await image.SaveAsync(absolutePath, encoder);
 
             return "/" + relativePath.Replace("\\", "/");
         }
