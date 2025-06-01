@@ -28,5 +28,8 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public Guid OrganizationId { get; set; }
         [Required(ErrorMessage = "the district field is required")]
         public Guid? DistrictId { get; set; }
+
+        [AllowNull]
+        public IFormFile? PhotoFile { get; set; }
     }
 }

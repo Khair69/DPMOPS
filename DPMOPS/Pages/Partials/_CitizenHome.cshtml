@@ -2,32 +2,33 @@
 @using Humanizer
 
 <div class="container py-4">
-@{
-    var data = ViewData["UserData"] as IList<ServiceRequestDto>;
+    @{
+        var data = ViewData["UserData"] as IList<ServiceRequestDto>;
 
 
-if (data.Count() == 0){
-    <h2 class="fw-bold mb-4">You havn't made any service request</h2>
-}
-else if (data!=null){
+        if (data.Count() == 0){
+            <h2 class="fw-bold mb-4">You havn't made any service request</h2>
+        }
+        else if (data!=null){
             <h2 class="fw-bold mb-4">Your Recent Requests</h2>
 
             @foreach (var sr in data){
-            <div class="card mb-4 shadow-sm border-0">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="/placeholder.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="image didn't load correctly">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold">@sr.Title</h5>
-                            <p class="card-text">@sr.Description</p>
-                            <p class="card-text"><small class="text-muted">
-                                @sr.Address, @sr.LocDescription <br />
-                                @sr.DateCreated.Humanize() <br />
-                                Status: @sr.Status <br />
-                                Organization: @sr.OrganizationName
-                            </small></p>
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="@(string.IsNullOrEmpty(@sr.PhotoPath) ? "/placeholder.jpg" : @sr.PhotoPath)" class="img-fluid rounded-start h-100 object-fit-cover" alt="image didn't load correctly">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">@sr.Title</h5>
+                                <p class="card-text">@sr.Description</p>
+                                <p class="card-text"><small class="text-muted">
+                                        @sr.Address, @sr.LocDescription <br />
+                                        @sr.DateCreated.Humanize() <br />
+                                        Status: @sr.Status <br />
+                                        Organization: @sr.OrganizationName <br />
+                                        @if (sr.EmployeeId != null) { <text>Employee: @sr.EmployeeName</text> }
+                                    </small></p>
                                 <a asp-page="/ServiceRequest/Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-secondary">Info</a>
                         </div>
                     </div>

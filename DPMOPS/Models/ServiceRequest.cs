@@ -27,6 +27,9 @@ namespace DPMOPS.Models
         public Organization? Organization { get; set; }
         public District? District { get; set; }
 
+        [AllowNull]
+        public string? PhotoPath { get; set; }
+
         // possible add ons:
         // public DateTime? DateCompleted { get; set; }
         // public int? Rating { get; set; }

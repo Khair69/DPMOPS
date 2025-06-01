@@ -1,7 +1,6 @@
 using DPMOPS.Models;
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
-using DPMOPS.Services.EmployeePicker;
 using DPMOPS.Services.Organization;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
@@ -10,13 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
 {
     [Authorize("IsCitizen")]
+    [RequestSizeLimit(5_000_000)]
     public class AddModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
@@ -45,6 +43,9 @@ namespace DPMOPS.Pages.ServiceRequest
         [BindProperty]
         public CreateServiceRequestDto SrDto { get; set; }
 
+        [BindProperty]
+        public IFormFile? Photo { get; set; }
+
         public async Task OnGetAsync()
         {
             CityOptions = await _cityService.GetCityOptionsAsync();
@@ -61,6 +62,8 @@ namespace DPMOPS.Pages.ServiceRequest
                 OrganizationOptions = Enumerable.Empty<SelectListItem>();
                 return Page();
             }
+
+            SrDto.PhotoFile = Photo;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             SrDto.CitizenId = userId;

@@ -11,6 +11,7 @@ using DPMOPS.Services.Organization;
 using DPMOPS.Authorization.Requirements;
 using DPMOPS.Authorization.Handlers;
 using Microsoft.AspNetCore.Authorization;
+using DPMOPS.Services.Photo;
 
 namespace DPMOPS
 {
@@ -73,6 +74,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
             builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+            builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
 
             var app = builder.Build();
 

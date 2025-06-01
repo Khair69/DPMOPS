@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Services.ServiceRequest.Dtos
 {
@@ -22,5 +23,7 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public string? CitizenId { get; set; }
         public Guid? OrganizationId { get; set; }
         public string? EmployeeId { get; set; }
+
+        public string? PhotoPath { get; set; }
     }
 }

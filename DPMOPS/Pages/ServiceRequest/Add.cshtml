@@ -5,7 +5,7 @@
 }
 
 <div class="col-md-4">
-    <form asp-page="Add">
+    <form asp-page="Add" enctype="multipart/form-data">
         <div class="form-floating mb-3">
             <input asp-for="SrDto.Title" class="form-control" placeholder="Title" />
             <label asp-for="SrDto.Title"></label>
@@ -41,6 +41,7 @@
             <label asp-for="SrDto.LocDescription"></label>
             <span asp-validation-for="SrDto.LocDescription" class="text-danger"></span>
         </div>
+        <input type="file" name="Photo" />
         <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
     </form>
 </div>

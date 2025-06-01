@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore uploaded photos
+DPMOPS/wwwroot/uploads/*
+!DPMOPS/wwwroot/uploads/
+!DPMOPS/wwwroot/uploads/.gitkeep

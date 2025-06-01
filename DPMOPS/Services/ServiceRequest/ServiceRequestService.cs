@@ -2,6 +2,7 @@
 
 using DPMOPS.Data;
 using DPMOPS.Models;
+using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,13 @@ namespace DPMOPS.Services.ServiceRequest
     public class ServiceRequestService : IServiceRequestService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPhotoUploadService _photoUploadService;
 
-        public ServiceRequestService(ApplicationDbContext context)
+        public ServiceRequestService(ApplicationDbContext context,
+            IPhotoUploadService photoUploadService)
         {
             _context = context;
+            _photoUploadService = photoUploadService;
         }
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
@@ -44,7 +48,9 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .ToListAsync();
         }
@@ -77,25 +83,54 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .FirstOrDefaultAsync();
         }
 
         public async Task<bool> CreateServiceRequestAsync(CreateServiceRequestDto srDto)
         {
-            var Sr = new Models.ServiceRequest();
-            Sr.ServiceRequestId = Guid.NewGuid();
-            Sr.Title = srDto.Title;
-            Sr.Description = srDto.Description;
-            Sr.LocDescription = srDto.LocDescription;
-            Sr.CitizenId = srDto.CitizenId;
-            Sr.OrganizationId = srDto.OrganizationId;
-            Sr.EmployeeId = srDto.EmployeeId;
-            Sr.DistrictId = srDto.DistrictId;
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            string photoPath = null;
 
-            _context.ServiceRequests.Add(Sr);
-            var res = await _context.SaveChangesAsync();
+            int res = 0;
+            try
+            {
+                if (srDto.PhotoFile != null)
+                {
+                    photoPath = await _photoUploadService.UploadAsync(srDto.PhotoFile);
+                }
+
+                var Sr = new Models.ServiceRequest
+                {
+                    ServiceRequestId = Guid.NewGuid(),
+                    Title = srDto.Title,
+                    Description = srDto.Description,
+                    LocDescription = srDto.LocDescription,
+                    CitizenId = srDto.CitizenId,
+                    OrganizationId = srDto.OrganizationId,
+                    EmployeeId = srDto.EmployeeId,
+                    DistrictId = srDto.DistrictId,
+                    PhotoPath = photoPath
+                };
+
+                _context.ServiceRequests.Add(Sr);
+                res = await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                if (!string.IsNullOrEmpty(photoPath))
+                    _photoUploadService.DeletePhoto(photoPath);
+
+                await transaction.RollbackAsync();
+                throw;
+            }
+
+
+
             return res == 1;
         }
 
@@ -122,6 +157,11 @@ namespace DPMOPS.Services.ServiceRequest
             _context.ServiceRequests.Remove(existingReq);
 
             var saveresult = await _context.SaveChangesAsync();
+
+            if (saveresult == 1 && !string.IsNullOrEmpty(existingReq.PhotoPath))
+            {
+                _photoUploadService.DeletePhoto(existingReq.PhotoPath);
+            }
             return saveresult == 1;
         }
 
@@ -154,7 +194,9 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .ToListAsync();
         }
@@ -188,7 +230,9 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .ToListAsync();
         }
@@ -222,7 +266,9 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .ToListAsync();
         }
@@ -256,7 +302,9 @@ namespace DPMOPS.Services.ServiceRequest
 
                     CitizenId = sr.Citizen.Id,
                     OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath
                 })
                 .ToListAsync();
         }

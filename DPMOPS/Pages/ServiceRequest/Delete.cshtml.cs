@@ -34,7 +34,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 return BadRequest();
             }
 
-            return RedirectToPage("Index");
+            return RedirectToPage("/Index");
         }
     }
 }
