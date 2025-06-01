@@ -1,0 +1,18 @@
+﻿@page "{id}"
+@model DPMOPS.Pages.ServiceRequest.InfoModel
+@{
+    ViewData["Title"] = "Request's Info";
+}
+
+<p>@Model.ServiceRequest.Title</p>
+<p>@Model.ServiceRequest.Description</p>
+<p>@Model.ServiceRequest.CitizenName</p>
+<p>@Model.ServiceRequest.OrganizationName</p>
+<p>@Model.ServiceRequest.EmployeeName</p>
+<p>@Model.ServiceRequest.Address</p>
+<p>@Model.ServiceRequest.LocDescription</p>
+<p>@Model.ServiceRequest.DateCreated</p>
+<p>@Model.ServiceRequest.Status</p>
+
+@*should check if employee and if not claimed*@
+<a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId">Claim</a>

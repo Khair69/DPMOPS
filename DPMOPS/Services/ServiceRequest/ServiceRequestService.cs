@@ -1,4 +1,6 @@
-﻿using DPMOPS.Data;
+﻿#nullable disable
+
+using DPMOPS.Data;
 using DPMOPS.Models;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
@@ -46,9 +48,36 @@ namespace DPMOPS.Services.ServiceRequest
                 .ToListAsync();
         }
 
-        public Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
+        public async Task<ServiceRequestDto> GetServiceRequestByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == id)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> CreateServiceRequestAsync(CreateServiceRequestDto srDto)
@@ -182,6 +211,53 @@ namespace DPMOPS.Services.ServiceRequest
                     EmployeeId = sr.EmployeeId
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IList<ServiceRequestDto>> GetUnclaimedRequestsByOrganizationAsync(Guid id)
+        {
+            return await _context.ServiceRequests
+                .Where(sr => sr.OrganizationId == id && sr.EmployeeId == null)
+                .OrderBy(sr => sr.DateCreated)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId
+                })
+                .ToListAsync();
+        }
+
+        public async Task<bool> ClaimRequestAsync(Guid reqId, string empId)
+        {
+            var existingRequest = await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == reqId)
+                .FirstOrDefaultAsync();
+
+            if (existingRequest == null) return false;
+
+            existingRequest.EmployeeId = empId;
+
+            var saveresult = await _context.SaveChangesAsync();
+            return saveresult == 1;
         }
     }
 }

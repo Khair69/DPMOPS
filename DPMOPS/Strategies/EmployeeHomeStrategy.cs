@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Models;
+using DPMOPS.Services.Organization;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Strategies.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -11,27 +12,21 @@ namespace DPMOPS.Strategies
 {
     public class EmployeeHomeStrategy : IHomePageStrategy
     {
-        private readonly IServiceRequestService _serviceRequestService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IOrganizationService _organizationService;
 
-        public EmployeeHomeStrategy(IServiceRequestService serviceRequestService,
-            UserManager<ApplicationUser> userManager)
+        public EmployeeHomeStrategy(IOrganizationService organizationService)
         {
-            _serviceRequestService = serviceRequestService;
-            _userManager = userManager;
+            _organizationService = organizationService;
         }
 
         public async Task<IActionResult> GetPageResult(PageModel pageModel)
         {
-            //var user = await _userManager.Users.
-            //    Include(u => u.Employee)
-            //    .FirstOrDefaultAsync(u => u.Id == pageModel.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            //Guid EmpId = user.Employee.EmployeeId;
+            var OrgId = pageModel.User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value;
 
-            //var data = await _serviceRequestService.GetServiceRequestsByEmployeeAsync(EmpId);
+            var data = await _organizationService.GetOrganizationByIdAsync(Guid.Parse(OrgId));
 
+            pageModel.ViewData["UserData"] = data;
             pageModel.ViewData["UserType"] = "Employee";
-            //pageModel.ViewData["UserData"] = data;
 
             return pageModel.Page();
         }

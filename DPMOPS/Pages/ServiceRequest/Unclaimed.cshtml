@@ -1,15 +1,15 @@
 ﻿@page
-@model DPMOPS.Pages.ServiceRequest.ByOrgModel
+@model DPMOPS.Pages.ServiceRequest.UnclaimedModel
 @{
     ViewData["Title"] = "Service Requests";
 }
 
 <div class="panel panel-default table-panel">
     @if (Model.ServiceRequests.Count() == 0) {
-        <h2 class="fw-bold mb-4">Your organization hasn't recieved any service request</h2>
+        <h2 class="fw-bold mb-4">there aren't any unclaimed service request in your organization</h2>
     }
     else if (Model.ServiceRequests!=null){
-    <h3>All The Service Requests Submited To Our Organization</h3>
+    <h3>All The Unclaimed Service Requests Submited To Your Organization</h3>
 
     <table class="table table-hover">
         <thead>
@@ -19,7 +19,6 @@
                 <th>Location</th>
                 <th>Location Desc</th>
                 <th>Citizen</th>
-                <th>Employee</th>
                 <th>Date Reported</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -34,11 +33,10 @@
                     <td>@sr.Address</td>
                     <td>@sr.LocDescription</td>
                     <td>@sr.CitizenName</td>
-                    <td>@sr.EmployeeName</td>
                     <td>@sr.DateCreated</td>
                     <td>@sr.Status</td>
                     <td>
-                            <a class="btn btn-sm btn-secondary">Info</a>
+                            <a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-secondary">Info</a>
                     </td>
                 </tr>
             }

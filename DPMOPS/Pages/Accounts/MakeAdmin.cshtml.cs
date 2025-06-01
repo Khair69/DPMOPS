@@ -17,6 +17,7 @@ namespace DPMOPS.Pages.Accounts
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            //should check if not allready admin
             var succesful = await _userService.MakeAdminAsync(id);
             if (!succesful)
             {

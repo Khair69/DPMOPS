@@ -1,42 +1,10 @@
-﻿@using DPMOPS.Services.ServiceRequest.Dtos
-@using Humanizer
+﻿@using DPMOPS.Services.Organization.Dtos
 
-<p>employee</p>
-@* <div class="container py-4">
 @{
-    var data = ViewData["UserData"] as IList<ServiceRequestDto>;
-
-if (data.Count() == 0){
-    <h2 class="fw-bold mb-4">You havn't recieved any service requests</h2>
+    var data = ViewData["UserData"] as OrganizationDto;
 }
-else if (data!=null){
-        <h2 class="fw-bold mb-4">Your Recent Requests</h2>
-
-        @foreach (var sr in data)
-        {
-            <div class="card mb-4 shadow-sm border-0">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="/placeholder.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="image didn't load correctly">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold">@sr.Title</h5>
-                            <p class="card-text">@sr.Description</p>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    @sr.Address, @sr.LocDescription <br />
-                                    @sr.DateCreated.Humanize() <br />
-                                    Status: @sr.Status <br />
-                                    Submitted By: @sr.CitizenName 
-                                </small>
-                            </p>
-                            <a asp-page="/ServiceRequest/ChangeStatus" asp-route-id="@sr.ServiceRequestId" class="btn btn-outline-primary">Info</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-}
-}
-</div> *@
+<div class="text-center">
+    <h1 class="display-4">You Are An Employee Of @data.Name</h1>
+    <hr />
+    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Unclaimed">Unclaimed Requests</a>
+</div>

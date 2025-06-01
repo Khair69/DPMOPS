@@ -12,5 +12,7 @@ namespace DPMOPS.Services.ServiceRequest
         Task<IList<ServiceRequestDto>> GetServiceRequestsByCitizenAsync(string id);
         Task<IList<ServiceRequestDto>> GetServiceRequestsByEmployeeAsync(string id);
         Task<IList<ServiceRequestDto>> GetServiceRequestsByOrganizationAsync(Guid id);
+        Task<IList<ServiceRequestDto>> GetUnclaimedRequestsByOrganizationAsync(Guid id);
+        Task<bool> ClaimRequestAsync(Guid reqId, string empId);
     }
 }
