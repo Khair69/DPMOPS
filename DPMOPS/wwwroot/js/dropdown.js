@@ -5,7 +5,7 @@
             $.getJSON('?handler=DistrictsByCity&cityId=' + cityId, function (data) {
                 var districtSelect = $('#districtSelect');
                 districtSelect.empty();
-                districtSelect.append($('<option/>').val('').text('-- Select District --'));
+                districtSelect.append($('<option/>').val('').text(' '));
                 $.each(data, function (index, item) {
                     districtSelect.append($('<option/>').val(item.value).text(item.text));
                 });
@@ -24,7 +24,7 @@ $(document).ready(function () {
             $.getJSON('?handler=OrgsByCity&cityId=' + cityId, function (data) {
                 var orgSelect = $('#orgSelect');
                 orgSelect.empty();
-                orgSelect.append($('<option/>').val('').text('-- Select Organization --'));
+                orgSelect.append($('<option/>').val('').text(' '));
                 $.each(data, function (index, item) {
                     orgSelect.append($('<option/>').val(item.value).text(item.text));
                 });

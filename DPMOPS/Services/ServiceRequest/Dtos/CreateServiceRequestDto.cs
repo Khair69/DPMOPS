@@ -24,9 +24,9 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public string? CitizenId { get; set; }
         [AllowNull]
         public string? EmployeeId { get; set; }
-        [Required(ErrorMessage = "the organization field is required")]
+        [Required(ErrorMessage = "the Organization field is required")]
         public Guid OrganizationId { get; set; }
-        [Required(ErrorMessage = "the district field is required")]
+        [Required(ErrorMessage = "the District field is required")]
         public Guid? DistrictId { get; set; }
 
         [AllowNull]
