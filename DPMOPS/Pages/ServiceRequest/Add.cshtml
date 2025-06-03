@@ -4,51 +4,66 @@
     ViewData["Title"] = "Make A Service Request";
 }
 
-    <h2 class="fw-bold mb-4">@ViewData["Title"]</h2>
+<h2 class="fw-bold mb-4 text-center">@ViewData["Title"]</h2>
 
-    <form asp-page="Add" enctype="multipart/form-data" class="row g-3">
-        <div class="form-floating col-md-12">
+
+<form asp-page="Add" enctype="multipart/form-data" class="row">
+    <div class="col-md-6 col-12 mx-auto">
+        <div class="form-floating mb-4">
             <input asp-for="SrDto.Title" class="form-control" placeholder="Title" />
             <label asp-for="SrDto.Title"></label>
             <span asp-validation-for="SrDto.Title" class="text-danger"></span>
         </div>
-        <div class="form-floating col-md-12">
-            <textarea asp-for="SrDto.Description" class="form-control" placeholder="Description"></textarea>
+        <div class="form-floating mb-4">
+            <textarea asp-for="SrDto.Description" class="form-control" placeholder="Description" style="height: 100px;"></textarea>
             <label asp-for="SrDto.Description"></label>
             <span asp-validation-for="SrDto.Description" class="text-danger"></span>
         </div>
-        <div class="form-floating col-md-6">
-            <select asp-items="Model.CityOptions" class="form-select" id="citySelect">
-                <option value=" "> </option>
-            </select>
-            <label class="control-label">City</label>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-items="Model.CityOptions" class="form-select" id="citySelect">
+                        <option value=" "> </option>
+                    </select>
+                    <label class="control-label">City</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="SrDto.DistrictId" asp-items="Model.DistrictOptions" class="form-select" id="districtSelect" disabled>
+                        <option value=" "> </option>
+                    </select>
+                    <label asp-for="SrDto.DistrictId" class="control-label">District</label>
+                </div>
+            </div>
         </div>
-        <div class="form-floating col-md-6">
-            <select asp-for="SrDto.OrganizationId" asp-items="Model.OrganizationOptions" class="form-select" id="orgSelect" disabled>
-                <option value=" "> </option>
-            </select>
-            <label asp-for="SrDto.OrganizationId" class="control-label">Organization</label>
-            <span asp-validation-for="SrDto.OrganizationId" class="text-danger"></span>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="SrDto.OrganizationId" asp-items="Model.OrganizationOptions" class="form-select" id="orgSelect" disabled>
+                        <option value=" "> </option>
+                    </select>
+                    <label asp-for="SrDto.OrganizationId" class="control-label">Organization</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="SrDto.LocDescription" class="form-control" placeholder="Location Description" />
+                    <label asp-for="SrDto.LocDescription"></label>
+                </div>
+            </div>
         </div>
-        <div class="form-floating col-md-6">
-            <select asp-for="SrDto.DistrictId" asp-items="Model.DistrictOptions" class="form-select" id="districtSelect" disabled>
-                <option value=" "> </option>
-            </select>
-            <label asp-for="SrDto.DistrictId" class="control-label">District</label>
-            <span asp-validation-for="SrDto.DistrictId" class="text-danger"></span>
+
+        <div class="mb-4">
+            <input type="file" class="form-control" asp-for="Photo" placeholder="Select Photo" />
         </div>
-        <div class="form-floating col-md-6">
-            <input asp-for="SrDto.LocDescription" class="form-control" placeholder="Location Description" />
-            <label asp-for="SrDto.LocDescription"></label>
-            <span asp-validation-for="SrDto.LocDescription" class="text-danger"></span>
+        <div class="mb-4">
+            <button type="submit" class="btn btn-primary w-100">Add</button>
         </div>
-        <div class="col-md-6">
-            <input type="file" class="form-control" asp-for="Photo" placeholder="Select Photo"/>
-        </div>
-        <div class="col-md-6">
-            <button type="submit" class="btn btn-primary h-100">Add</button>
-        </div>
-    </form>
+    </div>
+</form>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
