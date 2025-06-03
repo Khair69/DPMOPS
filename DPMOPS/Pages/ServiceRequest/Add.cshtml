@@ -34,10 +34,10 @@
                         <option value=" "> </option>
                     </select>
                     <label asp-for="SrDto.DistrictId" class="control-label">District</label>
+                    <span asp-validation-for="SrDto.DistrictId" class="text-danger"></span>
                 </div>
             </div>
         </div>
-
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="form-floating">
@@ -45,18 +45,21 @@
                         <option value=" "> </option>
                     </select>
                     <label asp-for="SrDto.OrganizationId" class="control-label">Organization</label>
+                    <span asp-validation-for="SrDto.OrganizationId" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating">
                     <input asp-for="SrDto.LocDescription" class="form-control" placeholder="Location Description" />
                     <label asp-for="SrDto.LocDescription"></label>
+                    <span asp-validation-for="SrDto.LocDescription" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
         <div class="mb-4">
             <input type="file" class="form-control" asp-for="Photo" placeholder="Select Photo" />
+            <span asp-validation-for="Photo" class="text-danger"></span>
         </div>
         <div class="mb-4">
             <button type="submit" class="btn btn-primary w-100">Add</button>

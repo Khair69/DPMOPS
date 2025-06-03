@@ -8,11 +8,11 @@
 
 <div class="col-md-4">
     <form asp-page="AddDistrict">
-        <div class="form-group mb-3">
-            <label asp-for="DistrictDto.CityId" class="control-label"></label>
-            <select asp-for="DistrictDto.CityId" asp-items="Model.CityOptions" class="form-control">
-                <option value=" ">-- Select City --</option>
+        <div class="form-floating mb-3">
+            <select asp-for="DistrictDto.CityId" asp-items="Model.CityOptions" class="form-select">
+                <option value=" "> </option>
             </select>
+            <label asp-for="DistrictDto.CityId" class="control-label"></label>
             <span asp-validation-for="DistrictDto.CityId" class="text-danger"></span>
         </div>
         <div class="form-floating mb-3">
