@@ -28,3 +28,7 @@ div.table-panel {
 .object-fit-cover {
     object-fit: cover;
 }
+
+.card .text-muted {
+    word-break: break-word;
+}
