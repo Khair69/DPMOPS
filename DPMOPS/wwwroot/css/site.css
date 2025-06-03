@@ -32,3 +32,9 @@ div.table-panel {
 .card .text-muted {
     word-break: break-word;
 }
+
+.card-custom-bg {
+    background-color: #343a40;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

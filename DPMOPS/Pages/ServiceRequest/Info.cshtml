@@ -1,39 +1,77 @@
 ﻿@page "{id}"
 @model DPMOPS.Pages.ServiceRequest.InfoModel
+@using Humanizer
 @{
     ViewData["Title"] = "Request's Info";
 }
 
-<p>@Model.ServiceRequest.Title</p>
-<p>@Model.ServiceRequest.Description</p>
-<p>@Model.ServiceRequest.CitizenName</p>
-<p>@Model.ServiceRequest.OrganizationName</p>
-<p>@Model.ServiceRequest.EmployeeName</p>
-<p>@Model.ServiceRequest.Address</p>
-<p>@Model.ServiceRequest.LocDescription</p>
-<p>@Model.ServiceRequest.DateCreated</p>
-<p>@Model.ServiceRequest.Status</p>
-
-@if(Model.ClaimVisible){
-    <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="w-100 btn btn-primary">Claim</a>
-}
-
-@if (Model.StatusVisible)
-{
-    <form asp-page="Info" asp-page-handler="Status">
-        <div class="form-floating mb-3">
-            <select asp-for="ChangeStatus.StatusId" asp-items="Html.GetEnumSelectList<Models.Status>()" class="form-select">
-            </select>
-            <label asp-for="ChangeStatus.StatusId"></label>
-            <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+<div class="container py-5">
+    <div class="row align-items-stretch border rounded-3 shadow-sm overflow-hidden">
+        <!-- Image on the Left -->
+        <div class="col-lg-6 mb-4 mb-lg-0 p-0">
+            <div class="ratio ratio-4x3">
+                <img src="@(string.IsNullOrEmpty(Model.ServiceRequest.PhotoPath) ? "/placeholder.jpg" : Model.ServiceRequest.PhotoPath)"
+                     class="img-fluid rounded shadow-sm object-fit-cover"
+                     alt="Image not available"
+                     asp-append-version="true">
+            </div>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-    </form>
-}
 
-@if(Model.DeleteVisible){
-    @*are you sureeeee js!!*@
-    <a asp-page="Delete" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="w-100 btn btn-danger">Delete</a>
-}
+        <!-- Content on the Right -->
+        <div class="col-lg-6 position-relative">
+            <!-- Delete Button -->
+            @if (Model.DeleteVisible)
+            {
+                <a asp-page="Delete"
+                   asp-route-id="@Model.ServiceRequest.ServiceRequestId"
+                   class="btn btn-sm btn-outline-danger position-absolute top-0 end-0 m-2"
+                   title="Delete">
+                    <i class="bi bi-trash-fill"></i>
+                </a>
+            }
+            <!-- Text Content -->
+            <h1 class="display-5 fw-bold">@Model.ServiceRequest.Title</h1>
+            <p class="lead mt-3">@Model.ServiceRequest.Description</p>
 
-@*(idea) make button to transfer to another employee if you're the admin*@
+            <!-- List of Details -->
+            <ul class="list-unstyled small text-muted fs-6">
+                <li><i class="bi bi-geo-alt-fill me-1"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription</li>
+                <li><i class="bi bi-calendar-event me-1"></i> @Model.ServiceRequest.DateCreated.Humanize()</li>
+                <li><i class="bi bi-person-fill me-1"></i> Citizen: @Model.ServiceRequest.CitizenName</li>
+                <li><i class="bi bi-person-check-fill me-1"></i> Employee: @(Model.ServiceRequest.EmployeeId == null ? "Unassigned" : Model.ServiceRequest.EmployeeName)</li>
+                <li><i class="bi bi-building me-1"></i> Organization: @Model.ServiceRequest.OrganizationName</li>
+                @*status*@
+            </ul>
+
+            <div class="mt-auto pt-3">
+
+                @if (Model.ClaimVisible)
+                {
+                    <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="btn btn-primary w-100 mb-3">Claim</a>
+                }
+
+                @if (Model.StatusVisible)
+                {
+                    <form asp-page="Info" asp-page-handler="Status">
+                        <div class="form-floating mb-3">
+                            <select asp-for="ChangeStatus.StatusId" asp-items="Html.GetEnumSelectList<Models.Status>()" class="form-select">
+                            </select>
+                            <label asp-for="ChangeStatus.StatusId">Status</label>
+                            <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-primary w-100">Save</button>
+                    </form>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*
+    (idea) make button to transfer to another employee if you're the admin
+    also, a progress bar for the status.
+    the combobox should display the current status
+    when claimed change status to accepted
+*@
