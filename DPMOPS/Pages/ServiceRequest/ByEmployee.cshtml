@@ -1,46 +1,53 @@
 ﻿@page
+@using Humanizer
 @model DPMOPS.Pages.ServiceRequest.ByEmployeeModel
 @{
-    ViewData["Title"] = "Service Requests";
+    ViewData["Title"] = "Your Requests";
 }
 
-<div class="panel panel-default table-panel">
-    @if (Model.ServiceRequests.Count() == 0) {
-        <h2 class="fw-bold mb-4">You havn't recieved any service request</h2>
-    }
-    else if (Model.ServiceRequests!=null){
-    <h3>All The Service Requests Submited To You</h3>
+<div class="container py-4">
+    <h2 class="mb-4 text-center fw-bold">Your requests</h2>
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Location Desc</th>
-                <th>Citizen</th>
-                <th>Date Reported</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var sr in Model.ServiceRequests)
+    @if (Model.ServiceRequests != null && Model.ServiceRequests.Any())
+    {
+        <div class="row g-4">
+            @foreach (var request in Model.ServiceRequests)
             {
-                <tr>
-                    <td>@sr.Title</td>
-                    <td>@sr.Description</td>
-                    <td>@sr.Address</td>
-                    <td>@sr.LocDescription</td>
-                    <td>@sr.CitizenName</td>
-                    <td>@sr.DateCreated</td>
-                    <td>@sr.Status</td>
-                    <td>
-                            <a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-secondary">Info</a>
-                    </td>
-                </tr>
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 card-custom-bg px-2">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-auto">
+                                <img src="@request.PhotoPath" alt="Request photo" class="img-thumbnail thumbnail-img me-3 p-0">
+                            </div>
+                            <div class="col position-relative">
+                                <div class="card-body py-2 px-0 pe-4 position-relative">
+                                    <h5 class="card-title fw-bold mb-1">@request.Title</h5>
+                                    <p class="card-text mb-2">@request.Description</p>
+
+                                    <p class="card-text text-muted small mb-5 text-wrap">
+                                        <i class="bi bi-person-fill me-1"></i>@request.CitizenName |
+                                        <i class="bi bi-geo-alt-fill me-1"></i>@request.Address |
+                                        <i class="bi bi-calendar-event me-1"></i>@request.DateCreated.Humanize()
+                                    </p>
+
+                                    <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; right: 0.5rem;">
+                                        <a asp-page="Info" asp-route-id="@request.ServiceRequestId"
+                                           class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-info-circle"></i> Info
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            You haven't claimed any requests.
+        </div>
     }
 </div>

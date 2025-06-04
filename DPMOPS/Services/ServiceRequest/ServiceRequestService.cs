@@ -318,6 +318,7 @@ namespace DPMOPS.Services.ServiceRequest
             if (existingRequest == null) return false;
 
             existingRequest.EmployeeId = empId;
+            existingRequest.StatusId = 2;
 
             var saveresult = await _context.SaveChangesAsync();
             return saveresult == 1;

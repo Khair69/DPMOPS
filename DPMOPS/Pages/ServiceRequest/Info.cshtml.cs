@@ -48,8 +48,10 @@ namespace DPMOPS.Pages.ServiceRequest
             if (ServiceRequest.EmployeeId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 StatusVisible = true;
+                ChangeStatus = new ChangeRequestStatusDto();
+                ChangeStatus.StatusId = (int)ServiceRequest.Status;
             }
-            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier) && ServiceRequest.Status == Status.Pending)
             {
                 DeleteVisible = true;
             }
