@@ -1,19 +1,24 @@
 ﻿@page
 @model DPMOPS.Pages.Organization.IndexModel
 @{
-    ViewData["Title"] = "Organizations";
+    ViewData["Title"] = "المؤسسات";
 }
 
 <div class="panel panel-default table-panel">
-    <h3>@ViewData["Title"]</h3>
+    <div class="d-flex justify-content-between mb-3">
+        <h3>@ViewData["Title"]</h3>
+        <div>
+            <a asp-page="Add" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة مؤسسة</a>
+        </div>
+    </div>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>City</th>
-                <th>Employees</th>
-                <th>Actions</th>
+                <th>الاسم</th>
+                <th>المدينة</th>
+                <th>عدد الموظفين</th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -24,14 +29,23 @@
                     <td>@o.CityName</td>
                     <td>@o.NumberOfEmployees</td>
                     <td>
-                        <a asp-page="Employees/Index" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-secondary">Manage Employees</a>
-                        <a asp-page="Edit" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-page="" asp-route-id="" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-page="Employees/Index" asp-route-id="@o.OrganizationId" class="btn btn-sm btn-outline-secondary">إدارة الموظفين</a>
+                        <a asp-page="Edit"
+                           asp-route-id="@o.OrganizationId"
+                           class="btn btn-sm btn-outline-warning"
+                           title="Edit">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                        <a asp-page="Delete"
+                           asp-route-id="@o.OrganizationId"
+                           class="btn btn-sm btn-outline-danger"
+                           title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a asp-page="Add" class="btn btn-primary">Add Organization</a>
 </div>

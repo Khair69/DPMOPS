@@ -1,80 +1,93 @@
 ﻿@page "{id}"
 @model DPMOPS.Pages.Organization.Employees.IndexModel
 @{
-    ViewData["Title"] = "Manage Employees";
+    ViewData["Title"] = "الموظفين";
 
 }
 
-@if (Model.Employees.Any())
-{
-    <div class="panel panel-default table-panel">
-        <div class="panel-heading"><h3>Employee Accounts:</h3></div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Date Created</th>
-                    <th>Location</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.Employees)
-                {
-                    <tr>
-                        <td>@user.FirstName @user.LastName</td>
-                        <td>@user.Email</td>
-                        <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="" class="w-100 btn btn-primary">Make Admin</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="panel panel-default table-panel">
+    <div class="d-flex justify-content-between mb-3">
+        <div class="panel-heading"><h3>حسابات الموظفين</h3></div>
+            <div>
+            <a asp-area="Identity" asp-page="/Account/RegisterEmployee" asp-route-orgId="@Model.OrgId" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة موظفين</a>
+            </div>
     </div>
-}
-else
-{
-    <div class="panel-heading"><h3>Employee Accounts:</h3></div>
-    <div class="alert alert-info">No users found.</div>
-}
-
-<a asp-area="Identity" asp-page="/Account/RegisterEmployee" asp-route-orgId="@Model.OrgId" class="btn btn-sm btn-primary">Add Employee</a>
-
-@if (Model.Admins.Any())
-{
-    <div class="panel panel-default table-panel">
-        <div class="panel-heading"><h3>Admin Accounts:</h3></div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Date Created</th>
-                    <th>Location</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.Admins)
-                {
+    @if (Model.Employees.Any())
+    {
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>@user.FirstName @user.LastName</td>
-                        <td>@user.Email</td>
-                        <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                        <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="" class="w-100 btn btn-danger btn-danger">Remove Admin</a></td>
+                        <th>الاسم</th>
+                        <th>البريد الالكتروني</th>
+                        <th>تاريخ الانشاء</th>
+                        <th>العنوان</th>
+                        <th>الإجراءات</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
-else
-{
-    <div class="panel-heading"><h3>Admin Accounts:</h3></div>
-    <div class="alert alert-info">No users found.</div>
-}
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Employees)
+                    {
+                        <tr>
+                            <td>@user.FirstName @user.LastName</td>
+                            <td>@user.Email</td>
+                            <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@user.District.City.Name, @user.District.Name</td>
+                            <td>
+                                <a asp-page="" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
+                                <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    }
+    else
+    {
+        <div class="alert alert-info">لا يوجد موظفين</div>
+    }
+</div>
 
-<a asp-area="Identity" asp-page="/Account/RegisterOrgAdmin" asp-route-orgId="@Model.OrgId" class="btn btn-sm btn-primary">Add Admin</a>
+
+<div class="panel panel-default table-panel">
+    <div class="d-flex justify-content-between mb-3">
+        <div class="panel-heading"><h3>حسابات الأدمن</h3></div>
+        <a asp-area="Identity" asp-page="/Account/RegisterOrgAdmin" asp-route-orgId="@Model.OrgId" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة أدمن</a>
+    </div>
+    @if (Model.Admins.Any())
+    {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>البريد الالكتروني</th>
+                        <th>تاريخ الانشاء</th>
+                        <th>العنوان</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Admins)
+                    {
+                        <tr>
+                            <td>@user.FirstName @user.LastName</td>
+                            <td>@user.Email</td>
+                            <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@user.District.City.Name, @user.District.Name</td>
+                            <td>
+                                <a asp-page="" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
+                                <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+    }
+    else
+    {
+        <div class="alert alert-info">لا يوجد أدمن</div>
+    }
+</div>

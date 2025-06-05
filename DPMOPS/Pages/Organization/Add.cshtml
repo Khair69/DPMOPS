@@ -1,12 +1,13 @@
 ﻿@page
 @model DPMOPS.Pages.Organization.AddModel
 @{
-    ViewData["Title"] = "Add an organization";
+    ViewData["Title"] = "إضافة مؤسسة";
 }
 
-<h1>@ViewData["Title"]</h1>
 
 <div class="col-md-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
     <form asp-page="Add">
         <div class="form-floating mb-3">
             <input asp-for="OrgDto.Name" class="form-control" placeholder="Name" />
@@ -15,11 +16,11 @@
         </div>
         <div class="form-floating mb-3">
             <select asp-for="OrgDto.CityId" asp-items="Model.CityOptions" class="form-select">
-                <option value=" ">-- Select City --</option>
+                <option value=" "> </option>
             </select>
             <label asp-for="OrgDto.CityId" class="control-label"></label>
             <span asp-validation-for="OrgDto.CityId" class="text-danger"></span>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">إضافة</button>
     </form>
 </div>

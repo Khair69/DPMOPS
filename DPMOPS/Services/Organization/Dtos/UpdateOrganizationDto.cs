@@ -6,10 +6,10 @@ namespace DPMOPS.Services.Organization.Dtos
     {
         public Guid OrganizationId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} مطلوب")]
         [DataType(DataType.Text)]
-        [StringLength(50, ErrorMessage = "The {0} can't be shorter than {2} and longer than {1}", MinimumLength = 2)]
-        [Display(Name = "Organization's Name")]
+        [StringLength(50, ErrorMessage = "{0} يجب ان يكون اقصر من {1} حرف و اطول من {2} حرف ", MinimumLength = 2)]
+        [Display(Name = "الاسم")]
         public string? Name { get; set; }
     }
 }

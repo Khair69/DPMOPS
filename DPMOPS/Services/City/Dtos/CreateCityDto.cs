@@ -4,9 +4,9 @@ namespace DPMOPS.Services.City.Dtos
 {
     public class CreateCityDto
     {
-        [Required(ErrorMessage ="اسم المدينة مطلوب")]
+        [Required(ErrorMessage = "{0} مطلوب")]
         [DataType(DataType.Text)]
-        [StringLength(50, MinimumLength = 2)]
+        [StringLength(50, ErrorMessage = "{0} يجب ان يكون اقصر من {1} حرف و اطول من {2} حرف ", MinimumLength = 2)]
         [Display(Name ="الاسم")]
         public string? Name { get; set; }
     }

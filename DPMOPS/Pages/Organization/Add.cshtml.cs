@@ -36,6 +36,7 @@ namespace DPMOPS.Pages.Organization
         {
             if (!ModelState.IsValid)
             {
+                CityOptions = await _cityService.GetCityOptionsAsync();
                 return Page();
             }
 
