@@ -12,6 +12,7 @@ using DPMOPS.Authorization.Requirements;
 using DPMOPS.Authorization.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using DPMOPS.Services.Photo;
+using Microsoft.AspNetCore.Identity;
 
 namespace DPMOPS
 {
