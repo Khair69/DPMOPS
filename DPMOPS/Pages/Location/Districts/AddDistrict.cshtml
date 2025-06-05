@@ -1,12 +1,12 @@
 ﻿@page
 @model DPMOPS.Pages.Location.Districts.AddDistrictModel
 @{
-    ViewData["Title"] = "Add a district";
+    ViewData["Title"] = "إضافة منطقة";
 }
 
-<h1>@ViewData["Title"]</h1>
-
 <div class="col-md-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
     <form asp-page="AddDistrict">
         <div class="form-floating mb-3">
             <select asp-for="DistrictDto.CityId" asp-items="Model.CityOptions" class="form-select">
@@ -21,7 +21,7 @@
             <span asp-validation-for="DistrictDto.Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">إضافة</button>
         </div>
     </form>
 </div>

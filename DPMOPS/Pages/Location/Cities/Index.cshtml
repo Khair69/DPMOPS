@@ -1,19 +1,24 @@
 ﻿@page
 @model DPMOPS.Pages.Location.IndexModel
 @{
-    ViewData["Title"] = "Cities";
+    ViewData["Title"] = "المدن";
 }
 
 
 <div class="panel panel-default table-panel">
-    <h3>@ViewData["Title"]</h3>
+    <div class="d-flex justify-content-between mb-3">
+        <h3>@ViewData["Title"]</h3>
+        <div>
+            <a asp-page="/Location/Cities/AddCity" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة مدينة</a>
+        </div>
+    </div>
 
-    <table class="table table-hover">
+    <table class="table table-hover" >
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Districts</th>
-                <th>Actions</th>
+                <th>الاسم</th>
+                <th>عدد المناطق</th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
         <tbody>
@@ -23,17 +28,25 @@
                     <td>@c.Name</td>
                     <td>@c.DistrictCount</td>
                     <td>
-                        <a asp-page="/Location/Districts/Index" asp-route-cityId="@c.CityId" class="btn btn-sm btn-secondary">Manage Districts</a>
-                        <a asp-page="/Location/Cities/EditCity" asp-route-id="@c.CityId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-page="/Location/Cities/DeleteCity" asp-route-id="@c.CityId" class="btn btn-sm btn-danger">Delete</a>
-                        @*<a asp-page="./Details" asp-route-id="@c.CityId" class="btn btn-sm btn-info">Details</a>*@
+                        <a asp-page="/Location/Districts/Index" asp-route-cityId="@c.CityId" class="btn btn-sm btn-outline-secondary">إدارة المناطق</a>
+                        <a asp-page="EditCity"
+                           asp-route-id="@c.CityId"
+                           class="btn btn-sm btn-outline-warning"
+                           title="Edit">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                        <a asp-page="DeleteCity"
+                           asp-route-id="@c.CityId"
+                           class="btn btn-sm btn-outline-danger"
+                           title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a asp-page="/Location/Cities/AddCity" class="btn btn-primary">Add City</a>
 </div>
 
 

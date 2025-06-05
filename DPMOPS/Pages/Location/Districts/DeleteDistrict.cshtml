@@ -1,16 +1,16 @@
 ﻿@page "{id}"
 @model DPMOPS.Pages.Location.Districts.DeleteDistrictModel
 @{
-    ViewData["Title"] = "Delete district";
+    ViewData["Title"] = "حذف المنطقة";
 }
 
-<h2>Delete Confirmation</h2>
+<h2>تأكيد الحذف</h2>
 <div class="alert alert-danger">
-    Are you sure you want to delete @Model.District.Name?
+    هل انت متأكد من حذف @Model.District.Name؟
 </div>
 
 <form method="post">
     <input type="hidden" asp-for="districtId" value="@Model.District.DistrictId" />
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a asp-page="/Location/Districts/Index" asp-route-cityId="@Model.District.CityId" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">متأكد</button>
+    <a asp-page="/Location/Districts/Index" asp-route-cityId="@Model.District.CityId" class="btn btn-secondary">الإلغاء</a>
 </form>

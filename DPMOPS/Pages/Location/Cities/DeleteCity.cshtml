@@ -1,16 +1,17 @@
 ﻿@page "{id}"
 @model DPMOPS.Pages.Location.Cities.DeleteCityModel
 @{
-    ViewData["Title"] = "Delete city";
+    ViewData["Title"] = "حذف المدينة";
 }
 
-<h2>Delete Confirmation</h2>
+<h2>تأكيد الحذف</h2>
+<hr />
 <div class="alert alert-danger">
-    Are you sure you want to delete @Model.City.Name? All the districts associated with it will be deleted too.
+   هل انت متأكد من حذف @Model.City.Name؟ كل المناطق المرتبطة بها ستحذف ايضا.
 </div>
 
 <form method="post">
     <input type="hidden" asp-for="cityId" value="@Model.City.CityId"/>
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a asp-page="/Location/Cities/Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">متأكد</button>
+    <a asp-page="/Location/Cities/Index" class="btn btn-secondary">الإلغاء</a>
 </form>

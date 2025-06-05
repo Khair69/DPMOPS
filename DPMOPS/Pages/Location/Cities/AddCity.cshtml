@@ -1,18 +1,19 @@
 ﻿@page
 @model DPMOPS.Pages.Location.AddCityModel
 @{
-    ViewData["Title"] = "Add a city";
+    ViewData["Title"] = "إضافة منطقة";
 }
 
-<h1>@ViewData["Title"]</h1>
 
 <div class="col-md-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
     <form asp-page="AddCity">
         <div class="form-floating mb-3">
             <input asp-for="CityDto.Name" class="form-control" placeholder="Name" />
             <label asp-for="CityDto.Name"></label>
             <span asp-validation-for="CityDto.Name" class="text-danger"></span>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary">Add</button>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">إضافة</button>
     </form>
 </div>

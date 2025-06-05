@@ -4,14 +4,14 @@ namespace DPMOPS.Services.District.Dtos
 {
     public class CreateDistrictDto
     {
-        [Required]
+        [Required (ErrorMessage = "{0} مطلوب")]
         [DataType(DataType.Text)]
-        [StringLength(50, ErrorMessage = "The district's name can't be shorter than {2} and longer than {1}", MinimumLength = 2)]
-        [Display(Name = "District's Name")]
+        [StringLength(50, ErrorMessage = "اسم المنطقة يجب ان يكون اقصر من {1} حرف و اطول من {2} حرف ", MinimumLength = 2)]
+        [Display(Name = "الاسم")]
         public string? Name { get; set; }
 
-        [Required]
-        [Display(Name = "City")]
+        [Required(ErrorMessage = "{0} مطلوبة")]
+        [Display(Name = "المدينة")]
         public string? CityId { get; set; }
     }
 }

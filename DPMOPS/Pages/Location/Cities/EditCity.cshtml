@@ -1,18 +1,19 @@
 ﻿@page "{id}"
 @model DPMOPS.Pages.Location.Cities.EditCityModel
 @{
-    ViewData["Title"] = "Edit city's info";
+    ViewData["Title"] = "تعديل معلومات المدينة";
 }
 
-<h1>@ViewData["Title"]</h1>
 
 <div class="col-md-4">
+    <h2>@ViewData["Title"]</h2>
+    <hr />
     <form asp-page="EditCity">
         <div class="form-floating mb-3">
             <input asp-for="CityUpdateDto.Name" class="form-control" placeholder="Name" value="@Model.CityDto.Name"/>
             <label asp-for="CityUpdateDto.Name"></label>
             <span asp-validation-for="CityUpdateDto.Name" class="text-danger"></span>
         </div>
-        <button type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">تعديل</button>
     </form>
 </div>

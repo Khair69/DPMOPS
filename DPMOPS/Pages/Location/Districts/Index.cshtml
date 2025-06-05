@@ -1,22 +1,22 @@
 ﻿@page "{cityId}"
 @model DPMOPS.Pages.Location.Districts.IndexModel
 @{
-    ViewData["Title"] = "Districts";
+    ViewData["Title"] = "المناطق";
 }
 
 <div class="panel panel-default table-panel">
     <div class="d-flex justify-content-between mb-3">
-        <h3>@ViewData["Title"] for @Model.City.Name</h3>
+        <h3>@ViewData["Title"] في @Model.City.Name</h3>
         <div>
-            <a asp-page="/Location/Cities/Index" class="btn btn-secondary">Back to Cities</a>
+            <a asp-page="/Location/Districts/AddDistrict" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة منطقة</a>
         </div>
     </div>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Actions</th>
+                <th>الاسم</th>
+                <th>الإجراءات</th>
             </tr>
         </thead>
 
@@ -26,14 +26,23 @@
                 <tr>
                     <td>@d.Name</td>
                     <td>
-                        <a asp-page="/Location/Districts/EditDistrict" asp-route-id="@d.DistrictId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-page="/Location/Districts/DeleteDistrict" asp-route-id="@d.DistrictId" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-page="EditDistrict"
+                           asp-route-id="@d.DistrictId"
+                           class="btn btn-sm btn-outline-warning"
+                           title="Edit">
+                            <i class="bi bi-pen-fill"></i>
+                        </a>
+                        <a asp-page="DeleteDistrict"
+                           asp-route-id="@d.DistrictId"
+                           class="btn btn-sm btn-outline-danger"
+                           title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a asp-page="/Location/Districts/AddDistrict" class="btn btn-primary">Add District</a>
 </div>
 
