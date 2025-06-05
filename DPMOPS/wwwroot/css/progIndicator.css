@@ -1,0 +1,57 @@
+﻿:root {
+    --default-dot-color: #0d6efd;
+    --dead-dot-color: dimgrey;
+    --current-dot-color: #0d6efd;
+    --success-dot-color: #198754;
+    --warning-dot-color: #ffc107;
+    --danger-dot-color: #dc3545;
+}
+
+.dot {
+    height: 50px;
+    width: 50px;
+    background-color: dimgrey;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+}
+
+.dot-label{
+    display: none;
+}
+
+.dot i {
+    font-size: 21px;
+    color: #212529;
+}
+
+.first-dot {
+    left: 0;
+}
+
+.second-dot {
+    left: 33%;
+    transform: translateX(-50%); /* Center the dot at 25% */
+}
+
+.third-dot {
+    left: 66%;
+    transform: translateX(-50%); /* Center the dot at 75% */
+}
+
+.fourth-dot {
+    right: 0;
+}
+
+.prog-box {
+    position: relative;
+    padding-top: 20px;
+}
+
+.progress{
+    height: 10px;
+}

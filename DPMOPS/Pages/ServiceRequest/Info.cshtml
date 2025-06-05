@@ -68,6 +68,48 @@
     </div>
 </div>
 
+<div class="mx-5 prog-box">
+    <div class="progress" role="progressbar" aria-label="progInd" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: @((int)Model.ServiceRequest.Status)%"></div>
+    </div>
+
+    <div>
+        <span class="dot first-dot">
+            <i class="bi bi-hourglass-split"></i>
+        </span>
+        <span class="dot-label">Pending</span>
+    </div>
+
+    <div>
+        <span class="dot second-dot">
+            <i class="bi bi-check2"></i>
+        </span>
+        <span class="dot-label">Approved</span>
+    </div>
+
+    <div>
+        <span class="dot third-dot">
+            <i class="bi bi-hammer"></i>
+        </span>
+        <span class="dot-label">InProgress</span>
+    </div>
+
+    <div>
+        <span class="dot fourth-dot">
+            <i class="bi bi-check2-all"></i>
+        </span>
+        <span class="dot-label">Completed</span>
+    </div>
+</div>
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/progindicator.css" asp-append-version="true"/>
+}
+
+@section Scripts {
+    <script src="~/js/progIndicator.js" asp-append-version="true"></script>
+}
 
 @*
     (idea) make button to transfer to another employee if you're the admin
