@@ -30,21 +30,19 @@
 }
 
 .first-dot {
-    left: 0;
+    right: 0;
 }
 
 .second-dot {
-    left: 33%;
-    transform: translateX(-50%); /* Center the dot at 25% */
+    right: 33%;
 }
 
 .third-dot {
-    left: 66%;
-    transform: translateX(-50%); /* Center the dot at 75% */
+    right: 66%;
 }
 
 .fourth-dot {
-    right: 0;
+    left: 0;
 }
 
 .prog-box {

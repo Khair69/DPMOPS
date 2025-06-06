@@ -2,11 +2,11 @@
 {
     public enum Status
     {
-        Pending = 1,
-        Approved = 2,
-        InProgress = 3,
-        Suspended = 4,
-        Rejected = 5,
-        Completed = 6
+        قيدالانتظار = 1,
+        مقبول = 2,
+        قيدالعمل = 3,
+        معلق = 4,
+        مرفوض = 5,
+        مكتمل = 6
     }
 }

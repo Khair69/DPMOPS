@@ -1,28 +1,28 @@
 ﻿@page
 @model DPMOPS.Pages.ServiceRequest.ByOrgModel
 @{
-    ViewData["Title"] = "Service Requests";
+    ViewData["Title"] = "طلبات الخدمة";
 }
 
 <div class="panel panel-default table-panel">
     @if (Model.ServiceRequests.Count() == 0) {
-        <h2 class="fw-bold mb-4">Your organization hasn't recieved any service request</h2>
+        <h2 class="fw-bold mb-4">لا يوجد أي طلب خدمة في مؤسستك</h2>
     }
     else if (Model.ServiceRequests!=null){
-    <h3>All The Service Requests Submited To Our Organization</h3>
+    <h3>كل طلبات الخدمة في مؤسستك</h3>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Location</th>
-                <th>Location Desc</th>
-                <th>Citizen</th>
-                <th>Employee</th>
-                <th>Date Reported</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>العنوان</th>
+                <th>الوصف</th>
+                <th>الموقع</th>
+                <th>وصف الموقع</th>
+                <th>المواطن</th>
+                <th>الموظف</th>
+                <th>التاريخ</th>
+                <th>الحالة</th>
+                <th>العمليات</th>
             </tr>
         </thead>
         <tbody>
@@ -38,7 +38,9 @@
                     <td>@sr.DateCreated</td>
                     <td>@sr.Status</td>
                     <td>
-                            <a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-secondary">Info</a>
+                        <a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-outline-info align-items-center">
+                            <i class="bi bi-info-circle"></i>
+                        </a>
                     </td>
                 </tr>
             }

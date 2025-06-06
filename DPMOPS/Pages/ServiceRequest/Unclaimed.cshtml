@@ -2,11 +2,11 @@
 @using Humanizer
 @model DPMOPS.Pages.ServiceRequest.UnclaimedModel
 @{
-    ViewData["Title"] = "Unclaimed Requests";
+    ViewData["Title"] = "الطلبات الغير مخصصة";
 }
 
 <div class="container py-4">
-    <h2 class="mb-4 text-center fw-bold">Requests made to your organization</h2>
+    <h2 class="mb-4 text-center fw-bold">الطلبات المقدمة لمؤسستك</h2>
 
     @if (Model.ServiceRequests != null && Model.ServiceRequests.Any())
     {
@@ -17,7 +17,7 @@
                 <div class="card shadow-sm border-0 card-custom-bg px-2">
                     <div class="row g-0 align-items-center">
                         <div class="col-auto">
-                            <img src="@request.PhotoPath" alt="Request photo" class="img-thumbnail thumbnail-img me-3 p-0">
+                                <img src="@request.PhotoPath" alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
                         </div>
                         <div class="col position-relative">
                             <div class="card-body py-2 px-0 pe-4 position-relative">
@@ -25,19 +25,19 @@
                                 <p class="card-text mb-2">@request.Description</p>
                             
                                 <p class="card-text text-muted small mb-5 text-wrap">
-                                    <i class="bi bi-person-fill me-1"></i>@request.CitizenName |
-                                    <i class="bi bi-geo-alt-fill me-1"></i>@request.Address |
-                                    <i class="bi bi-calendar-event me-1"></i>@request.DateCreated.Humanize()
+                                    <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
+                                    <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
+                                        <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
                                 </p>
 
-                                <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; right: 0.5rem;">
+                                <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">
                                     <a asp-page="Claim" asp-route-id="@request.ServiceRequestId"
                                        class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-check-circle"></i> Claim
+                                        <i class="bi bi-check-circle"></i> قبول
                                     </a>
                                     <a asp-page="Info" asp-route-id="@request.ServiceRequestId"
                                        class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-info-circle"></i> Info
+                                        <i class="bi bi-info-circle"></i>
                                     </a>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
     else
     {
         <div class="alert alert-info text-center">
-            No requests at the moment.
+            لا يوجد طلبات حاليا
         </div>
     }
 </div>

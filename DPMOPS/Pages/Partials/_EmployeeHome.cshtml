@@ -4,9 +4,9 @@
     var data = ViewData["UserData"] as OrganizationDto;
 }
 <div class="text-center">
-    <h1 class="display-4">You Are An Employee Of @data.Name</h1>
+    <h1 class="display-4">انت موظف في @data.Name</h1>
     <hr />
-    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/ByEmployee">Your Requests</a>
+    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/ByEmployee">طلباتك</a>
     <br />
-    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Unclaimed">Unclaimed Requests</a>
+    <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/ServiceRequest/Unclaimed">الطلبات الغير معينة</a>
 </div>

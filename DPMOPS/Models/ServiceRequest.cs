@@ -20,7 +20,7 @@ namespace DPMOPS.Models
         [AllowNull]
         public string? EmployeeId { get; set; }
         public Guid? DistrictId { get; set; }
-        public int StatusId { get; set; } = (int)Status.Pending;
+        public int StatusId { get; set; } = 1;
 
         public ApplicationUser? Citizen { get; set; }
         public ApplicationUser? Employee { get; set; }

@@ -51,7 +51,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 ChangeStatus = new ChangeRequestStatusDto();
                 ChangeStatus.StatusId = (int)ServiceRequest.Status;
             }
-            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier) && ServiceRequest.Status == Status.Pending)
+            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier) && ServiceRequest.Status == (Status)1)
             {
                 DeleteVisible = true;
             }
