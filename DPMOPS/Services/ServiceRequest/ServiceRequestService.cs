@@ -50,7 +50,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .ToListAsync();
         }
@@ -85,7 +88,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .FirstOrDefaultAsync();
         }
@@ -113,7 +119,9 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = srDto.OrganizationId,
                     EmployeeId = srDto.EmployeeId,
                     DistrictId = srDto.DistrictId,
-                    PhotoPath = photoPath
+                    PhotoPath = photoPath,
+                    Latitude = srDto.Latitude,
+                    Longitude = srDto.Longitude
                 };
 
                 _context.ServiceRequests.Add(Sr);
@@ -196,7 +204,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .ToListAsync();
         }
@@ -232,7 +243,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .ToListAsync();
         }
@@ -268,7 +282,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .ToListAsync();
         }
@@ -304,7 +321,10 @@ namespace DPMOPS.Services.ServiceRequest
                     OrganizationId = sr.OrganizationId,
                     EmployeeId = sr.EmployeeId,
 
-                    PhotoPath = sr.PhotoPath
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude
                 })
                 .ToListAsync();
         }

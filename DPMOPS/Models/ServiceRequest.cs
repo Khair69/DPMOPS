@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Models
@@ -29,6 +30,11 @@ namespace DPMOPS.Models
 
         [AllowNull]
         public string? PhotoPath { get; set; }
+
+        [Required]
+        public double Latitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
 
         // possible add ons:
         // public DateTime? DateCompleted { get; set; }

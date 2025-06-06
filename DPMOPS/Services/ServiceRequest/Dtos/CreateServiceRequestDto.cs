@@ -39,5 +39,10 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         [AllowNull]
         [Display(Name = "الصورة")]
         public IFormFile? PhotoFile { get; set; }
+
+        [Required(ErrorMessage = "من فضلك اختر موقع على الخريطة")]
+        public double Latitude { get; set; }
+        [Required]
+        public double Longitude { get; set; }
     }
 }

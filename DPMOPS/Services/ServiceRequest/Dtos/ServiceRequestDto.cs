@@ -25,5 +25,8 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public string? EmployeeId { get; set; }
 
         public string? PhotoPath { get; set; }
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }
