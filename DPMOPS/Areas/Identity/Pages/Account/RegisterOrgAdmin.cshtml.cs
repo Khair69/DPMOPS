@@ -124,6 +124,11 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             [Display(Name = "العنوان")]
             [Required(ErrorMessage = "{0} مطلوب")]
             public Guid DistrictId { get; set; }
+
+            [Required(ErrorMessage = "{0} مطلوب")]
+            [RegularExpression(@"^09\d{8}$", ErrorMessage = "رقم المحمول يجب ان يبدأ ب09 و ان يكون مؤلف من عشر خانات")]
+            [Display(Name = "رقم المحمول")]
+            public string PhoneNumber { get; set; }
         }
 
 
@@ -163,6 +168,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                 user.DistrictId = Input.DistrictId;
                 user.DateCreated = DateTime.Now;
                 user.OrganizationId = orgId;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
