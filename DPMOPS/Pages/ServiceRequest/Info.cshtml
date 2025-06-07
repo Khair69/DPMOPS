@@ -44,6 +44,10 @@
 
             <div class="mt-auto pt-3">
 
+                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                    <i class="bi bi-geo-alt"></i> عرض على الخرائط
+                </button>
+
                 @if (Model.ClaimVisible)
                 {
                     <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="btn btn-outline-success mb-3">قبول</a>
@@ -102,18 +106,58 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">الموقع على الخريطة</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="map" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const latitude = @Model.ServiceRequest.Latitude;
+    const longitude = @Model.ServiceRequest.Longitude;
+    let mapInitialized = false;
+    let map;
+
+    const mapModal = document.getElementById('mapModal');
+    mapModal.addEventListener('shown.bs.modal', function () {
+        if (!mapInitialized) {
+            map = L.map('map').setView([latitude, longitude], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('Saved Location')
+                .openPopup();
+
+            mapInitialized = true;
+        } else {
+            map.invalidateSize(); // Recalculate map size if modal is reopened
+        }
+    });
+</script>
+
 
 @section Styles {
     <link rel="stylesheet" href="~/css/progindicator.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 }
 
 @section Scripts {
     <script src="~/js/progIndicator.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 }
 
 @*
     (idea) make button to transfer to another employee if you're the admin
-    also, a progress bar for the status.
-    the combobox should display the current status
-    when claimed change status to accepted
 *@
