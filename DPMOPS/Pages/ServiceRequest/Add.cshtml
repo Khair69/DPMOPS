@@ -68,12 +68,15 @@
                                 <span asp-validation-for="Photo" class="text-danger"></span>
                             </div>
 
-                            <span asp-validation-for="SrDto.Latitude" class="text-danger"></span>
-                            <div id="map" style="visibility: visible; height: 400px" class="my-4"></div>
-
                             <!-- Hidden fields to store coordinates -->
-                            <input asp-for="SrDto.Latitude" id="Latitude" type="hidden"/>
-                            <input asp-for="SrDto.Longitude" id="Longitude" type="hidden"/>
+                            <input asp-for="SrDto.Latitude" id="latitude" type="hidden" readonly/>
+                            <input asp-for="SrDto.Longitude" id="longitude" type="hidden" readonly/>
+                            <div class="mb-4 text-center">
+                                <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#mapModal">
+                                    <i class="bi bi-geo"></i>
+                                    اختر الموقع على الخريطة
+                                </button>
+                            </div>
 
                             <div class="mb-4">
                                 <button type="submit" class="btn btn-primary w-100">إضافة</button>
@@ -82,6 +85,22 @@
                     </form>
                 </div>
             </div> 
+        </div>
+    </div>
+</div>
+
+
+<!-- Map Modal -->
+<div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">اختر الموقع</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="map" style="height: 400px;"></div>
+            </div>
         </div>
     </div>
 </div>

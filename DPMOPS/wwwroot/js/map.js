@@ -1,44 +1,32 @@
-﻿//document.addEventListener("DOMContentLoaded", function () {
-//    const citySelect = document.getElementById("citySelect");
-//    const mapDiv = document.getElementById("map");
+﻿let map;
+let marker;
 
-//    if (citySelect && mapDiv) {
-//        citySelect.addEventListener("change", function () {
-//            const selectedCity = citySelect.value;
+const mapModal = document.getElementById('mapModal');
+mapModal.addEventListener('shown.bs.modal', function () {
+    // If map is not initialized
+    if (!map) {
+        map = L.map('map').setView([35.124180, 36.759390], 8);
 
-//            // Apply desired styles
-//            mapDiv.style.height = "400px";
-//            mapDiv.style.visibility = "visible";
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-//            // Apply class
-//            mapDiv.className = "my-4";
+        map.on('click', function (e) {
+            const { lat, lng } = e.latlng;
 
-//            // Placeholder for future logic using selectedCity
-//            // You can use `selectedCity` in future logic here
-//        });
-//    }
-//});
+            // Remove old marker if exists
+            if (marker) {
+                map.removeLayer(marker);
+            }
 
-var map = L.map('map').setView([35.124180, 36.759390], 8);
+            marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup("You selected this location").openPopup();
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-var marker;
-
-map.on('click', function (e) {
-    var lat = e.latlng.lat;
-    var lng = e.latlng.lng;
-
-    // Update hidden fields
-    document.getElementById('Latitude').value = lat;
-    document.getElementById('Longitude').value = lng;
-
-    // Place or move the marker
-    if (marker) {
-        marker.setLatLng(e.latlng);
+            // Update form inputs
+            document.getElementById("latitude").value = lat.toFixed(6);
+            document.getElementById("longitude").value = lng.toFixed(6);
+        });
     } else {
-        marker = L.marker(e.latlng).addTo(map);
+        map.invalidateSize();
     }
 });

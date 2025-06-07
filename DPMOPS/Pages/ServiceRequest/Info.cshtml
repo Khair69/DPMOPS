@@ -130,7 +130,7 @@
     const mapModal = document.getElementById('mapModal');
     mapModal.addEventListener('shown.bs.modal', function () {
         if (!mapInitialized) {
-            map = L.map('map').setView([latitude, longitude], 13);
+            map = L.map('map').setView([latitude, longitude], 15);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
