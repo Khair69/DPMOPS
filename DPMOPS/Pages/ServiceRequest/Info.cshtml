@@ -50,13 +50,13 @@
 
                 @if (Model.ClaimVisible)
                 {
-                    <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="btn btn-outline-success mb-3">قبول</a>
+                    <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="btn btn-outline-success">قبول</a>
                 }
 
                 @if (Model.StatusVisible)
                 {
                     <form asp-page="Info" asp-page-handler="Status">
-                        <div class="form-floating mb-3">
+                        <div class="form-floating m-3">
                             <select asp-for="ChangeStatus.StatusId" asp-items="Html.GetEnumSelectList<Models.Status>()" class="form-select">
                             </select>
                             <label asp-for="ChangeStatus.StatusId"></label>
