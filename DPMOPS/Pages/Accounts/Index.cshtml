@@ -15,6 +15,7 @@
                     <th>البريد الالكتروني</th>
                     <th>النوع</th>
                     <th>تاريخ اللإنشاء</th>
+                    <th>رقم المحمول</th>
                     <th>العنوان</th>
                     <th>العمليات</th>
                 </tr>
@@ -36,6 +37,7 @@
                             }
                         </td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@user.PhoneNumber</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/MakeAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a></td>
                     </tr>
@@ -61,6 +63,7 @@ else
                     <th>البريد الالكتروني</th>
                     <th>تاريخ اللإنشاء</th>
                     <th>العنوان</th>
+                    <th>رقم المحمول</th>
                     <th>العمليات</th>
                 </tr>
             </thead>
@@ -71,6 +74,7 @@ else
                         <td>@user.FirstName @user.LastName</td>
                         <td>@user.Email</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@user.PhoneNumber</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td><a asp-page="/Accounts/RemoveAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-danger">اللإزالة كأدمن</a></td>
                     </tr>

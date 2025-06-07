@@ -21,6 +21,7 @@
                     <th>البريد الالكتروني</th>
                     <th>تاريخ الانشاء</th>
                     <th>العنوان</th>
+                    <th>رقم المحمول</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>@user.Email</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
+                        <td>@user.PhoneNumber</td>
                         <td>
                             <a asp-page="" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
                             <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -64,6 +66,7 @@
                     <th>البريد الالكتروني</th>
                     <th>تاريخ الانشاء</th>
                     <th>العنوان</th>
+                    <th>رقم المحمول</th>
                     <th>الإجراءات</th>
                 </tr>
             </thead>
@@ -75,6 +78,7 @@
                         <td>@user.Email</td>
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
+                        <td>@user.PhoneNumber</td>
                         <td>
                             <a asp-page="" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
                             <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
