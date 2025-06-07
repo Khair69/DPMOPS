@@ -8,40 +8,40 @@
 <div class="panel panel-default table-panel">
     <div class="d-flex justify-content-between mb-3">
         <div class="panel-heading"><h3>حسابات الموظفين</h3></div>
-            <div>
+        <div>
             <a asp-area="Identity" asp-page="/Account/RegisterEmployee" asp-route-orgId="@Model.OrgId" class="btn btn-outline-primary"><i class="bi bi-plus-lg"></i>إضافة موظفين</a>
-            </div>
+        </div>
     </div>
     @if (Model.Employees.Any())
     {
-            <table class="table table-hover">
-                <thead>
+        <table class="table table-hover table-striped display" id="employee-table">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد الالكتروني</th>
+                    <th>تاريخ الانشاء</th>
+                    <th>العنوان</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Employees)
+                {
                     <tr>
-                        <th>الاسم</th>
-                        <th>البريد الالكتروني</th>
-                        <th>تاريخ الانشاء</th>
-                        <th>العنوان</th>
-                        <th>الإجراءات</th>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@user.District.City.Name, @user.District.Name</td>
+                        <td>
+                            <a asp-page="" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
+                            <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model.Employees)
-                    {
-                        <tr>
-                            <td>@user.FirstName @user.LastName</td>
-                            <td>@user.Email</td>
-                            <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                            <td>@user.District.City.Name, @user.District.Name</td>
-                            <td>
-                                <a asp-page="" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
-                                <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                }
+            </tbody>
+        </table>
     }
     else
     {
@@ -57,37 +57,48 @@
     </div>
     @if (Model.Admins.Any())
     {
-            <table class="table table-hover">
-                <thead>
+        <table class="table table-hover table-striped display" id="orgAdmin-table">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد الالكتروني</th>
+                    <th>تاريخ الانشاء</th>
+                    <th>العنوان</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Admins)
+                {
                     <tr>
-                        <th>الاسم</th>
-                        <th>البريد الالكتروني</th>
-                        <th>تاريخ الانشاء</th>
-                        <th>العنوان</th>
-                        <th>الإجراءات</th>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                        <td>@user.District.City.Name, @user.District.Name</td>
+                        <td>
+                            <a asp-page="" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
+                            <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model.Admins)
-                    {
-                        <tr>
-                            <td>@user.FirstName @user.LastName</td>
-                            <td>@user.Email</td>
-                            <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
-                            <td>@user.District.City.Name, @user.District.Name</td>
-                            <td>
-                                <a asp-page="" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
-                                <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
-                            </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+                }
+            </tbody>
+        </table>
     }
     else
     {
         <div class="alert alert-info">لا يوجد أدمن</div>
     }
 </div>
+
+
+@section Styles {
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
+    <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+}

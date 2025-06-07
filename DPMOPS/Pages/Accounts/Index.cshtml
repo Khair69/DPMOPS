@@ -8,7 +8,7 @@
 {
     <div class="panel panel-default table-panel">
         <div class="panel-heading"><h3>الحسابات الطبيعية</h3></div>
-        <table class="table table-hover">
+        <table class="table table-hover table-striped display" id="account-table">
             <thead>
                 <tr>
                     <th>الاسم</th>
@@ -54,7 +54,7 @@ else
 {
     <div class="panel panel-default table-panel">
         <div class="panel-heading"><h3>حسابات الأدمن</h3></div>
-        <table class="table table-hover">
+        <table class="table table-hover table-striped display" id="admin-table">
             <thead>
                 <tr>
                     <th>الاسم</th>
@@ -85,3 +85,13 @@ else
     <div class="alert alert-info">No users found.</div>
 }
 
+
+@section Styles {
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
+    <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+}

@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <table class="table table-hover">
+    <table class="table table-hover table-striped display" id="district-table">
         <thead>
             <tr>
                 <th>الاسم</th>
@@ -46,3 +46,12 @@
 
 </div>
 
+@section Styles {
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
+    <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+}
