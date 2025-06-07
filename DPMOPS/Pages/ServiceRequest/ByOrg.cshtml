@@ -11,7 +11,7 @@
     else if (Model.ServiceRequests!=null){
     <h3>كل طلبات الخدمة في مؤسستك</h3>
 
-    <table class="table table-hover">
+    <table class="table table-hover table-striped display" id="request-table">
         <thead>
             <tr>
                 <th>العنوان</th>
@@ -48,3 +48,13 @@
     </table>
     }
 </div>
+
+@section Styles {
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
+    <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+}
