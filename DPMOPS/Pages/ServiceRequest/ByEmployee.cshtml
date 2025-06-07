@@ -17,7 +17,8 @@
                     <div class="card shadow-sm border-0 card-custom-bg px-2">
                         <div class="row g-0 align-items-center">
                             <div class="col-auto">
-                                <img src="@request.PhotoPath" alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
+                                <img src="@(string.IsNullOrEmpty(request.PhotoPath) ? "/placeholder.jpg" : request.PhotoPath)"
+                                alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
                             </div>
                             <div class="col position-relative">
                                 <div class="card-body py-2 px-0 pe-4 position-relative">
