@@ -17,20 +17,20 @@
             @foreach (var notification in Model.Take(10))
             {
                 <li>
-                    <a class="dropdown-item d-block text-wrap @(notification.IsRead ? "" : "fw-bold")" href="@Url.Page("/Notification/Open", new {id = notification.AppNotificationId})">
+                    <a class="dropdown-item d-block text-wrap @(notification.IsRead ? "" : "fw-bold")" href="@Url.Page("/Notification/Open", new { id = notification.AppNotificationId })">
                         <div class="mb-1 text-end">@notification.Title</div>
                         <div class="small text-muted text-end">@notification.Body</div>
                         <div class="text-start small text-secondary">@notification.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</div>
                     </a>
                 </li>
                 <li><hr class="dropdown-divider m-0" /></li>
-                <li>
-                    <a class="dropdown-item text-center text-primary fw-bold"
-                       href="@Url.Page("/Notification/MarkAllRead")">
-                        Mark all as read
-                    </a>
-                </li>
             }
+            <li>
+                <a class="dropdown-item text-center text-primary fw-bold"
+                   href="@Url.Page("/Notification/MarkAllRead")">
+                    Mark all as read
+                </a>
+            </li>
         }
         else
         {

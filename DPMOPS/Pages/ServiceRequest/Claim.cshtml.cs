@@ -36,8 +36,7 @@ namespace DPMOPS.Pages.ServiceRequest
 
             var success = await _serviceRequestService.ClaimRequestAsync(id , User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            //should be employee requests
-            return RedirectToPage("/Index");
+            return RedirectToPage("Info", new { id = id });
         }
     }
 }
