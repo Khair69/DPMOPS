@@ -1,0 +1,51 @@
+﻿@page
+@model DPMOPS.Pages.Accounts.CitizensModel
+@{
+    ViewData["Title"] = "المواطنين";
+}
+
+@if (Model.Citizens.Any())
+{
+    <div class="panel panel-default table-panel">
+        <div class="panel-heading"><h3>حسابات المواطنين</h3></div>
+        <table class="table table-hover table-striped display" id="account-table">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>البريد الالكتروني</th>
+                    <th>عدد الطلبات</th>
+                    <th>العنوان</th>
+                    <th>رقم المحمول</th>
+                    <th>تاريخ اللإنشاء</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cit in Model.Citizens)
+                {
+                    <tr>
+                        <td>@cit.FullName</td>
+                        <td>@cit.Email</td>
+                        <td>@cit.NumberOfRequests</td>
+                        <td>@cit.Address</td>
+                        <td>@cit.PhoneNumber</td>
+                        <td>@cit.DateCreated.Date.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">لا يوجد مستخدمين</div>
+}
+
+@section Styles {
+    <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
+    <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/lib/datatables/js/datatables.min.js"></script>
+    <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+}

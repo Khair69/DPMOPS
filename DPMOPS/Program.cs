@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using DPMOPS.Services.Photo;
 using Microsoft.AspNetCore.Identity;
 using DPMOPS.Services.Notification;
+using DPMOPS.Services.Account;
 
 namespace DPMOPS
 {
@@ -78,6 +79,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
 
             var app = builder.Build();
 
