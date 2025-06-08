@@ -12,18 +12,18 @@ namespace DPMOPS.Strategies
 {
     public class EmployeeHomeStrategy : IHomePageStrategy
     {
-        private readonly IOrganizationService _organizationService;
+        private readonly IServiceRequestService _serviceRequestsService;
 
-        public EmployeeHomeStrategy(IOrganizationService organizationService)
+        public EmployeeHomeStrategy(IServiceRequestService serviceRequestsService)
         {
-            _organizationService = organizationService;
+            _serviceRequestsService = serviceRequestsService;
         }
 
         public async Task<IActionResult> GetPageResult(PageModel pageModel)
         {
-            var OrgId = pageModel.User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value;
+            var userId = pageModel.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var data = await _organizationService.GetOrganizationByIdAsync(Guid.Parse(OrgId));
+            var data = await _serviceRequestsService.GetServiceRequestsByEmployeeAsync(userId);
 
             pageModel.ViewData["UserData"] = data;
             pageModel.ViewData["UserType"] = "Employee";
