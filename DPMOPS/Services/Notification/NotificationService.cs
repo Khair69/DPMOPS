@@ -31,6 +31,7 @@ namespace DPMOPS.Services.Notification
                     Link = n.Link
                 }
                 )
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -48,6 +49,7 @@ namespace DPMOPS.Services.Notification
                     Link = n.Link
                 }
                 )
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -97,7 +99,23 @@ namespace DPMOPS.Services.Notification
                     Link = n.Link,
                     AccountId = n.AccountId
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task MarkAllReadAsync(string userId)
+        {
+            var unreadNotifs = await _context.Notifications
+                .Where(n => n.AccountId == userId && !n.IsRead)
+                .ToListAsync();
+
+            foreach (var notif in unreadNotifs)
+            {
+                notif.IsRead = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return;
         }
     }
 }

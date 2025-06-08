@@ -10,5 +10,6 @@ namespace DPMOPS.Services.Notification
         Task<IList<NotificationDto>> GetUnreadAsync(string userId);
         Task<bool> MarkAsReadAsync(Guid id);
         Task<NotificationDto> GetNotificationById(Guid id);
+        Task MarkAllReadAsync(string userId);
     }
 }
