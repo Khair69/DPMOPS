@@ -55,15 +55,17 @@
 
                 @if (Model.StatusVisible)
                 {
-                    <form asp-page="Info" asp-page-handler="Status" class="text-center">
-                        <div class="form-floating m-3">
-                            <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="@Model.StatusOptions" class="form-select">
-                            </select>
-                            <label asp-for="ChangeStatus.StatusId"></label>
-                            <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
-                        </div>
-                        <button id="statusSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>حفظ</button>
-                    </form>
+                    <div class="d-flex justify-content-center">
+                        <form asp-page="Info" asp-page-handler="Status" class="w-50 text-center">
+                            <div class="form-floating m-3">
+                                <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="@Model.StatusOptions" class="form-select">
+                                </select>
+                                <label asp-for="ChangeStatus.StatusId"></label>
+                                <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+                            </div>
+                            <button id="statusSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>حفظ</button>
+                        </form>
+                    </div>
                 }
 
             </div>
@@ -81,28 +83,28 @@
         <span class="dot first-dot">
             <i class="bi bi-hourglass-split"></i>
         </span>
-        <span class="dot-label">Pending</span>
+        <span class="dot-label first-dot-label">قيدالانتظار</span>
     </div>
 
     <div>
         <span class="dot second-dot">
             <i class="bi bi-check2"></i>
         </span>
-        <span class="dot-label">Approved</span>
+        <span class="dot-label second-dot-label">مقبول</span>
     </div>
 
     <div>
         <span class="dot third-dot">
             <i class="bi bi-hammer"></i>
         </span>
-        <span class="dot-label">InProgress</span>
+        <span class="dot-label third-dot-label">قيدالعمل</span>
     </div>
 
     <div>
         <span class="dot fourth-dot">
             <i class="bi bi-check2-all"></i>
         </span>
-        <span class="dot-label">Completed</span>
+        <span class="dot-label fourth-dot-label">مكتمل</span>
     </div>
 </div>
 

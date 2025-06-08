@@ -20,8 +20,9 @@
     justify-content: center; /* Horizontal centering */
 }
 
-.dot-label{
-    display: none;
+.dot-label {
+    position: absolute;
+    top: 55px;
 }
 
 .dot i {
@@ -33,11 +34,23 @@
     right: 0;
 }
 
+.first-dot-label {
+    right: 0;
+}
+
 .second-dot {
     right: 33%;
 }
 
+.second-dot-label{
+    right: 33.5%;
+}
+
 .third-dot {
+    right: 66%;
+}
+
+.third-dot-label {
     right: 66%;
 }
 
@@ -45,9 +58,14 @@
     left: 0;
 }
 
+.fourth-dot-label {
+    left: 0;
+}
+
 .prog-box {
     position: relative;
     padding-top: 20px;
+    min-height: 15vh;
 }
 
 .progress{

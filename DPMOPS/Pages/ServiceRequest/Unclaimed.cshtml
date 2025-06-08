@@ -6,53 +6,61 @@
 }
 
 <div class="container py-4">
-    <h2 class="mb-4 text-center fw-bold">الطلبات المقدمة لمؤسستك</h2>
+        @if (Model.ServiceRequests == null || Model.ServiceRequests.Count == 0)
+        {
+            <div class="alert alert-info text-center">
+                لا يوجد طلبات حاليا
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-between mb-3">
+                <div class="panel-heading">
+                    <h3 class="fw-bold mb-0">الطلبات المقدمة لمؤسستك</h3>
+                </div>
+            </div>
+        }
+
 
     @if (Model.ServiceRequests != null && Model.ServiceRequests.Any())
     {
-    <div class="row g-4">
-        @foreach (var request in Model.ServiceRequests)
-        {
-            <div class="col-12">
-                <div class="card shadow-sm border-0 card-custom-bg px-2">
-                    <div class="row g-0 align-items-center">
-                        <div class="col-auto">
+        <div class="row g-4">
+            @foreach (var request in Model.ServiceRequests)
+            {
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 card-custom-bg px-2">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-auto">
                                 <img src="@(string.IsNullOrEmpty(request.PhotoPath) ? "/placeholder.jpg" : request.PhotoPath)"
                                      alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
-                        </div>
-                        <div class="col position-relative">
-                            <div class="card-body py-2 px-0 pe-4 position-relative">
-                                <h5 class="card-title fw-bold mb-1">@request.Title</h5>
-                                <p class="card-text mb-2">@request.Description</p>
-                            
-                                <p class="card-text text-muted small mb-5 text-wrap">
-                                    <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
-                                    <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
-                                        <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
-                                </p>
+                            </div>
+                            <div class="col position-relative">
+                                <div class="card-body py-2 px-0 pe-4 position-relative">
+                                    <h5 class="card-title fw-bold mb-1">@request.Title</h5>
+                                    <p class="card-text mb-2">@request.Description</p>
 
-                                <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">
-                                    <a asp-page="Claim" asp-route-id="@request.ServiceRequestId"
-                                       class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-check-circle"></i> قبول
-                                    </a>
-                                    <a asp-page="Info" asp-route-id="@request.ServiceRequestId"
-                                       class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
-                                        <i class="bi bi-info-circle"></i>
-                                    </a>
+                                    <p class="card-text text-muted small mb-5 text-wrap">
+                                        <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
+                                        <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
+                                        <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
+                                    </p>
+
+                                    <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">
+                                        <a asp-page="Claim" asp-route-id="@request.ServiceRequestId"
+                                           class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-check-circle"></i> قبول
+                                        </a>
+                                        <a asp-page="Info" asp-route-id="@request.ServiceRequestId"
+                                           class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
+                                            <i class="bi bi-info-circle"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-    }
-    else
-    {
-        <div class="alert alert-info text-center">
-            لا يوجد طلبات حاليا
+            }
         </div>
     }
 </div>
