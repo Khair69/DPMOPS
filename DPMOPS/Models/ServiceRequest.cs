@@ -41,7 +41,6 @@ namespace DPMOPS.Models
         // public int? Rating { get; set; }
         // public string ServiceProviderNotes { get; set; }
         // public string ReportType { get; set; } // e.g., "Maintenance", "Complaint"
-        // public string ImageUrl { get; set; } // For photo evidence
         // public bool IsUrgent { get; set; }
     }
 }

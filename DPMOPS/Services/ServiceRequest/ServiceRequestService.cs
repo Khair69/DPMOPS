@@ -2,6 +2,8 @@
 
 using DPMOPS.Data;
 using DPMOPS.Models;
+using DPMOPS.Services.Notification;
+using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +14,18 @@ namespace DPMOPS.Services.ServiceRequest
     {
         private readonly ApplicationDbContext _context;
         private readonly IPhotoUploadService _photoUploadService;
+        private readonly INotificationService _notificationService;
+        private readonly LinkGenerator _linkGenerator;
 
         public ServiceRequestService(ApplicationDbContext context,
-            IPhotoUploadService photoUploadService)
+            IPhotoUploadService photoUploadService,
+            INotificationService notificationService,
+            LinkGenerator linkGenerator)
         {
             _context = context;
             _photoUploadService = photoUploadService;
+            _notificationService = notificationService;
+            _linkGenerator = linkGenerator;
         }
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
@@ -148,10 +156,55 @@ namespace DPMOPS.Services.ServiceRequest
                 .Where(sr => sr.ServiceRequestId == srDto.ServiceRequestId)
                 .FirstOrDefaultAsync();
 
-            existingRequest.StatusId = srDto.StatusId;
+            if (existingRequest != null)
+            {
+                CreateNotificationDto notif = new CreateNotificationDto
+                {
+                    AccountId = existingRequest.CitizenId,
+                    Title = "تغيير حالة طلب",
+                    Body = $"لقد تم تغيير حالة طلبك الى {(Status)srDto.StatusId}",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = existingRequest.ServiceRequestId })
+                };
 
-            var saveresult = await _context.SaveChangesAsync();
-            return saveresult == 1;
+                var notifRes = await _notificationService.SaveAsync(notif);
+
+                existingRequest.StatusId = srDto.StatusId;
+
+                var saveresult = await _context.SaveChangesAsync();
+                return saveresult == 1 && notifRes;
+            }
+            return false;
+        }
+
+        public async Task<bool> ClaimRequestAsync(Guid reqId, string empId)
+        {
+            var existingRequest = await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == reqId)
+                .FirstOrDefaultAsync();
+
+            if (existingRequest != null)
+            {
+                CreateNotificationDto notif = new CreateNotificationDto
+                {
+                    AccountId = existingRequest.CitizenId,
+                    Title = "قبول طلبك",
+                    Body = $"لقد تم قبول طلبك بعنوان \"{existingRequest.Title}\"",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = existingRequest.ServiceRequestId })
+                };
+
+                var notifRes = await _notificationService.SaveAsync(notif);
+
+                existingRequest.EmployeeId = empId;
+                existingRequest.StatusId = 2;
+
+                var saveresult = await _context.SaveChangesAsync();
+                return saveresult == 1 && notifRes;
+            }
+            return false;
         }
 
         public async Task<bool> DeleteServiceRequestAsync(Guid id)
@@ -327,21 +380,6 @@ namespace DPMOPS.Services.ServiceRequest
                     Longitude = sr.Longitude
                 })
                 .ToListAsync();
-        }
-
-        public async Task<bool> ClaimRequestAsync(Guid reqId, string empId)
-        {
-            var existingRequest = await _context.ServiceRequests
-                .Where(sr => sr.ServiceRequestId == reqId)
-                .FirstOrDefaultAsync();
-
-            if (existingRequest == null) return false;
-
-            existingRequest.EmployeeId = empId;
-            existingRequest.StatusId = 2;
-
-            var saveresult = await _context.SaveChangesAsync();
-            return saveresult == 1;
         }
     }
 }

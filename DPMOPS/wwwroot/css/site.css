@@ -41,3 +41,8 @@ div.table-panel {
     object-fit: cover;
     border-radius: 0.5rem;
 }
+
+.dropdown-menu {
+    max-height: 400px;
+    overflow-y: auto;
+}

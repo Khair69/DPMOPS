@@ -35,5 +35,6 @@ namespace DPMOPS.Models
         public Organization? Organization { get; set; }
         public ICollection<ServiceRequest>? CitizinServiceRequests { get; set; }
         public ICollection<ServiceRequest>? EmployeeServiceRequests { get; set; }
+        public ICollection<AppNotification>? Notifications { get; set; }
     }
 }

@@ -1,0 +1,34 @@
+﻿@model IList<DPMOPS.Services.Notification.Dtos.NotificationDto>
+@using Humanizer
+<div class="dropdown">
+    <a class="nav-link position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bell fs-5"></i>
+        @if (Model?.Any(n => !n.IsRead) == true)
+        {
+            <span class="position-absolute top-5 start-100 translate-middle badge rounded-pill bg-danger">
+                @Model.Count(n => !n.IsRead)
+                <span class="visually-hidden">unread notifications</span>
+            </span>
+        }
+    </a>
+    <ul class="dropdown-menu dropdown-menu-start shadow p-0" aria-labelledby="notificationDropdown" style="width: 340px; max-height: 450px; overflow-y: auto;">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var notification in Model.Take(10))
+            {
+                <li>
+                    <a class="dropdown-item d-block text-wrap @(notification.IsRead ? "" : "fw-bold")" href="@Url.Page("/Notification/Open", new {id = notification.AppNotificationId})">
+                        <div class="mb-1 text-end">@notification.Title</div>
+                        <div class="small text-muted text-end">@notification.Body</div>
+                        <div class="text-start small text-secondary">@notification.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</div>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider m-0" /></li>
+            }
+        }
+        else
+        {
+            <li class="dropdown-item text-muted">ليس لديك اشعارات</li>
+        }
+    </ul>
+</div>

@@ -15,6 +15,7 @@ namespace DPMOPS.Data
         public DbSet<District> Districts { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
+        public DbSet<AppNotification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,6 +73,12 @@ namespace DPMOPS.Data
             modelBuilder.Entity<ServiceRequest>()
                 .Property(e => e.StatusId)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<AppNotification>(entity =>
+                entity.HasOne(n => n.Account)
+                .WithMany(u => u.Notifications)
+                .HasForeignKey(n => n.AccountId)
+                );
         }
     }
 }

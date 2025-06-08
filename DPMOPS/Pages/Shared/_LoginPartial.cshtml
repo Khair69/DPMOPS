@@ -2,6 +2,12 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@using System.Security.Claims
+@inject DPMOPS.Services.Notification.INotificationService NotificationService
+
+@{
+    var notifications = await NotificationService.GetUnreadAsync(User?.FindFirstValue(ClaimTypes.NameIdentifier));
+}
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
@@ -13,12 +19,15 @@
             </li>
         }
 
+    <li>
+        @await Html.PartialAsync("_NotificationPartial", notifications)
+    </li>
     <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle"></i></a>
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bi bi-person-circle fs-5"></i></a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right"></i></button>
+                <button type="submit" class="nav-link btn btn-link"><i class="bi bi-box-arrow-right fs-5"></i></button>
         </form>
     </li>
 }
