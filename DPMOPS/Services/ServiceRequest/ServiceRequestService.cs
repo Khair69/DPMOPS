@@ -161,8 +161,8 @@ namespace DPMOPS.Services.ServiceRequest
                 CreateNotificationDto notif = new CreateNotificationDto
                 {
                     AccountId = existingRequest.CitizenId,
-                    Title = "تغيير حالة طلب",
-                    Body = $"لقد تم تغيير حالة طلبك الى {(Status)srDto.StatusId}",
+                    Title = "تم تغيير حالة طلبك",
+                    Body = $"\"{existingRequest.Title}\" تغيرت حالته الى {(Status)srDto.StatusId}",
                     Link = _linkGenerator.GetPathByPage(
                         "/ServiceRequest/Info",
                         values: new { id = existingRequest.ServiceRequestId })
@@ -189,7 +189,7 @@ namespace DPMOPS.Services.ServiceRequest
                 CreateNotificationDto notif = new CreateNotificationDto
                 {
                     AccountId = existingRequest.CitizenId,
-                    Title = "قبول طلبك",
+                    Title = "تم قبول طلبك",
                     Body = $"لقد تم قبول طلبك بعنوان \"{existingRequest.Title}\"",
                     Link = _linkGenerator.GetPathByPage(
                         "/ServiceRequest/Info",
