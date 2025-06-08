@@ -55,14 +55,14 @@
 
                 @if (Model.StatusVisible)
                 {
-                    <form asp-page="Info" asp-page-handler="Status">
+                    <form asp-page="Info" asp-page-handler="Status" class="text-center">
                         <div class="form-floating m-3">
-                            <select asp-for="ChangeStatus.StatusId" asp-items="Html.GetEnumSelectList<Models.Status>()" class="form-select">
+                            <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="@Model.StatusOptions" class="form-select">
                             </select>
                             <label asp-for="ChangeStatus.StatusId"></label>
                             <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="btn btn-lg btn-primary w-100">حفظ</button>
+                        <button id="statusSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>حفظ</button>
                     </form>
                 }
 
@@ -145,11 +145,31 @@
             map.invalidateSize(); // Recalculate map size if modal is reopened
         }
     });
+
+    //status select section
+
+    let originalValue;
+
+    window.onload = function () {
+        const select = document.getElementById("statusSelect");
+        originalValue = select.value;
+    };
+
+    function checkSelection() {
+        const select = document.getElementById("statusSelect");
+        const button = document.getElementById("statusSaveButton");
+
+        if (select.value !== originalValue) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    }
 </script>
 
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/progindicator.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/progindicator.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 }
 

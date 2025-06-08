@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
@@ -25,6 +26,7 @@ namespace DPMOPS.Pages.ServiceRequest
         public bool ClaimVisible { get; set; } = false;
         public bool StatusVisible { get; set; } = false;
         public bool DeleteVisible { get; set; } = false;
+        public IEnumerable<SelectListItem> StatusOptions { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -47,6 +49,15 @@ namespace DPMOPS.Pages.ServiceRequest
             }
             if (ServiceRequest.EmployeeId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
+                StatusOptions = Enum.GetValues(typeof(Status))
+                    .Cast<Status>()
+                    .Where(s => s != (Status)1)
+                    .Select(s => new SelectListItem
+                    {
+                        Value = ((int)s).ToString(),
+                        Text = s.ToString()
+                    })
+                    .ToList();
                 StatusVisible = true;
                 ChangeStatus = new ChangeRequestStatusDto();
                 ChangeStatus.StatusId = (int)ServiceRequest.Status;
