@@ -35,6 +35,14 @@ namespace DPMOPS.Services.Account
                 .ToListAsync();
         }
 
+        public async Task<IList<string>> GetEmpIdInOrg(Guid orgId)
+        {
+            return await _userManager.Users
+                .Where(u => u.OrganizationId == orgId)
+                .Select(u => u.Id)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<SelectListItem>> GetEmployeeInOrgOptionsAsync(Guid orgId)
         {
             return await _userManager.Users

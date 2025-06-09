@@ -2,6 +2,7 @@
 
 using DPMOPS.Data;
 using DPMOPS.Models;
+using DPMOPS.Services.Account;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
@@ -16,16 +17,19 @@ namespace DPMOPS.Services.ServiceRequest
         private readonly IPhotoUploadService _photoUploadService;
         private readonly INotificationService _notificationService;
         private readonly LinkGenerator _linkGenerator;
+        private readonly IAccountService _accountService;
 
         public ServiceRequestService(ApplicationDbContext context,
             IPhotoUploadService photoUploadService,
             INotificationService notificationService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            IAccountService accountService)
         {
             _context = context;
             _photoUploadService = photoUploadService;
             _notificationService = notificationService;
             _linkGenerator = linkGenerator;
+            _accountService = accountService;
         }
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
@@ -134,6 +138,25 @@ namespace DPMOPS.Services.ServiceRequest
 
                 _context.ServiceRequests.Add(Sr);
                 res = await _context.SaveChangesAsync();
+
+                if (res == 1)
+                {
+                    var empIds = await _accountService.GetEmpIdInOrg(srDto.OrganizationId);
+                    foreach (var empId in empIds)
+                    {
+                        CreateNotificationDto notif = new CreateNotificationDto
+                        {
+                            AccountId = empId,
+                            Title = "تم تقديم طلب الى مؤسستك",
+                            Body = $"تم تقديم طلب بعنوان {Sr.Title}",
+                            Link = _linkGenerator.GetPathByPage(
+                                "/ServiceRequest/Info",
+                                values: new { id = Sr.ServiceRequestId })
+                        };
+
+                        await _notificationService.SaveAsync(notif);
+                    }
+                }
                 await transaction.CommitAsync();
             }
             catch

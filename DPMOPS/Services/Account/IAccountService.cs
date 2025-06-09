@@ -8,5 +8,6 @@ namespace DPMOPS.Services.Account
         Task<IList<AccountDto>> GetCitizensAsync();
         Task<IList<AccountDto>> GetEmployeesAsync();
         Task<IEnumerable<SelectListItem>> GetEmployeeInOrgOptionsAsync(Guid orgId);
+        Task<IList<string>> GetEmpIdInOrg(Guid orgId);
     }
 }
