@@ -1,4 +1,6 @@
-﻿using DPMOPS.Models;
+﻿#nullable disable
+
+using DPMOPS.Models;
 using DPMOPS.Services.Account.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +15,27 @@ namespace DPMOPS.Services.Account
         public AccountService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
+        }
+
+        public async Task<AccountDto> GetAccountByIdAsync(string id)
+        {
+            return await _userManager.Users
+                .Where(u => u.Id == id)
+                .Include(u => u.District)
+                    .ThenInclude(d => d.City)
+                .Include(u => u.CitizinServiceRequests)
+                .Select(u => new AccountDto
+                {
+                    AccountId = u.Id,
+                    FullName = u.FirstName + " " + u.LastName,
+                    Email = u.Email,
+                    DateCreated = u.DateCreated,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.District.City.Name + ", " + u.District.Name,
+                    NumberOfRequests = u.CitizinServiceRequests.Count()
+                })
+                .FirstOrDefaultAsync();
+
         }
 
         public async Task<IList<AccountDto>> GetCitizensAsync()

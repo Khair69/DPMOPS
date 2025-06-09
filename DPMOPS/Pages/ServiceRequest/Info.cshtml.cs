@@ -1,5 +1,6 @@
 using DPMOPS.Models;
 using DPMOPS.Services.Account;
+using DPMOPS.Services.Account.Dtos;
 using DPMOPS.Services.Appointment;
 using DPMOPS.Services.Appointment.Dtos;
 using DPMOPS.Services.ServiceRequest;
@@ -38,15 +39,16 @@ namespace DPMOPS.Pages.ServiceRequest
         public bool TransferVisible { get; set; } = false;
         public IEnumerable<SelectListItem> EmployeeOptions { get; set; }
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
+        public AccountDto Citizen { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
             ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
-
             if (ServiceRequest == null)
             {
                 return NotFound();
             }
+            Citizen = await _accountService.GetAccountByIdAsync(ServiceRequest.CitizenId);
 
             AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "IsUnclaimedOrYours");
             if (!authResult.Succeeded)

@@ -38,21 +38,26 @@
             <p class="list-unstyled small text-muted fs-6">
                 <i class="bi bi-geo-alt-fill"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription <br />
                 <i class="bi bi-calendar-event"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
-                <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName <br />
+                <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName 
+                @if(Model.StatusVisible || Model.TransferVisible)
+                {
+                    <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
+                }
+                <br />
                 <i class="bi bi-person-check-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
                 @if (Model.ServiceRequest.AppointmentDate.HasValue)
                 {
-                    <span class="text-primary">
+                    <span>
                         <i class="bi bi-calendar-check"></i>
                          الموعد المحدد: @Model.ServiceRequest.AppointmentDate.Value.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))
-                     </span>
+                    </span>
                 }
             </p>
 
             <div class="mt-auto pt-3">
 
-                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#mapModal">
+                <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#mapModal">
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 
@@ -65,13 +70,13 @@
                 {
                     @if (Model.ServiceRequest.AppointmentId == null)
                     {
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#scheduleModal">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal">
                             <i class="bi bi-calendar-plus"></i> اضافة موعد
                         </button>
                     }
                     else
                     {
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#rescheduleModal">
+                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#rescheduleModal">
                             <i class="bi bi-calendar-week"></i><text> تعديل الموعد</text>
                         </button>
                     }
@@ -212,6 +217,29 @@
                     <button type="submit" class="btn btn-success">تعديل الموعد</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!--Contect Info Modal-->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">التواصل مع المواطن</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>الاسم:</strong> @Model.Citizen.FullName</p>
+                <p>
+                    <strong>البريد الاكتروني:</strong>
+                    <a href="mailto:@Model.Citizen.Email">@Model.Citizen.Email</a>
+                </p>
+                <p>
+                    <strong>رقم الجوال:</strong>
+                    <a href="https://wa.me/+963@(Model.Citizen.PhoneNumber)" target="_blank">@Model.Citizen.PhoneNumber</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
