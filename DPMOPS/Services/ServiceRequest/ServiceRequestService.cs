@@ -429,9 +429,19 @@ namespace DPMOPS.Services.ServiceRequest
                         "/ServiceRequest/Info",
                         values: new { id = existingRequest.ServiceRequestId })
                 };
+                CreateNotificationDto citNotif = new CreateNotificationDto
+                {
+                    AccountId = existingRequest.CitizenId,
+                    Title = "تم تعيين موظف جديد",
+                    Body = $"تعيين موظف على \"{existingRequest.Title}\"",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = existingRequest.ServiceRequestId })
+                };
 
                 await _notificationService.SaveAsync(fromNotif);
                 await _notificationService.SaveAsync(toNotif);
+                await _notificationService.SaveAsync(citNotif);
 
                 existingRequest.EmployeeId = srDto.EmployeeId;
 
