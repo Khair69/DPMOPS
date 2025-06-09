@@ -83,14 +83,15 @@ namespace DPMOPS.Pages.ServiceRequest
             return Page();
         }
 
-        [BindProperty]
+        [BindProperty(Name = "ChangeStatus")]
         public ChangeRequestStatusDto ChangeStatus { get; set; }
 
         public async Task<IActionResult> OnPostStatusAsync(Guid id)
         {
+            RemoveUnrelatedModelState("ChangeStatus");
             if (!ModelState.IsValid)
             {
-                return Page();
+                return RedirectToPage("Info");
             }
 
             ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
@@ -109,14 +110,15 @@ namespace DPMOPS.Pages.ServiceRequest
             return RedirectToPage("Info");
         }
 
-        [BindProperty]
+        [BindProperty(Name = "ChangeEmployee")]
         public ChangeEmployeeDto ChangeEmployee { get; set; }
 
         public async Task<IActionResult> OnPostTransferAsync(Guid id)
         {
+            RemoveUnrelatedModelState("ChangeEmployee");
             if (!ModelState.IsValid)
             {
-                return Page();
+                return RedirectToPage("Info");
             }
 
             ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
