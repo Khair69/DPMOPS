@@ -25,6 +25,14 @@ mapModal.addEventListener('shown.bs.modal', function () {
             // Update form inputs
             document.getElementById("latitude").value = lat.toFixed(6);
             document.getElementById("longitude").value = lng.toFixed(6);
+
+            const selectButton = document.getElementById("selectLocation");
+            selectButton.innerHTML = selectButton.innerHTML.replace(
+                'اختر الموقع على الخريطة',
+                'تغيير موقعك على الخريطة'
+            );
+            selectButton.classList.replace("btn-outline-light", "btn-outline-success");
+            
         });
     } else {
         map.invalidateSize();
