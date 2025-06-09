@@ -1,6 +1,7 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Services.Appointment.Dtos;
 using DPMOPS.Services.ServiceRequest;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Appointment
 {
@@ -43,9 +44,19 @@ namespace DPMOPS.Services.Appointment
             throw new NotImplementedException();
         }
 
-        public Task<IList<AppointmentDto>> GetEmployeeAppointmentsAsync(string empId)
+        public async Task<IList<AppointmentDto>> GetEmployeeAppointmentsAsync(string empId)
         {
-            throw new NotImplementedException();
+            return await _context.Appointments
+                .Include(a => a.ServiceRequest)
+                .Where(a => a.ServiceRequest.EmployeeId == empId)
+                .Select(a => new AppointmentDto
+                {
+                    AppointmentId = a.AppointmentId,
+                    ServiceRequestId = a.ServiceRequestId,
+                    ScheduledAt = a.ScheduledAt,
+                    RequestTitle = a.ServiceRequest.Title
+                })
+                .ToListAsync();
         }
 
         public Task<bool> RemoveAppointmentAsync(Guid id)

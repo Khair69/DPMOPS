@@ -16,3 +16,9 @@
         <a class="nav-link" asp-page="/ServiceRequest/Index">الطلبات</a>
     </li>
 }
+@if (User.Claims.FirstOrDefault(x => x.Type == "OrganizationId")?.Value != null && User.Claims.FirstOrDefault(x => x.Type == "IsOrgAdmin")?.Value == null)
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-page="/Organization/Calendar"><i class="bi bi-calendar-week"></i></a>
+    </li>
+}

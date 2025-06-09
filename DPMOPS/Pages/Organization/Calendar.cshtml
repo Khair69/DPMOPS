@@ -1,0 +1,35 @@
+﻿@page
+@model DPMOPS.Pages.Organization.CalendarModel
+@{
+}
+
+<div class="container mt-5">
+    <div id="calendar"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: '/Organization/Calendar?handler=GetAppointments' // or static array
+        });
+
+        calendar.render();
+    });
+</script>
+
+
+@section Styles {
+}
+
+@section Scripts {
+    <script src="~/lib/fullcalendar/dist/index.global.min.js"></script>
+}
