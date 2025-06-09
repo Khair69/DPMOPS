@@ -1,6 +1,7 @@
 ﻿using DPMOPS.Models;
 using DPMOPS.Services.Account.Dtos;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Account
@@ -30,6 +31,18 @@ namespace DPMOPS.Services.Account
                     PhoneNumber = u.PhoneNumber,
                     Address = u.District.City.Name + ", " + u.District.Name,
                     NumberOfRequests = u.CitizinServiceRequests.Count()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetEmployeeInOrgOptionsAsync(Guid orgId)
+        {
+            return await _userManager.Users
+                .Where(u => u.OrganizationId == orgId)
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.FirstName +" "+u.LastName,
                 })
                 .ToListAsync();
         }

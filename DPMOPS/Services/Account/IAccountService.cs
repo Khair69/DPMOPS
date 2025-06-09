@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Services.Account.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DPMOPS.Services.Account
 {
@@ -6,5 +7,6 @@ namespace DPMOPS.Services.Account
     {
         Task<IList<AccountDto>> GetCitizensAsync();
         Task<IList<AccountDto>> GetEmployeesAsync();
+        Task<IEnumerable<SelectListItem>> GetEmployeeInOrgOptionsAsync(Guid orgId);
     }
 }

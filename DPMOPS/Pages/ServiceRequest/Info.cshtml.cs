@@ -1,4 +1,5 @@
 using DPMOPS.Models;
+using DPMOPS.Services.Account;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -14,18 +15,23 @@ namespace DPMOPS.Pages.ServiceRequest
     {
         private readonly IAuthorizationService _authService;
         private readonly IServiceRequestService _serviceRequestService;
+        private readonly IAccountService _accountService;
 
         public InfoModel(IAuthorizationService authService,
-            IServiceRequestService serviceRequestService)
+            IServiceRequestService serviceRequestService,
+            IAccountService accountService)
         {
             _authService = authService;
             _serviceRequestService = serviceRequestService;
+            _accountService = accountService;
         }
 
         public ServiceRequestDto ServiceRequest { get; set; }
         public bool ClaimVisible { get; set; } = false;
         public bool StatusVisible { get; set; } = false;
         public bool DeleteVisible { get; set; } = false;
+        public bool TransferVisible { get; set; } = false;
+        public IEnumerable<SelectListItem> EmployeeOptions { get; set; }
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
@@ -66,6 +72,13 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 DeleteVisible = true;
             }
+            if (User.HasClaim("IsOrgAdmin", "true") && ServiceRequest.OrganizationId.ToString() == User.FindFirst("OrganizationId")?.Value)
+            {
+                EmployeeOptions = await _accountService.GetEmployeeInOrgOptionsAsync(Guid.Parse(User.FindFirst("OrganizationId")?.Value));
+                TransferVisible = true;
+                ChangeEmployee = new ChangeEmployeeDto();
+                ChangeEmployee.EmployeeId = ServiceRequest.EmployeeId;
+            }
 
             return Page();
         }
@@ -88,6 +101,32 @@ namespace DPMOPS.Pages.ServiceRequest
 
             ChangeStatus.ServiceRequestId = id;
             var success = await _serviceRequestService.ChangeRequestStatusAsync(ChangeStatus);
+            if (!success)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToPage("Info");
+        }
+
+        [BindProperty]
+        public ChangeEmployeeDto ChangeEmployee { get; set; }
+
+        public async Task<IActionResult> OnPostTransferAsync(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
+            if (User.FindFirst("OrganizationId")?.Value != ServiceRequest.OrganizationId.ToString() && !User.HasClaim("IsOrgAdmin", "true"))
+            {
+                return new ForbidResult();
+            }
+
+            ChangeEmployee.ServiceRequestId = id;
+            var success = await _serviceRequestService.ChangeRequestsEmployeeAsync(ChangeEmployee);
             if (!success)
             {
                 return BadRequest();

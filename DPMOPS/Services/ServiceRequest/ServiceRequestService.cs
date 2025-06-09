@@ -168,12 +168,12 @@ namespace DPMOPS.Services.ServiceRequest
                         values: new { id = existingRequest.ServiceRequestId })
                 };
 
-                var notifRes = await _notificationService.SaveAsync(notif);
+                await _notificationService.SaveAsync(notif);
 
                 existingRequest.StatusId = srDto.StatusId;
 
                 var saveresult = await _context.SaveChangesAsync();
-                return saveresult == 1 && notifRes;
+                return saveresult == 1;
             }
             return false;
         }
@@ -196,13 +196,13 @@ namespace DPMOPS.Services.ServiceRequest
                         values: new { id = existingRequest.ServiceRequestId })
                 };
 
-                var notifRes = await _notificationService.SaveAsync(notif);
+                await _notificationService.SaveAsync(notif);
 
                 existingRequest.EmployeeId = empId;
                 existingRequest.StatusId = 2;
 
                 var saveresult = await _context.SaveChangesAsync();
-                return saveresult == 1 && notifRes;
+                return saveresult == 1;
             }
             return false;
         }
@@ -380,6 +380,42 @@ namespace DPMOPS.Services.ServiceRequest
                     Longitude = sr.Longitude
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> ChangeRequestsEmployeeAsync(ChangeEmployeeDto srDto)
+        {
+            var existingRequest = await _context.ServiceRequests
+                .Where(sr => sr.ServiceRequestId == srDto.ServiceRequestId)
+                .FirstOrDefaultAsync();
+
+            if (existingRequest != null)
+            {
+                CreateNotificationDto fromNotif = new CreateNotificationDto
+                {
+                    AccountId = existingRequest.EmployeeId,
+                    Title = "تم إزالتك من الطلب",
+                    Body = $"تم إزالتك من \"{existingRequest.Title}\"",
+                    Link = _linkGenerator.GetPathByPage("/Index")
+                };
+                CreateNotificationDto toNotif = new CreateNotificationDto
+                {
+                    AccountId = srDto.EmployeeId,
+                    Title = "تم تعيينك على الطلب",
+                    Body = $"تم تعيينك على \"{existingRequest.Title}\"",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = existingRequest.ServiceRequestId })
+                };
+
+                await _notificationService.SaveAsync(fromNotif);
+                await _notificationService.SaveAsync(toNotif);
+
+                existingRequest.EmployeeId = srDto.EmployeeId;
+
+                var saveresult = await _context.SaveChangesAsync();
+                return saveresult == 1;
+            }
+            return false;
         }
     }
 }
