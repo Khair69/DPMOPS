@@ -9,7 +9,5 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         [Display(Name = "الموظف")]
         [Required(ErrorMessage = "{0} مطلوب")]
         public string? EmployeeId { get; set; }
-
-
     }
 }

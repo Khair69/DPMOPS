@@ -4,6 +4,7 @@ using DPMOPS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DPMOPS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609091824_Appointment")]
+    partial class Appointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,8 +162,7 @@ namespace DPMOPS.Data.Migrations
 
                     b.HasKey("AppointmentId");
 
-                    b.HasIndex("ServiceRequestId")
-                        .IsUnique();
+                    b.HasIndex("ServiceRequestId");
 
                     b.ToTable("Appointments");
                 });
@@ -449,8 +451,8 @@ namespace DPMOPS.Data.Migrations
             modelBuilder.Entity("DPMOPS.Models.Appointment", b =>
                 {
                     b.HasOne("DPMOPS.Models.ServiceRequest", "ServiceRequest")
-                        .WithOne("Appointment")
-                        .HasForeignKey("DPMOPS.Models.Appointment", "ServiceRequestId")
+                        .WithMany()
+                        .HasForeignKey("ServiceRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -585,11 +587,6 @@ namespace DPMOPS.Data.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("ServiceRequests");
-                });
-
-            modelBuilder.Entity("DPMOPS.Models.ServiceRequest", b =>
-                {
-                    b.Navigation("Appointment");
                 });
 #pragma warning restore 612, 618
         }

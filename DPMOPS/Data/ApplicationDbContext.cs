@@ -16,6 +16,7 @@ namespace DPMOPS.Data
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<AppNotification> Notifications { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -78,7 +79,12 @@ namespace DPMOPS.Data
                 entity.HasOne(n => n.Account)
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.AccountId)
-                );
+            );
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.ServiceRequest)
+                .WithOne(sr => sr.Appointment)
+                .HasForeignKey<Appointment>(a => a.ServiceRequestId);
         }
     }
 }

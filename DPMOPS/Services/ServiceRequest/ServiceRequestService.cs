@@ -41,6 +41,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .Include(sr => sr.Appointment)
                 .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
@@ -65,7 +66,10 @@ namespace DPMOPS.Services.ServiceRequest
                     PhotoPath = sr.PhotoPath,
 
                     Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
+                    Longitude = sr.Longitude,
+
+                    AppointmentId = sr.Appointment.AppointmentId,
+                    AppointmentDate = sr.Appointment.ScheduledAt
                 })
                 .ToListAsync();
         }
@@ -79,6 +83,7 @@ namespace DPMOPS.Services.ServiceRequest
                 .Include(sr => sr.Citizen)
                 .Include(sr => sr.Employee)
                 .Include(sr => sr.Organization)
+                .Include(sr => sr.Appointment)
                 .AsNoTracking()
                 .Select(sr => new ServiceRequestDto
                 {
@@ -103,7 +108,10 @@ namespace DPMOPS.Services.ServiceRequest
                     PhotoPath = sr.PhotoPath,
 
                     Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
+                    Longitude = sr.Longitude,
+
+                    AppointmentId = sr.Appointment.AppointmentId,
+                    AppointmentDate = sr.Appointment.ScheduledAt
                 })
                 .FirstOrDefaultAsync();
         }

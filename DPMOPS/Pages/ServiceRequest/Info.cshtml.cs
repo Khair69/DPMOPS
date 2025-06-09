@@ -1,5 +1,7 @@
 using DPMOPS.Models;
 using DPMOPS.Services.Account;
+using DPMOPS.Services.Appointment;
+using DPMOPS.Services.Appointment.Dtos;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -16,14 +18,17 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IAuthorizationService _authService;
         private readonly IServiceRequestService _serviceRequestService;
         private readonly IAccountService _accountService;
+        private readonly IAppointmentService _appointmentService;
 
         public InfoModel(IAuthorizationService authService,
             IServiceRequestService serviceRequestService,
-            IAccountService accountService)
+            IAccountService accountService,
+            IAppointmentService appointmentService)
         {
             _authService = authService;
             _serviceRequestService = serviceRequestService;
             _accountService = accountService;
+            _appointmentService = appointmentService;
         }
 
         public ServiceRequestDto ServiceRequest { get; set; }
@@ -135,6 +140,78 @@ namespace DPMOPS.Pages.ServiceRequest
             }
 
             return RedirectToPage("Info");
+        }
+
+        [BindProperty(Name = "AddAppointment")]
+        public CreateAppointmentDto AddAppointment {  get; set; }
+
+        public async Task<IActionResult> OnPostAddAppointmentAsync(Guid id)
+        {
+            RemoveUnrelatedModelState("AddAppointment");
+            if (!ModelState.IsValid)
+            {
+                return RedirectToPage("Info");
+            }
+
+            var datePart = Request.Form["ScheduleDate"];
+            var timePart = Request.Form["ScheduleTime"];
+
+            if (DateTime.TryParse(datePart, out var date) && TimeSpan.TryParse(timePart, out var time))
+            {
+                AddAppointment.ScheduledAt = date.Date + time;
+                AddAppointment.ServiceRequestId = id;
+                var success = await _appointmentService.AddAppointmentAsync(AddAppointment);
+                if (!success)
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            return RedirectToPage("Info");
+        }
+
+        [BindProperty(Name = "ReSchAppointment")]
+        public RescheduleAppointmentDto ReSchAppointment { get; set; }
+
+        public async Task<IActionResult> OnPostReSchAppointmentAsync()
+        {
+            RemoveUnrelatedModelState("ReSchAppointment");
+            if (!ModelState.IsValid)
+            {
+                return RedirectToPage("Info");
+            }
+
+            var datePart = Request.Form["ScheduleDate"];
+            var timePart = Request.Form["ScheduleTime"];
+
+            if (DateTime.TryParse(datePart, out var date) && TimeSpan.TryParse(timePart, out var time))
+            {
+                ReSchAppointment.ScheduledAt = date.Date + time;
+                var success = await _appointmentService.RescheduleAsync(ReSchAppointment);
+                if (!success)
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            return RedirectToPage("Info");
+        }
+
+        private void RemoveUnrelatedModelState(string prefixToKeep)
+        {
+            var keysToRemove = ModelState.Keys.Where(k => !k.StartsWith(prefixToKeep + ".", StringComparison.OrdinalIgnoreCase)).ToList();
+            foreach (var key in keysToRemove)
+            {
+                ModelState.Remove(key);
+            }
         }
     }
 }

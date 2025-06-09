@@ -36,6 +36,8 @@ namespace DPMOPS.Models
         [Required]
         public double Longitude { get; set; }
 
+        public Appointment? Appointment { get; set; }
+
         // possible add ons:
         // public DateTime? DateCompleted { get; set; }
         // public int? Rating { get; set; }

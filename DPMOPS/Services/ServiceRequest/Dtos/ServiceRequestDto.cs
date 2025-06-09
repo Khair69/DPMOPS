@@ -28,5 +28,8 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
 
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public Guid? AppointmentId { get; set; }
+        public DateTime? AppointmentDate { get; set; }
     }
 }
