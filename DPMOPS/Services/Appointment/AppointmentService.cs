@@ -39,9 +39,19 @@ namespace DPMOPS.Services.Appointment
             return false;
         }
 
-        public Task<IList<AppointmentDto>> GetCitizenAppointmentsAsync(string citId)
+        public async Task<IList<AppointmentDto>> GetCitizenAppointmentsAsync(string citId)
         {
-            throw new NotImplementedException();
+            return await _context.Appointments
+                .Include(a => a.ServiceRequest)
+                .Where(a => a.ServiceRequest.CitizenId == citId)
+                .Select(a => new AppointmentDto
+                {
+                    AppointmentId = a.AppointmentId,
+                    ServiceRequestId = a.ServiceRequestId,
+                    ScheduledAt = a.ScheduledAt,
+                    RequestTitle = a.ServiceRequest.Title
+                })
+                .ToListAsync();
         }
 
         public async Task<IList<AppointmentDto>> GetEmployeeAppointmentsAsync(string empId)
@@ -54,6 +64,21 @@ namespace DPMOPS.Services.Appointment
                     AppointmentId = a.AppointmentId,
                     ServiceRequestId = a.ServiceRequestId,
                     ScheduledAt = a.ScheduledAt,
+                    RequestTitle = a.ServiceRequest.Title
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IList<AppointmentDto>> GetOrganizationAppointmentsAsync(Guid orgId)
+        {
+            return await _context.Appointments
+                .Include(a => a.ServiceRequest)
+                .Where(a => a.ServiceRequest.OrganizationId == orgId)
+                .Select(a => new AppointmentDto
+                {
+                    AppointmentId = a.AppointmentId,
+                    ServiceRequestId = a.ServiceRequestId,
+                    ScheduledAt= a.ScheduledAt,
                     RequestTitle = a.ServiceRequest.Title
                 })
                 .ToListAsync();

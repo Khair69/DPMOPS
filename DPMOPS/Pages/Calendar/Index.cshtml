@@ -1,5 +1,5 @@
 ﻿@page
-@model DPMOPS.Pages.Organization.CalendarModel
+@model DPMOPS.Pages.Calendar.IndexModel
 @{
 }
 
@@ -19,7 +19,7 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
-            events: '/Organization/Calendar?handler=GetAppointments' // or static array
+            events: '/Calendar/Index?handler=GetAppointments'
         });
 
         calendar.render();

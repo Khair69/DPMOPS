@@ -8,6 +8,7 @@ namespace DPMOPS.Services.Appointment
         Task<bool> RescheduleAsync(RescheduleAppointmentDto apDto);
         Task<bool> RemoveAppointmentAsync(Guid id);
         Task<IList<AppointmentDto>> GetEmployeeAppointmentsAsync(string empId); 
+        Task<IList<AppointmentDto>> GetOrganizationAppointmentsAsync(Guid orgId); 
         Task<IList<AppointmentDto>> GetCitizenAppointmentsAsync(string citId); 
     }
 }
