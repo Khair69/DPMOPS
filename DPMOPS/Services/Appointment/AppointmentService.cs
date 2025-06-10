@@ -1,7 +1,13 @@
-﻿using DPMOPS.Data;
+﻿using Azure.Core;
+using DPMOPS.Data;
+using DPMOPS.Data.Migrations;
 using DPMOPS.Services.Appointment.Dtos;
+using DPMOPS.Services.Notification;
+using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.ServiceRequest;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace DPMOPS.Services.Appointment
 {
@@ -9,12 +15,18 @@ namespace DPMOPS.Services.Appointment
     {
         private readonly ApplicationDbContext _context;
         private readonly IServiceRequestService _serviceRequestService;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly INotificationService _notificationService;
 
         public AppointmentService(ApplicationDbContext context,
-            IServiceRequestService serviceRequestService)
+            IServiceRequestService serviceRequestService,
+            LinkGenerator linkGenerator,
+            INotificationService notificationService)
         {
             _context = context;
             _serviceRequestService = serviceRequestService;
+            _linkGenerator = linkGenerator;
+            _notificationService = notificationService;
         }
 
         public async Task<bool> AddAppointmentAsync(CreateAppointmentDto apDto)
@@ -32,7 +44,17 @@ namespace DPMOPS.Services.Appointment
                 _context.Appointments.Add(ap);
                 var res = await _context.SaveChangesAsync();
 
-                //notification to citizen.
+                CreateNotificationDto notif = new CreateNotificationDto
+                {
+                    AccountId = request.CitizenId,
+                    Title = $"تم تحديد موعد لطلبك \"{request.Title}\"",
+                    Body = $"{apDto.ScheduledAt.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))}",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = request.ServiceRequestId })
+                };
+
+                await _notificationService.SaveAsync(notif);
 
                 return res == 1;
             }
@@ -92,15 +114,28 @@ namespace DPMOPS.Services.Appointment
         public async Task<bool> RescheduleAsync(RescheduleAppointmentDto apDto)
         {
             var existingAp = await _context.Appointments
-                .FindAsync(apDto.AppointmentId);
+                .Where(a => a.AppointmentId == apDto.AppointmentId)
+                .Include(a => a.ServiceRequest)
+                .FirstOrDefaultAsync();
 
             if (existingAp != null)
             {
                 existingAp.ScheduledAt = apDto.ScheduledAt;
                 var success = await _context.SaveChangesAsync();
-                return success == 1;
 
-                //notification
+                CreateNotificationDto notif = new CreateNotificationDto
+                {
+                    AccountId = existingAp.ServiceRequest.CitizenId,
+                    Title = $"تم تغيير موعد طلبك \"{existingAp.ServiceRequest.Title}\"",
+                    Body = $"{apDto.ScheduledAt.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))}",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/ServiceRequest/Info",
+                        values: new { id = existingAp.ServiceRequest.ServiceRequestId })
+                };
+
+                await _notificationService.SaveAsync(notif);
+
+                return success == 1;
             }
             return false;
         }
