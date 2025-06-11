@@ -7,8 +7,11 @@ namespace DPMOPS.Services.Account
     {
         Task<IList<AccountDto>> GetCitizensAsync();
         Task<IList<AccountDto>> GetEmployeesAsync();
-        Task<IEnumerable<SelectListItem>> GetEmployeeInOrgOptionsAsync(Guid orgId);
-        Task<IList<string>> GetEmpIdInOrg(Guid orgId);
+        Task<IList<AccountDto>> GetOrgAdminsAsync();
+        Task<IEnumerable<SelectListItem>> GetEmployeesInOrgOptionsAsync(Guid orgId);
+        Task<IList<string>> GetAdminIdsInOrg(Guid orgId);
         Task<AccountDto> GetAccountByIdAsync(string id);
+        Task<bool> UserHasClaimAsync(string userId, string claimType, string claimValue);
+        Task<string> ValueOfUserClaimAsync(string userId, string claimType);
     }
 }

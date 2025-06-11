@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
@@ -33,10 +34,9 @@ namespace DPMOPS.Pages.ServiceRequest
         }
 
         public ServiceRequestDto ServiceRequest { get; set; }
-        public bool ClaimVisible { get; set; } = false;
-        public bool StatusVisible { get; set; } = false;
+        public bool EmployeeViewer { get; set; } = false;
         public bool DeleteVisible { get; set; } = false;
-        public bool TransferVisible { get; set; } = false;
+        public bool OrgAdminViewer { get; set; } = false;
         public IEnumerable<SelectListItem> EmployeeOptions { get; set; }
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
         public AccountDto Citizen { get; set; }
@@ -50,16 +50,12 @@ namespace DPMOPS.Pages.ServiceRequest
             }
             Citizen = await _accountService.GetAccountByIdAsync(ServiceRequest.CitizenId);
 
-            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "IsUnclaimedOrYours");
+            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "OrgAdminOrYours");
             if (!authResult.Succeeded)
             {
                 return new ForbidResult();
             }
 
-            if (ServiceRequest.EmployeeId == null && !User.HasClaim("IsOrgAdmin", "true") && User.FindFirst("OrganizationId")?.Value != null)
-            {
-                ClaimVisible = true;
-            }
             if (ServiceRequest.EmployeeId == User.FindFirstValue(ClaimTypes.NameIdentifier))
             {
                 StatusOptions = Enum.GetValues(typeof(Status))
@@ -71,7 +67,7 @@ namespace DPMOPS.Pages.ServiceRequest
                         Text = s.ToString()
                     })
                     .ToList();
-                StatusVisible = true;
+                EmployeeViewer = true;
                 ChangeStatus = new ChangeRequestStatusDto();
                 ChangeStatus.StatusId = (int)ServiceRequest.Status;
             }
@@ -79,12 +75,12 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 DeleteVisible = true;
             }
-            if (User.HasClaim("IsOrgAdmin", "true") && ServiceRequest.OrganizationId.ToString() == User.FindFirst("OrganizationId")?.Value)
+            if (User.HasClaim("IsOrgAdmin", "true"))
             {
-                EmployeeOptions = await _accountService.GetEmployeeInOrgOptionsAsync(Guid.Parse(User.FindFirst("OrganizationId")?.Value));
-                TransferVisible = true;
-                ChangeEmployee = new ChangeEmployeeDto();
-                ChangeEmployee.EmployeeId = ServiceRequest.EmployeeId;
+                EmployeeOptions = await _accountService.GetEmployeesInOrgOptionsAsync(Guid.Parse(User.FindFirst("OrganizationId")?.Value));
+                OrgAdminViewer = true;
+                AssignEmployee = new AssignEmployeeDto();
+                AssignEmployee.EmployeeId = ServiceRequest.EmployeeId;
             }
 
             return Page();
@@ -117,12 +113,12 @@ namespace DPMOPS.Pages.ServiceRequest
             return RedirectToPage("Info");
         }
 
-        [BindProperty(Name = "ChangeEmployee")]
-        public ChangeEmployeeDto ChangeEmployee { get; set; }
+        [BindProperty(Name = "AssignEmployee")]
+        public AssignEmployeeDto AssignEmployee { get; set; }
 
-        public async Task<IActionResult> OnPostTransferAsync(Guid id)
+        public async Task<IActionResult> OnPostAssignAsync(Guid id)
         {
-            RemoveUnrelatedModelState("ChangeEmployee");
+            RemoveUnrelatedModelState("AssignEmployee");
             if (!ModelState.IsValid)
             {
                 return RedirectToPage("Info");
@@ -134,14 +130,14 @@ namespace DPMOPS.Pages.ServiceRequest
                 return new ForbidResult();
             }
 
-            ChangeEmployee.ServiceRequestId = id;
-            var success = await _serviceRequestService.ChangeRequestsEmployeeAsync(ChangeEmployee);
+            AssignEmployee.ServiceRequestId = id;
+            var success = await _serviceRequestService.AssignEmployeeAsync(AssignEmployee);
             if (!success)
             {
                 return BadRequest();
             }
 
-            return RedirectToPage("Info");
+            return RedirectToPage("Info");//this should just close the modal
         }
 
         [BindProperty(Name = "AddAppointment")]

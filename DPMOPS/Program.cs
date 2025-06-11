@@ -46,8 +46,8 @@ namespace DPMOPS
                 options.AddPolicy("IsCitizen", policy =>
                 policy.AddRequirements(new CitizenRequirement()));
 
-                options.AddPolicy("IsUnclaimedOrYours", policy =>
-                policy.AddRequirements(new UnclaimedOrYoursRequirement()));
+                options.AddPolicy("OrgAdminOrYours", policy =>
+                policy.AddRequirements(new OrgAdminOrYoursRequirement()));
             });
 
             builder.Services.AddScoped<IAuthorizationHandler, AdminHandler>();
@@ -56,7 +56,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IAuthorizationHandler, SameOrgHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, AdminOrOrgAdminInOrgHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, CitizenHandler>();
-            builder.Services.AddScoped<IAuthorizationHandler, UnclaimedOrYoursHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, OrgAdminOrYoursHandler>();
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

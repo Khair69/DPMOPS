@@ -39,7 +39,7 @@
                 <i class="bi bi-geo-alt-fill"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription <br />
                 <i class="bi bi-calendar-event"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
                 <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName 
-                @if(Model.StatusVisible || Model.TransferVisible)
+                @if(Model.EmployeeViewer || Model.OrgAdminViewer)
                 {
                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
                 }
@@ -61,12 +61,7 @@
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 
-                @if (Model.ClaimVisible)
-                {
-                    <a asp-page="Claim" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="btn btn-outline-success">قبول</a>
-                }
-
-                @if (Model.StatusVisible)
+                @if (Model.EmployeeViewer)
                 {
                     @if (Model.ServiceRequest.AppointmentId == null)
                     {
@@ -94,15 +89,16 @@
                     </div>
                 }
 
-                @if (Model.TransferVisible)
+                @if (Model.OrgAdminViewer && Model.ServiceRequest.EmployeeId == null)
                 {
                     <div class="d-flex justify-content-center">
-                        <form asp-page="Info" asp-page-handler="Transfer" class="w-50 text-center">
+                        <form asp-page="Info" asp-page-handler="Assign" class="w-50 text-center">
                             <div class="form-floating m-3">
-                                <select id="transferSelect" onchange="checkSelectionEmp()" asp-for="ChangeEmployee.EmployeeId" asp-items="@Model.EmployeeOptions" class="form-select">
+                                <select id="transferSelect" onchange="checkSelectionEmp()" asp-for="AssignEmployee.EmployeeId" asp-items="@Model.EmployeeOptions" class="form-select">
+                                    <option value=" "> </option>
                                 </select>
-                                <label asp-for="ChangeEmployee.EmployeeId"></label>
-                                <span asp-validation-for="ChangeEmployee.EmployeeId" class="text-danger"></span>
+                                <label asp-for="AssignEmployee.EmployeeId"></label>
+                                <span asp-validation-for="AssignEmployee.EmployeeId" class="text-danger"></span>
                             </div>
                             <button id="transferSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>تعيين</button>
                         </form>

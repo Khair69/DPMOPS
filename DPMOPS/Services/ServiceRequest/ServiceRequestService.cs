@@ -149,8 +149,8 @@ namespace DPMOPS.Services.ServiceRequest
 
                 if (res == 1)
                 {
-                    var empIds = await _accountService.GetEmpIdInOrg(srDto.OrganizationId);
-                    foreach (var empId in empIds)
+                    var AdminsIds = await _accountService.GetAdminIdsInOrg(srDto.OrganizationId);
+                    foreach (var empId in AdminsIds)
                     {
                         CreateNotificationDto notif = new CreateNotificationDto
                         {
@@ -374,88 +374,56 @@ namespace DPMOPS.Services.ServiceRequest
                 .ToListAsync();
         }
 
-        public async Task<IList<ServiceRequestDto>> GetUnclaimedRequestsByOrganizationAsync(Guid id)
-        {
-            return await _context.ServiceRequests
-                .Where(sr => sr.OrganizationId == id && sr.EmployeeId == null)
-                .OrderBy(sr => sr.DateCreated)
-                .Include(sr => sr.District)
-                    .ThenInclude(d => d.City)
-                .Include(sr => sr.Citizen)
-                .Include(sr => sr.Employee)
-                .Include(sr => sr.Organization)
-                .AsNoTracking()
-                .Select(sr => new ServiceRequestDto
-                {
-                    ServiceRequestId = sr.ServiceRequestId,
-                    Title = sr.Title,
-                    Description = sr.Description,
-                    LocDescription = sr.LocDescription,
-                    DateCreated = sr.DateCreated,
-
-                    DistrictId = sr.DistrictId,
-                    Address = sr.District.City.Name + ", " + sr.District.Name,
-                    Status = (Status)sr.StatusId,
-
-                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
-                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
-                    OrganizationName = sr.Organization.Name,
-
-                    CitizenId = sr.Citizen.Id,
-                    OrganizationId = sr.OrganizationId,
-                    EmployeeId = sr.EmployeeId,
-
-                    PhotoPath = sr.PhotoPath,
-
-                    Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
-                })
-                .ToListAsync();
-        }
-
-        public async Task<bool> ChangeRequestsEmployeeAsync(ChangeEmployeeDto srDto)
+        public async Task<bool> AssignEmployeeAsync(AssignEmployeeDto srDto)
         {
             var existingRequest = await _context.ServiceRequests
-                .Where(sr => sr.ServiceRequestId == srDto.ServiceRequestId)
-                .FirstOrDefaultAsync();
+                .FindAsync(srDto.ServiceRequestId);
 
             if (existingRequest != null)
             {
-                CreateNotificationDto fromNotif = new CreateNotificationDto
+                if (existingRequest.EmployeeId != null || await _accountService.UserHasClaimAsync(srDto.EmployeeId, "IsOrgAdmin", "true") || await _accountService.ValueOfUserClaimAsync(srDto.EmployeeId, "OrganizationId") != existingRequest.OrganizationId.ToString())
                 {
-                    AccountId = existingRequest.EmployeeId,
-                    Title = "تم إزالتك من الطلب",
-                    Body = $"تم إزالتك من \"{existingRequest.Title}\"",
-                    Link = _linkGenerator.GetPathByPage("/Index")
-                };
-                CreateNotificationDto toNotif = new CreateNotificationDto
-                {
-                    AccountId = srDto.EmployeeId,
-                    Title = "تم تعيينك على الطلب",
-                    Body = $"تم تعيينك على \"{existingRequest.Title}\"",
-                    Link = _linkGenerator.GetPathByPage(
-                        "/ServiceRequest/Info",
-                        values: new { id = existingRequest.ServiceRequestId })
-                };
-                CreateNotificationDto citNotif = new CreateNotificationDto
-                {
-                    AccountId = existingRequest.CitizenId,
-                    Title = "تم تعيين موظف جديد",
-                    Body = $"تعيين موظف على \"{existingRequest.Title}\"",
-                    Link = _linkGenerator.GetPathByPage(
-                        "/ServiceRequest/Info",
-                        values: new { id = existingRequest.ServiceRequestId })
-                };
-
-                await _notificationService.SaveAsync(fromNotif);
-                await _notificationService.SaveAsync(toNotif);
-                await _notificationService.SaveAsync(citNotif);
-
+                    return false;
+                }
                 existingRequest.EmployeeId = srDto.EmployeeId;
 
                 var saveresult = await _context.SaveChangesAsync();
                 return saveresult == 1;
             }
+
+            //if (existingRequest != null)
+            //{
+            //    CreateNotificationDto fromNotif = new CreateNotificationDto
+            //    {
+            //        AccountId = existingRequest.EmployeeId,
+            //        Title = "تم إزالتك من الطلب",
+            //        Body = $"تم إزالتك من \"{existingRequest.Title}\"",
+            //        Link = _linkGenerator.GetPathByPage("/Index")
+            //    };
+            //    CreateNotificationDto toNotif = new CreateNotificationDto
+            //    {
+            //        AccountId = srDto.EmployeeId,
+            //        Title = "تم تعيينك على الطلب",
+            //        Body = $"تم تعيينك على \"{existingRequest.Title}\"",
+            //        Link = _linkGenerator.GetPathByPage(
+            //            "/ServiceRequest/Info",
+            //            values: new { id = existingRequest.ServiceRequestId })
+            //    };
+            //    CreateNotificationDto citNotif = new CreateNotificationDto
+            //    {
+            //        AccountId = existingRequest.CitizenId,
+            //        Title = "تم تعيين موظف جديد",
+            //        Body = $"تعيين موظف على \"{existingRequest.Title}\"",
+            //        Link = _linkGenerator.GetPathByPage(
+            //            "/ServiceRequest/Info",
+            //            values: new { id = existingRequest.ServiceRequestId })
+            //    };
+
+            //    await _notificationService.SaveAsync(fromNotif);
+            //    await _notificationService.SaveAsync(toNotif);
+            //    await _notificationService.SaveAsync(citNotif);
+
+            //}
             return false;
         }
     }

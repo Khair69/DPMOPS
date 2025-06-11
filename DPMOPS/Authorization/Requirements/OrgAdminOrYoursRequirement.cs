@@ -2,7 +2,7 @@
 
 namespace DPMOPS.Authorization.Requirements
 {
-    public class UnclaimedOrYoursRequirement : IAuthorizationRequirement
+    public class OrgAdminOrYoursRequirement : IAuthorizationRequirement
     {
     }
 }

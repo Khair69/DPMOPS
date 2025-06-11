@@ -2,7 +2,7 @@
 
 namespace DPMOPS.Services.ServiceRequest.Dtos
 {
-    public class ChangeEmployeeDto
+    public class AssignEmployeeDto
     {
         public Guid ServiceRequestId { get; set; }
 

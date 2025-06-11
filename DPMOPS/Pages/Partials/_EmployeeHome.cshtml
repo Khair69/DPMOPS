@@ -19,12 +19,6 @@
                 <h3 class="fw-bold mb-0">طلباتك</h3>
             </div>
         }
-        <div>
-            <a class="btn btn-outline-primary" asp-page="/ServiceRequest/Unclaimed">
-                <i class="bi bi-plus-lg"></i>
-                استلم طلبات جديدة
-            </a>
-        </div>
     </div>
 
 
@@ -34,33 +28,30 @@
             @foreach (var request in data)
             {
                 <div class="col-12">
-                    <div class="card shadow-sm border-0 card-custom-bg px-2">
-                        <div class="row g-0 align-items-center">
-                            <div class="col-auto">
-                                <img src="@(string.IsNullOrEmpty(request.PhotoPath) ? "/placeholder.jpg" : request.PhotoPath)"
-                                     alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
-                            </div>
-                            <div class="col position-relative">
-                                <div class="card-body py-2 px-0 pe-4 position-relative">
-                                    <h5 class="card-title fw-bold mb-1">@request.Title</h5>
-                                    <p class="card-text mb-2">@request.Description</p>
+                    <a asp-page="/ServiceRequest/Info" asp-route-id="@request.ServiceRequestId" class="text-decoration-none">
+                        <div class="card shadow-sm border-0 card-custom-bg px-2">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-auto">
+                                    <img src="@(string.IsNullOrEmpty(request.PhotoPath) ? "/placeholder.jpg" : request.PhotoPath)"
+                                         alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
+                                </div>
+                                <div class="col position-relative">
+                                    <div class="card-body py-2 px-0 pe-4 position-relative">
+                                        <h5 class="card-title fw-bold mb-1">@request.Title</h5>
+                                        <p class="card-text mb-2">@request.Description</p>
 
-                                    <p class="card-text text-muted small mb-5 text-wrap">
-                                        <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
-                                        <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
-                                        <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
-                                    </p>
+                                        <p class="card-text text-muted small mb-5 text-wrap">
+                                            <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
+                                            <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
+                                            <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
+                                        </p>
 
-                                    <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">
-                                        <a asp-page="/ServiceRequest/Info" asp-route-id="@request.ServiceRequestId"
-                                           class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-info-circle"></i>
-                                        </a>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
         </div>
