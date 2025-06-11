@@ -1,23 +1,31 @@
-using DPMOPS.Strategies.Factories;
+using DPMOPS.Enums;
+using DPMOPS.Services.UserClaim;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Reflection.Metadata.Ecma335;
 
 namespace DPMOPS.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly IHomePageStrategyFactory _strategyFactory;
+        private readonly IUserClaimService _userClaimService;
 
-        public IndexModel(IHomePageStrategyFactory strategyFactory)
+        public IndexModel(IUserClaimService userClaimService)
         {
-            _strategyFactory = strategyFactory;
+            _userClaimService = userClaimService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
-            var strategy = await _strategyFactory.CreateStrategyAsync(User);
-            return await strategy.GetPageResult(this);
+            var userType = _userClaimService.ResolveUserType(User);
+
+            return userType switch
+            {
+                UserType.Admin => RedirectToPage("/AdminHome"),
+                UserType.Employee => RedirectToPage("/ServiceRequest/ByEmp"),
+                UserType.OrgAdmin => RedirectToPage("/ServiceRequest/ByOrg"),
+                UserType.Citizen => RedirectToPage("/ServiceRequest/ByCitizen"),
+                _ => Page()
+            };
         }
     }
 }

@@ -1,31 +1,31 @@
-﻿@using DPMOPS.Services.ServiceRequest.Dtos
+﻿@page "{category?}"
+@model DPMOPS.Pages.ServiceRequest.ByEmpModel
 @using Humanizer
-
 @{
-    var data = ViewData["UserData"] as IList<ServiceRequestDto>;
+    ViewData["Title"] = "طلباتك";
 }
-   
+
 <div class="container py-4">
     <div class="d-flex justify-content-between mb-3">
-        @if (data == null || data.Count == 0)
+        @if (Model.Requests == null || Model.Requests.Count == 0)
         {
             <div class="alert alert-info text-center">
-                انت لم تستلم أي طلب
+                لا يوجد طلبات
             </div>
         }
         else
         {
             <div class="panel-heading">
-                <h3 class="fw-bold mb-0">طلباتك</h3>
+                <h3 class="fw-bold mb-0">طلباتك @Model.Category</h3>
             </div>
         }
     </div>
 
 
-    @if (data != null && data.Any())
+    @if (Model.Requests != null && Model.Requests.Any())
     {
         <div class="row g-4">
-            @foreach (var request in data)
+            @foreach (var request in Model.Requests)
             {
                 <div class="col-12">
                     <a asp-page="/ServiceRequest/Info" asp-route-id="@request.ServiceRequestId" class="text-decoration-none">

@@ -1,28 +1,26 @@
-﻿using DPMOPS.Models;
+﻿using DPMOPS.Enums;
+using DPMOPS.Models;
 using System.Security.Claims;
 
 namespace DPMOPS.Services.UserClaim
 {
     public class UserClaimService : IUserClaimService
     {
-        public bool IsAdmin(ClaimsPrincipal user)
+        public UserType ResolveUserType(ClaimsPrincipal user)
         {
-            return user.HasClaim(x => x.Type == "IsAdmin" && x.Value == "true");
-        }
+            if (user == null || !user.Identity.IsAuthenticated)
+                return UserType.Unauthenticated;
 
-        public bool IsCitizen(ClaimsPrincipal user)
-        {
-            return !user.HasClaim(x => x.Type == "OrganizationId");
-        }
+            if (user.HasClaim("IsAdmin", "true"))
+                return UserType.Admin;
 
-        public bool IsEmployee(ClaimsPrincipal user)
-        {
-            return (user.HasClaim(x => x.Type == "OrganizationId") && !user.HasClaim(x => x.Type == "IsOrgAdmin" && x.Value == "true"));
-        }
+            if (user.HasClaim("IsOrgAdmin", "true"))
+                return UserType.OrgAdmin;
 
-        public bool IsOrganizationAdmin(ClaimsPrincipal user)
-        {
-            return user.HasClaim(x => x.Type == "IsOrgAdmin" && x.Value == "true");
+            if (!string.IsNullOrEmpty(user.FindFirst("OrganizationId")?.Value))
+                return UserType.Employee;
+
+            return UserType.Citizen;
         }
     }
 }

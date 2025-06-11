@@ -1,23 +1,11 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
-
-    var partialView = "_AnonymousHome";
-
-    if (ViewData["UserType"] != null)
-    {
-        partialView = ViewData["UserType"] switch
-        {
-            "Citizen" => "_CitizenHome",
-            "Admin" => "_AdminHome",
-            "Employee" => "_EmployeeHome",
-            "OrgAdmin" => "_OrgAdminHome",
-            _ => "_AnonymousHome"
-        };
-    }
+    ViewData["Title"] = "الصفحة الرئيسية";
 }
 
-<partial name="Partials/@partialView" />
+<div class="text-center">
+    <h3 class="display-5">انت لم تسجل دخول</h3>
+</div>
 
 

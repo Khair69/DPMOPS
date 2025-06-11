@@ -1,37 +1,37 @@
-﻿@using DPMOPS.Services.ServiceRequest.Dtos
+﻿@page "{category?}"
+@model DPMOPS.Pages.ServiceRequest.ByCitizenModel
 @using Humanizer
 
 @{
-    ViewData["Title"] = "Home Page";
-    var data = ViewData["UserData"] as IList<ServiceRequestDto>;
+    ViewData["Title"] = "طلباتك";
 }
 
 <div class="container my-4">
     <div class="d-flex justify-content-between mb-3">
-            @if (data == null || data.Count == 0)
-            {
-                <div class="alert alert-info">
-                    انت لم تقدم على أي طلب خدمة
-                </div>
-            }
-            else
-            {
-                <div class="panel-heading">
-                    <h3 class="fw-bold mb-0">طلباتك</h3>
-                </div>
-            }
-            <div>
-                <a asp-page="/ServiceRequest/Add" class="btn btn-outline-primary">
-                    <i class="bi bi-plus-lg"></i>
-                    التقديم على طلب خدمة
-                </a>
+        @if (Model.Requests == null || Model.Requests.Count == 0)
+        {
+            <div class="alert alert-info">
+                لا يوجد طلبات
             </div>
+        }
+        else
+        {
+            <div class="panel-heading">
+                <h3 class="fw-bold mb-0">طلباتك @Model.Category</h3>
+            </div>
+        }
+        <div>
+            <a asp-page="/ServiceRequest/Add" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg"></i>
+                التقديم على طلب خدمة
+            </a>
+        </div>
     </div>
 
-        @if (data != null && data.Count > 0)
-        {
-            <div class="row g-4">
-            @foreach (var sr in data)
+    @if (Model.Requests != null && Model.Requests.Count > 0)
+    {
+        <div class="row g-4">
+            @foreach (var sr in Model.Requests)
             {
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                     <a asp-page="/ServiceRequest/Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none">
@@ -49,10 +49,10 @@
                             <div class="card-body d-flex flex-column">
                                 <h4 class="card-title fw-bold">@sr.Title</h4>
                                 <p class="card-text flex-grow-1">@sr.Description</p>
-                                    <p class="small text-muted">
-                                        <i class="bi bi-geo-alt-fill"></i> @sr.Address <br />
-                                        <i class="bi bi-activity"></i> @sr.Status
-                                    </p>
+                                <p class="small text-muted">
+                                    <i class="bi bi-geo-alt-fill"></i> @sr.Address <br />
+                                    <i class="bi bi-activity"></i> @sr.Status
+                                </p>
                                 @*<div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">                                
                                 </div> *@
                             </div>
@@ -60,8 +60,8 @@
                     </a>
                 </div>
             }
-            </div>
-        }
+        </div>
+    }
 </div>
 
 

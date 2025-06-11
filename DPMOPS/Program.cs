@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using DPMOPS.Services.User;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
-using DPMOPS.Strategies.Factories;
 using DPMOPS.Services.Organization;
 using DPMOPS.Authorization.Requirements;
 using DPMOPS.Authorization.Handlers;
@@ -76,7 +75,6 @@ namespace DPMOPS
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
-            builder.Services.AddScoped<IHomePageStrategyFactory, HomePageStrategyFactory>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IPhotoUploadService, PhotoUploadService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();

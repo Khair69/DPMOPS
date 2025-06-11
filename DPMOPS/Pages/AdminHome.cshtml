@@ -1,4 +1,10 @@
-﻿<div class="text-center">
+﻿@page
+@model DPMOPS.Pages.AdminHomeModel
+@{
+    ViewData["Title"] = "أدمن";
+}
+
+<div class="text-center">
     <h1 class="display-4">انت أدمن</h1>
     <hr />
     <a class="btn btn-light mb-3 w-50 fw-bold" asp-page="/Location/Cities/Index">المدن</a>
