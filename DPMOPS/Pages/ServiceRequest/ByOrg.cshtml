@@ -1,14 +1,14 @@
-﻿@page
+﻿@page "{category?}"
 @model DPMOPS.Pages.ServiceRequest.ByOrgModel
 @{
-    ViewData["Title"] = "طلبات الخدمة";
+    ViewData["Title"] = "طلباتك";
 }
 
 <div class="panel panel-default table-panel">
-    @if (Model.ServiceRequests.Count() == 0) {
+    @if (Model.Requests.Count() == 0) {
         <h2 class="fw-bold mb-4">لا يوجد أي طلب خدمة في مؤسستك</h2>
     }
-    else if (Model.ServiceRequests!=null){
+    else if (Model.Requests!=null){
     <h3>كل طلبات الخدمة في مؤسستك</h3>
 
     <table class="table table-hover table-striped display" id="request-table">
@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var sr in Model.ServiceRequests)
+            @foreach (var sr in Model.Requests)
             {
                 <tr>
                     <td>@sr.Title</td>

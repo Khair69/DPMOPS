@@ -30,7 +30,6 @@ namespace DPMOPS.Pages.ServiceRequest
             Requests = Category switch
             {
                 "All" => temp_requests,
-                "Pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
                 "Accepted" => temp_requests.Where(sr => sr.Status == (Status)2).ToList(),
                 "InProgress" => temp_requests.Where(sr => sr.Status == (Status)3).ToList(),
                 "Suspended" => temp_requests.Where(sr => sr.Status == (Status)4).ToList(),
