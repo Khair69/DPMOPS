@@ -381,7 +381,9 @@ namespace DPMOPS.Services.ServiceRequest
 
             if (existingRequest != null)
             {
-                if (existingRequest.EmployeeId != null || await _accountService.UserHasClaimAsync(srDto.EmployeeId, "IsOrgAdmin", "true") || await _accountService.ValueOfUserClaimAsync(srDto.EmployeeId, "OrganizationId") != existingRequest.OrganizationId.ToString())
+                if (existingRequest.EmployeeId != null 
+                    || await _accountService.UserHasClaimAsync(srDto.EmployeeId, "IsOrgAdmin", "true") 
+                    || await _accountService.ValueOfUserClaimAsync(srDto.EmployeeId, "OrganizationId") != existingRequest.OrganizationId.ToString())
                 {
                     return false;
                 }
