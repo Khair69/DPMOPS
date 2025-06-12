@@ -19,9 +19,76 @@
         <a class="nav-link" asp-page="/ServiceRequest/Index">الطلبات</a>
     </li>
 }
-@if (SignInManager.IsSignedIn(User) && User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
+@{
+    var orgId = User.Claims.FirstOrDefault(x => x.Type == "OrganizationId")?.Value;
+}
+
+@if (SignInManager.IsSignedIn(User))
 {
+    @if (!string.IsNullOrEmpty(orgId))
+    {
+        @if (User.Claims.FirstOrDefault(x => x.Type == "IsOrgAdmin")?.Value != null)
+        {
+            <li class="nav-item dropdown">
+                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    الطلبات
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="All">الكل</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Pending">قيد الانتظار</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Accepted">المقبولة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="InProgress">قيد العمل</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Completed">المكتملة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Suspended">المعلقة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Denied">المرفوضة</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-page="/Organization/Employees/Index" asp-route-id="@orgId">الموظفين</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item dropdown">
+                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    طلباتك
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="All">الكل</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Accepted">المقبولة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="InProgress">قيد العمل</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Completed">المكتملة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Suspended">المعلقة</a></li>
+                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Denied">المرفوضة</a></li>
+                </ul>
+            </li>
+        }
+    }
+    else if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
+    {
+        <li class="nav-item dropdown">
+            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                طلباتك
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="All">الكل</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Pending">قيد الانتظار</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Accepted">المقبولة</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="InProgress">قيد العمل</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Completed">المكتملة</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Suspended">المعلقة</a></li>
+                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Denied">المرفوضة</a></li>
+            </ul>
+        </li>
+    }
+    @if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-page="/Calendar/Index">الروزنامة</a>
+        </li>
+    }
     <li class="nav-item">
-        <a class="nav-link" asp-page="/Calendar/Index"><i class="bi bi-calendar-week"></i></a>
+        <a class="nav-link" asp-page="">الشكاوي</a>
     </li>
 }

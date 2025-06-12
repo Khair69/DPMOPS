@@ -21,10 +21,6 @@ body {
   margin-bottom: 60px;
 }
 
-div.table-panel {
-    margin-top: 15px;
-}
-
 .object-fit-cover {
     object-fit: cover;
 }
