@@ -29,21 +29,21 @@
         <tbody>
             @foreach (var sr in Model.Requests)
             {
-                <tr>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Title</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Description</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Address</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.LocDescription</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.CitizenName</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.EmployeeName</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))</a></td>
-                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Status</a></td>
+                <tr class="clickable-row" data-href="@Url.Page("Info", new { id = sr.ServiceRequestId })">
+                    <td>@sr.Title</td>
+                    <td>@sr.Description</td>
+                    <td>@sr.Address</td>
+                    <td>@sr.LocDescription</td>
+                    <td>@sr.CitizenName</td>
+                    <td>@sr.EmployeeName</td>
+                    <td>@sr.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))</td>
+                    <td>@sr.Status</td>
                     <td>
-                            @if (sr.EmployeeId == null)
-                            {
-                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadAssignModal('@sr.ServiceRequestId')">تعيين موظف</button>
-                            }
-                        </td>
+                        @if (sr.EmployeeId == null)
+                        {
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="event.stopPropagation(); loadAssignModal('@sr.ServiceRequestId')">تعيين موظف</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -73,4 +73,16 @@
     <script src="~/lib/datatables/js/datatables.min.js"></script>
     <script src="~/js/tableStyling.js" asp-append-version="true"></script>
     <script src="~/js/assignModal.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', function () {
+                    const href = this.getAttribute('data-href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    </script>
 }
