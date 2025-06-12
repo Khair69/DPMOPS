@@ -39,11 +39,15 @@
                     <td>@sr.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))</td>
                     <td>@sr.Status</td>
                     <td>
-                        @if (sr.EmployeeId == null)
+                        @if (string.IsNullOrEmpty(sr.EmployeeId))
                         {
                             <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="event.stopPropagation(); loadAssignModal('@sr.ServiceRequestId')">تعيين موظف</button>
                         }
-                    </td>
+                        else if (!string.IsNullOrEmpty(sr.EmployeeId))
+                        {
+                            <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#changeModal" onclick="event.stopPropagation(); loadChangeModal('@sr.ServiceRequestId')">تغيير الموظف</button>
+                        }
+                        </td>
                 </tr>
             }
         </tbody>
@@ -64,6 +68,19 @@
     </div>
 </div>
 
+<!--Change Modal-->
+<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeModalLabel">تغيير الموظف</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <iframe id="changeFrame" style="border:0; height:200px"></iframe>
+        </div>
+    </div>
+</div>
+
 @section Styles {
     <link href="~/lib/datatables/css/datatables.min.css" rel="stylesheet">
     <link href="~/css/tableStyling.css" rel="stylesheet" asp-append-version="true" />
@@ -73,6 +90,7 @@
     <script src="~/lib/datatables/js/datatables.min.js"></script>
     <script src="~/js/tableStyling.js" asp-append-version="true"></script>
     <script src="~/js/assignModal.js" asp-append-version="true"></script>
+    <!--making the rows clickable-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.clickable-row').forEach(row => {

@@ -9,19 +9,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace DPMOPS.Pages.ServiceRequest
 {
     [Authorize("IsOrgAdmin")]
-    public class AssignEmployeeModel : PageModel
+    public class ChangeEmployeeModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
         private readonly IAccountService _accountService;
 
-        public AssignEmployeeModel(IServiceRequestService serviceRequestService, IAccountService accountService)
+        public ChangeEmployeeModel(IServiceRequestService serviceRequestService, IAccountService accountService)
         {
             _serviceRequestService = serviceRequestService;
             _accountService = accountService;
         }
 
         [BindProperty]
-        public AssignEmployeeDto AssignEmployee { get; set; }
+        public AssignEmployeeDto ChangeEmployee { get; set; }
 
         public IEnumerable<SelectListItem> EmployeeOptions { get; set; }
 
@@ -37,9 +37,10 @@ namespace DPMOPS.Pages.ServiceRequest
                 return Forbid();
             }
 
-            AssignEmployee = new AssignEmployeeDto
+            ChangeEmployee = new AssignEmployeeDto
             {
-                ServiceRequestId = id
+                ServiceRequestId = id,
+                EmployeeId = Sr.EmployeeId
             };
 
             EmployeeOptions = await _accountService.GetEmployeesInOrgOptionsAsync(Guid.Parse(User.FindFirst("OrganizationId")?.Value));
@@ -55,14 +56,14 @@ namespace DPMOPS.Pages.ServiceRequest
                 return Page();
             }
 
-            var success = await _serviceRequestService.AssignEmployeeAsync(AssignEmployee);
+            var success = await _serviceRequestService.ChangeEmployeeAsync(ChangeEmployee);
 
             if (!success)
             {
                 return BadRequest();
             }
 
-            return Content("<script>window.parent.closeAssignModalAndRefresh();</script>", "text/html");
+            return Content("<script>window.parent.closeChangeModalAndRefresh();</script>", "text/html");
         }
     }
 
