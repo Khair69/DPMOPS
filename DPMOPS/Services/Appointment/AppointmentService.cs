@@ -1,11 +1,9 @@
-﻿using Azure.Core;
+﻿#nullable disable
 using DPMOPS.Data;
-using DPMOPS.Data.Migrations;
 using DPMOPS.Services.Appointment.Dtos;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.ServiceRequest;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 

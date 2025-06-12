@@ -1,3 +1,4 @@
+#nullable disable
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using DPMOPS.Services.District.Dtos;

@@ -1,5 +1,5 @@
+#nullable disable
 using DPMOPS.Services.City;
-using DPMOPS.Services.City.Dtos;
 using DPMOPS.Services.District;
 using DPMOPS.Services.District.Dtos;
 using Microsoft.AspNetCore.Authorization;

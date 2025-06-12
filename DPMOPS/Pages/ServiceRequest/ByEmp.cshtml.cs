@@ -1,3 +1,4 @@
+#nullable disable
 using DPMOPS.Models;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;

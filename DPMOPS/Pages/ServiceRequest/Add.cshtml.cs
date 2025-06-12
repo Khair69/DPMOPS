@@ -1,14 +1,14 @@
-using DPMOPS.Models;
+#nullable disable
 using DPMOPS.Services.City;
 using DPMOPS.Services.District;
 using DPMOPS.Services.Organization;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
@@ -18,19 +18,16 @@ namespace DPMOPS.Pages.ServiceRequest
     public class AddModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICityService _cityService;
         private readonly IDistrictService _districtService;
         private readonly IOrganizationService _organizationService;
 
         public AddModel(IServiceRequestService serviceRequestService,
-            UserManager<ApplicationUser> userManager,
             ICityService cityService,
             IDistrictService districtService,
             IOrganizationService organizationService)
         {
             _serviceRequestService = serviceRequestService;
-            _userManager = userManager;
             _cityService = cityService;
             _districtService = districtService;
             _organizationService = organizationService;
@@ -44,7 +41,8 @@ namespace DPMOPS.Pages.ServiceRequest
         public CreateServiceRequestDto SrDto { get; set; }
 
         [BindProperty]
-        public IFormFile? Photo { get; set; }
+        [AllowNull]
+        public IFormFile Photo { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -67,8 +65,6 @@ namespace DPMOPS.Pages.ServiceRequest
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             SrDto.CitizenId = userId;
-
-            //for now i left the employee null
             
             var successful = await _serviceRequestService.CreateServiceRequestAsync(SrDto);
 

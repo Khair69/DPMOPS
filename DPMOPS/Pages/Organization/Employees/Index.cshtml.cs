@@ -1,3 +1,4 @@
+#nullable disable
 using DPMOPS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

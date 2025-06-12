@@ -1,3 +1,4 @@
+#nullable disable
 using DPMOPS.Services.Appointment;
 using DPMOPS.Services.Appointment.Dtos;
 using Microsoft.AspNetCore.Authorization;

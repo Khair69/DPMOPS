@@ -6,6 +6,7 @@
 @inject DPMOPS.Services.Notification.INotificationService NotificationService
 
 @{
+    #nullable disable
     var notifications = await NotificationService.GetUnreadAsync(User?.FindFirstValue(ClaimTypes.NameIdentifier));
 }
 

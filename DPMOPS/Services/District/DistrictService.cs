@@ -1,4 +1,5 @@
-﻿using DPMOPS.Data;
+﻿#nullable disable
+using DPMOPS.Data;
 using DPMOPS.Services.District.Dtos;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;

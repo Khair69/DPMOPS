@@ -1,7 +1,6 @@
-﻿using DPMOPS.Data;
+﻿#nullable disable
+using DPMOPS.Data;
 using DPMOPS.Services.City.Dtos;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using DPMOPS.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
