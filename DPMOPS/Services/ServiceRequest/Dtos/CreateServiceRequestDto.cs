@@ -44,5 +44,7 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public double? Latitude { get; set; }
         [Required]
         public double? Longitude { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

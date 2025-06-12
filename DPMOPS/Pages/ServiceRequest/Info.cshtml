@@ -46,6 +46,14 @@
                 <br />
                 <i class="bi bi-person-check-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
+                @if (Model.ServiceRequest.IsPublic)
+                {
+                    <i class="bi bi-unlock"></i><text> عامة</text><br />
+                }
+                else
+                {
+                    <i class="bi bi-person-lock"></i><text> خاصة</text><br />
+                }
                 @if (Model.ServiceRequest.AppointmentDate.HasValue)
                 {
                     <span>

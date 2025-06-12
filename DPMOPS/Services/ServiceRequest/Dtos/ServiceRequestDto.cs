@@ -31,5 +31,7 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
 
         public Guid? AppointmentId { get; set; }
         public DateTime? AppointmentDate { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

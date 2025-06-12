@@ -37,6 +37,7 @@ namespace DPMOPS.Models
         public double Longitude { get; set; }
 
         public Appointment? Appointment { get; set; }
+        public bool IsPublic { get; set; } = true;
 
         // possible add ons:
         // public DateTime? DateCompleted { get; set; }

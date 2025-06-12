@@ -69,7 +69,9 @@ namespace DPMOPS.Services.ServiceRequest
                     Longitude = sr.Longitude,
 
                     AppointmentId = sr.Appointment.AppointmentId,
-                    AppointmentDate = sr.Appointment.ScheduledAt
+                    AppointmentDate = sr.Appointment.ScheduledAt,
+
+                    IsPublic = sr.IsPublic
                 })
                 .ToListAsync();
         }
@@ -111,7 +113,9 @@ namespace DPMOPS.Services.ServiceRequest
                     Longitude = sr.Longitude,
 
                     AppointmentId = sr.Appointment.AppointmentId,
-                    AppointmentDate = sr.Appointment.ScheduledAt
+                    AppointmentDate = sr.Appointment.ScheduledAt,
+
+                    IsPublic = sr.IsPublic
                 })
                 .FirstOrDefaultAsync();
         }
@@ -141,7 +145,8 @@ namespace DPMOPS.Services.ServiceRequest
                     DistrictId = srDto.DistrictId,
                     PhotoPath = photoPath,
                     Latitude = (double)srDto.Latitude,
-                    Longitude = (double)srDto.Longitude
+                    Longitude = (double)srDto.Longitude,
+                    IsPublic = srDto.IsPublic
                 };
 
                 _context.ServiceRequests.Add(Sr);
@@ -175,8 +180,6 @@ namespace DPMOPS.Services.ServiceRequest
                 await transaction.RollbackAsync();
                 throw;
             }
-
-
 
             return res == 1;
         }
@@ -262,7 +265,9 @@ namespace DPMOPS.Services.ServiceRequest
                     PhotoPath = sr.PhotoPath,
 
                     Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
+                    Longitude = sr.Longitude,
+
+                    IsPublic = sr.IsPublic
                 })
                 .ToListAsync();
         }
@@ -301,7 +306,9 @@ namespace DPMOPS.Services.ServiceRequest
                     PhotoPath = sr.PhotoPath,
 
                     Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
+                    Longitude = sr.Longitude,
+
+                    IsPublic = sr.IsPublic
                 })
                 .ToListAsync();
         }
@@ -340,7 +347,9 @@ namespace DPMOPS.Services.ServiceRequest
                     PhotoPath = sr.PhotoPath,
 
                     Latitude = sr.Latitude,
-                    Longitude = sr.Longitude
+                    Longitude = sr.Longitude,
+
+                    IsPublic = sr.IsPublic
                 })
                 .ToListAsync();
         }

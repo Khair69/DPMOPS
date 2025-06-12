@@ -77,6 +77,14 @@
                                     اختر الموقع على الخريطة
                                 </button>
                                 <span asp-validation-for="SrDto.Latitude" class="text-danger"></span>
+
+                                <div class="btn-group" style="direction:ltr" role="group" aria-label="Public Or Private">
+                                    <input type="radio" class="btn-check" asp-for="SrDto.IsPublic" id="isPublicTrue" value="true" checked autocomplete="off">
+                                    <label for="isPublicTrue" class="btn btn-outline-primary">عامة</label>
+
+                                    <input type="radio" class="btn-check" asp-for="SrDto.IsPublic" id="isPublicFalse" value="false" autocomplete="off">
+                                    <label for="isPublicFalse" class="btn btn-outline-primary">خاصة</label>
+                                </div>
                             </div>
 
                             <div class="mb-4">
