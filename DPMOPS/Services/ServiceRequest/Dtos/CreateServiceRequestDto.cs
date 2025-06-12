@@ -41,8 +41,8 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public IFormFile? PhotoFile { get; set; }
 
         [Required(ErrorMessage = "من فضلك اختر موقع على الخريطة")]
-        public double Latitude { get; set; }
+        public double? Latitude { get; set; }
         [Required]
-        public double Longitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

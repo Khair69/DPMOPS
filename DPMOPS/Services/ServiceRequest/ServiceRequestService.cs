@@ -140,8 +140,8 @@ namespace DPMOPS.Services.ServiceRequest
                     EmployeeId = srDto.EmployeeId,
                     DistrictId = srDto.DistrictId,
                     PhotoPath = photoPath,
-                    Latitude = srDto.Latitude,
-                    Longitude = srDto.Longitude
+                    Latitude = (double)srDto.Latitude,
+                    Longitude = (double)srDto.Longitude
                 };
 
                 _context.ServiceRequests.Add(Sr);
