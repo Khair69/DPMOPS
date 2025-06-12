@@ -38,8 +38,8 @@
             <p class="list-unstyled small text-muted fs-6">
                 <i class="bi bi-geo-alt-fill"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription <br />
                 <i class="bi bi-calendar-event"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
-                <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName 
-                @if(Model.EmployeeViewer || Model.OrgAdminViewer)
+                <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName
+                @if (Model.EmployeeViewer || Model.OrgAdminViewer)
                 {
                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
                 }
@@ -50,7 +50,7 @@
                 {
                     <span>
                         <i class="bi bi-calendar-check"></i>
-                         الموعد المحدد: @Model.ServiceRequest.AppointmentDate.Value.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))
+                        الموعد المحدد: @Model.ServiceRequest.AppointmentDate.Value.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))
                     </span>
                 }
             </p>
@@ -63,6 +63,7 @@
 
                 @if (Model.EmployeeViewer)
                 {
+                    <!--Appointment-->
                     @if (Model.ServiceRequest.AppointmentId == null)
                     {
                         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal">
@@ -76,6 +77,7 @@
                         </button>
                     }
 
+                    <!--Change Status-->
                     <div class="d-flex justify-content-center">
                         <form asp-page="Info" asp-page-handler="Status" class="w-50 text-center">
                             <div class="form-floating m-3">
@@ -91,18 +93,7 @@
 
                 @if (Model.OrgAdminViewer && Model.ServiceRequest.EmployeeId == null)
                 {
-                    <div class="d-flex justify-content-center">
-                        <form asp-page="Info" asp-page-handler="Assign" class="w-50 text-center">
-                            <div class="form-floating m-3">
-                                <select id="transferSelect" onchange="checkSelectionEmp()" asp-for="AssignEmployee.EmployeeId" asp-items="@Model.EmployeeOptions" class="form-select">
-                                    <option value=" "> </option>
-                                </select>
-                                <label asp-for="AssignEmployee.EmployeeId"></label>
-                                <span asp-validation-for="AssignEmployee.EmployeeId" class="text-danger"></span>
-                            </div>
-                            <button id="transferSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>تعيين</button>
-                        </form>
-                    </div>
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadAssignModal('@Model.ServiceRequest.ServiceRequestId')">تعيين موظف</button>
                 }
 
             </div>
@@ -206,7 +197,7 @@
                         <label for="timeInput" class="form-label">اختر وقتاً</label>
                         <input type="time" class="form-control" id="timeInput" name="ScheduleTime" required>
                     </div>
-                    <input type="hidden" asp-for="@Model.ReSchAppointment.AppointmentId" value="@Model.ServiceRequest.AppointmentId"/>
+                    <input type="hidden" asp-for="@Model.ReSchAppointment.AppointmentId" value="@Model.ServiceRequest.AppointmentId" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">الالغاء</button>
@@ -240,6 +231,19 @@
     </div>
 </div>
 
+<!--Assign Modal-->
+<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignModalLabel">تعيين موظف</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <iframe id="assignFrame" style="border:0; height:200px"></iframe>
+        </div>
+    </div>
+</div>
+
 <script>
     const latitude = @Model.ServiceRequest.Latitude;
     const longitude = @Model.ServiceRequest.Longitude;
@@ -264,44 +268,6 @@
             map.invalidateSize(); // Recalculate map size if modal is reopened
         }
     });
-
-    //status select section
-
-    let originalValue;
-
-    window.onload = function () {
-        const select = document.getElementById("statusSelect");
-        originalValue = select.value;
-    };
-
-    function checkSelection() {
-        const select = document.getElementById("statusSelect");
-        const button = document.getElementById("statusSaveButton");
-
-        if (select.value !== originalValue) {
-            button.disabled = false;
-        } else {
-            button.disabled = true;
-        }
-    }
-
-    let originalEmployee;
-
-    window.onload = function () {
-        const empSelect = document.getElementById("transferSelect");
-        originalEmployee = empSelect.value;
-    };
-
-    function checkSelectionEmp() {
-        const select = document.getElementById("transferSelect");
-        const button = document.getElementById("transferSaveButton");
-
-        if (select.value !== originalEmployee) {
-            button.disabled = false;
-        } else {
-            button.disabled = true;
-        }
-    }
 </script>
 
 
@@ -312,5 +278,6 @@
 
 @section Scripts {
     <script src="~/js/progIndicator.js" asp-append-version="true"></script>
+    <script src="~/js/assignModal.js" asp-append-version="true"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 }

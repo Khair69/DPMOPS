@@ -1,0 +1,47 @@
+﻿@page "{id}"
+@model DPMOPS.Pages.ServiceRequest.AssignEmployeeModel
+@{
+    Layout = null;
+}
+
+<html lang="ar" data-bs-theme="dark" dir="rtl">
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
+<body>
+    <form method="post" class="text-center p-5">
+        <input type="hidden" asp-for="AssignEmployee.ServiceRequestId" />
+
+        <div class="form-floating mb-3">
+            <select asp-for="AssignEmployee.EmployeeId" asp-items="Model.EmployeeOptions" class="form-select" onchange="checkSelectionEmp()" id="transferSelect">
+                <option value=" "> </option>
+            </select>
+            <label asp-for="AssignEmployee.EmployeeId"></label>
+            <span asp-validation-for="AssignEmployee.EmployeeId" class="text-danger"></span>
+        </div>
+
+        <button id="transferSaveButton" type="submit" class="btn btn-primary w-100" disabled>تعيين</button>
+    </form>
+</body>
+</html>
+<partial name="_ValidationScriptsPartial" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let originalEmployee;
+
+    window.onload = function () {
+        const empSelect = document.getElementById("transferSelect");
+        originalEmployee = empSelect.value;
+    };
+
+    function checkSelectionEmp() {
+        const select = document.getElementById("transferSelect");
+        const button = document.getElementById("transferSaveButton");
+
+        if (select.value !== originalEmployee) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    }
+</script>

@@ -15,6 +15,7 @@ using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
 {
+    [Authorize]
     public class InfoModel : PageModel
     {
         private readonly IAuthorizationService _authService;
@@ -37,7 +38,6 @@ namespace DPMOPS.Pages.ServiceRequest
         public bool EmployeeViewer { get; set; } = false;
         public bool DeleteVisible { get; set; } = false;
         public bool OrgAdminViewer { get; set; } = false;
-        public IEnumerable<SelectListItem> EmployeeOptions { get; set; }
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
         public AccountDto Citizen { get; set; }
 
@@ -77,10 +77,7 @@ namespace DPMOPS.Pages.ServiceRequest
             }
             if (User.HasClaim("IsOrgAdmin", "true"))
             {
-                EmployeeOptions = await _accountService.GetEmployeesInOrgOptionsAsync(Guid.Parse(User.FindFirst("OrganizationId")?.Value));
                 OrgAdminViewer = true;
-                AssignEmployee = new AssignEmployeeDto();
-                AssignEmployee.EmployeeId = ServiceRequest.EmployeeId;
             }
 
             return Page();
@@ -111,33 +108,6 @@ namespace DPMOPS.Pages.ServiceRequest
             }
 
             return RedirectToPage("Info");
-        }
-
-        [BindProperty(Name = "AssignEmployee")]
-        public AssignEmployeeDto AssignEmployee { get; set; }
-
-        public async Task<IActionResult> OnPostAssignAsync(Guid id)
-        {
-            RemoveUnrelatedModelState("AssignEmployee");
-            if (!ModelState.IsValid)
-            {
-                return RedirectToPage("Info");
-            }
-
-            ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
-            if (User.FindFirst("OrganizationId")?.Value != ServiceRequest.OrganizationId.ToString() && !User.HasClaim("IsOrgAdmin", "true"))
-            {
-                return new ForbidResult();
-            }
-
-            AssignEmployee.ServiceRequestId = id;
-            var success = await _serviceRequestService.AssignEmployeeAsync(AssignEmployee);
-            if (!success)
-            {
-                return BadRequest();
-            }
-
-            return RedirectToPage("Info");//this should just close the modal
         }
 
         [BindProperty(Name = "AddAppointment")]

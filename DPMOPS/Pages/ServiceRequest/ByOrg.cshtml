@@ -1,4 +1,5 @@
 ﻿@page "{category?}"
+@using Humanizer
 @model DPMOPS.Pages.ServiceRequest.ByOrgModel
 @{
     ViewData["Title"] = "طلباتك";
@@ -29,24 +30,38 @@
             @foreach (var sr in Model.Requests)
             {
                 <tr>
-                    <td>@sr.Title</td>
-                    <td>@sr.Description</td>
-                    <td>@sr.Address</td>
-                    <td>@sr.LocDescription</td>
-                    <td>@sr.CitizenName</td>
-                    <td>@sr.EmployeeName</td>
-                    <td>@sr.DateCreated</td>
-                    <td>@sr.Status</td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Title</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Description</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Address</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.LocDescription</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.CitizenName</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.EmployeeName</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))</a></td>
+                    <td><a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="text-decoration-none text-white">@sr.Status</a></td>
                     <td>
-                        <a asp-page="Info" asp-route-id="@sr.ServiceRequestId" class="btn btn-sm btn-outline-info align-items-center">
-                            <i class="bi bi-info-circle"></i>
-                        </a>
-                    </td>
+                            @if (sr.EmployeeId == null)
+                            {
+                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadAssignModal('@sr.ServiceRequestId')">تعيين موظف</button>
+                            }
+                        </td>
                 </tr>
             }
         </tbody>
     </table>
     }
+</div>
+
+<!--Assign Modal-->
+<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignModalLabel">تعيين موظف</h5>
+                <button type="button" class="btn-close position-absolute top-0 start-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <iframe id="assignFrame" style="border:0; height:200px"></iframe>
+        </div>
+    </div>
 </div>
 
 @section Styles {
@@ -57,4 +72,5 @@
 @section Scripts {
     <script src="~/lib/datatables/js/datatables.min.js"></script>
     <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+    <script src="~/js/assignModal.js" asp-append-version="true"></script>
 }

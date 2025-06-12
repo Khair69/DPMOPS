@@ -388,6 +388,7 @@ namespace DPMOPS.Services.ServiceRequest
                     return false;
                 }
                 existingRequest.EmployeeId = srDto.EmployeeId;
+                existingRequest.StatusId = 2;
 
                 var saveresult = await _context.SaveChangesAsync();
                 return saveresult == 1;

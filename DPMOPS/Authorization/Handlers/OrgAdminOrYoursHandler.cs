@@ -31,6 +31,12 @@ namespace DPMOPS.Authorization.Handlers
                 return;
             }
 
+            if (context.User.HasClaim("IsAdmin", "true"))
+            {
+                context.Succeed(requirement);
+                return;
+            }
+
             //if you're the org admin and it's in the same org
             if (context.User.HasClaim("IsOrgAdmin", "true"))
             {
@@ -39,6 +45,7 @@ namespace DPMOPS.Authorization.Handlers
                 if (appUser != null && appUser.OrganizationId == resource.OrganizationId)
                 {
                     context.Succeed(requirement);
+                    return;
                 }
             }
         }
