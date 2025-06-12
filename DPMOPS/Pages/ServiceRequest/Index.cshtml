@@ -24,7 +24,7 @@
         <tbody>
             @foreach (var sr in Model.ServiceRequests)
             {
-                <tr>
+                <tr class="clickable-row" data-href="@Url.Page("Info", new { id = sr.ServiceRequestId })">
                     <td>@sr.Title</td>
                     <td>@sr.Description</td>
                     <td>@sr.Address</td>
@@ -48,4 +48,17 @@
 @section Scripts {
     <script src="~/lib/datatables/js/datatables.min.js"></script>
     <script src="~/js/tableStyling.js" asp-append-version="true"></script>
+    <!--making the rows clickable-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.clickable-row').forEach(row => {
+                row.addEventListener('click', function () {
+                    const href = this.getAttribute('data-href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    </script>
 }
