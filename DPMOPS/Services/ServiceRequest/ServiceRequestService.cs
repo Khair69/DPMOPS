@@ -458,5 +458,48 @@ namespace DPMOPS.Services.ServiceRequest
 
             return false;
         }
+
+        public async Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync()
+        {
+            return await _context.ServiceRequests
+                .OrderBy(sr => sr.DateCreated)
+                .Where(sr => sr.IsPublic == true)
+                .Include(sr => sr.District)
+                    .ThenInclude(d => d.City)
+                .Include(sr => sr.Citizen)
+                .Include(sr => sr.Employee)
+                .Include(sr => sr.Organization)
+                .Include(sr => sr.Appointment)
+                .AsNoTracking()
+                .Select(sr => new ServiceRequestDto
+                {
+                    ServiceRequestId = sr.ServiceRequestId,
+                    Title = sr.Title,
+                    Description = sr.Description,
+                    LocDescription = sr.LocDescription,
+                    DateCreated = sr.DateCreated,
+
+                    DistrictId = sr.DistrictId,
+                    Address = sr.District.City.Name + ", " + sr.District.Name,
+                    Status = (Status)sr.StatusId,
+
+                    CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                    EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                    OrganizationName = sr.Organization.Name,
+
+                    CitizenId = sr.Citizen.Id,
+                    OrganizationId = sr.OrganizationId,
+                    EmployeeId = sr.EmployeeId,
+
+                    PhotoPath = sr.PhotoPath,
+
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude,
+
+                    AppointmentId = sr.Appointment.AppointmentId,
+                    AppointmentDate = sr.Appointment.ScheduledAt
+                })
+                .ToListAsync();
+        }
     }
 }

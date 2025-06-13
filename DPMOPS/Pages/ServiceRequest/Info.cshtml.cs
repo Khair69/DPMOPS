@@ -49,7 +49,7 @@ namespace DPMOPS.Pages.ServiceRequest
             }
             Citizen = await _accountService.GetAccountByIdAsync(ServiceRequest.CitizenId);
 
-            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "OrgAdminOrYours");
+            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, ServiceRequest, "OrgAdminOrYoursPub");
             if (!authResult.Succeeded)
             {
                 return new ForbidResult();

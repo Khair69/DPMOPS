@@ -37,6 +37,12 @@ namespace DPMOPS.Authorization.Handlers
                 return;
             }
 
+            if (context.User.Identity.IsAuthenticated && resource.IsPublic)
+            {
+                context.Succeed(requirement);
+                return;
+            }
+
             //if you're the org admin and it's in the same org
             if (context.User.HasClaim("IsOrgAdmin", "true"))
             {

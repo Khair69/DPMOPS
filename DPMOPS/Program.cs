@@ -45,7 +45,7 @@ namespace DPMOPS
                 options.AddPolicy("IsCitizen", policy =>
                 policy.AddRequirements(new CitizenRequirement()));
 
-                options.AddPolicy("OrgAdminOrYours", policy =>
+                options.AddPolicy("OrgAdminOrYoursPub", policy =>
                 policy.AddRequirements(new OrgAdminOrYoursRequirement()));
             });
 

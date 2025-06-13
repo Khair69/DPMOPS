@@ -3,6 +3,7 @@
 
 @if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value != null)
 {
+    <!--Admin-->
     <li class="nav-item">
         <a class="nav-link" asp-page="/Location/Cities/Index">المدن</a>
     </li>
@@ -29,6 +30,7 @@
     {
         @if (User.Claims.FirstOrDefault(x => x.Type == "IsOrgAdmin")?.Value != null)
         {
+            <!--Organization Admin-->
             <li class="nav-item dropdown">
                 <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     الطلبات
@@ -50,6 +52,7 @@
         }
         else
         {
+            <!--Employee-->
             <li class="nav-item dropdown">
                 <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     طلباتك
@@ -67,6 +70,7 @@
     }
     else if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
+        <!--Citizen-->
         <li class="nav-item dropdown">
             <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 طلباتك
@@ -84,10 +88,15 @@
     }
     @if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
+        <!--Authenticated but not admin-->
         <li class="nav-item">
             <a class="nav-link" asp-page="/Calendar/Index">الروزنامة</a>
         </li>
     }
+    <!--Authenticated-->
+    <li class="nav-item">
+        <a class="nav-link" asp-page="/ServiceRequest/Public">الطلبات العامة</a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" asp-page="">الشكاوي</a>
     </li>
