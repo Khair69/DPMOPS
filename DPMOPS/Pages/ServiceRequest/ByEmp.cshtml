@@ -43,7 +43,17 @@
                                         <p class="card-text text-muted small mb-5 text-wrap">
                                             <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
                                             <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
-                                            <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))
+                                            <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar")) |
+                                            <i class="bi bi-person-fill-check"></i>
+                                            @if (request.IsPublic)
+                                            {
+                                                @request.FollowerCount
+                                                <text> متابعين</text>
+                                            }
+                                            else
+                                            {
+                                                <text>خاصة</text>
+                                            }
                                         </p>
 
 

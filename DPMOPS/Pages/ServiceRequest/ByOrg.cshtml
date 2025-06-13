@@ -23,6 +23,7 @@
                 <th>الموظف</th>
                 <th>التاريخ</th>
                 <th>الحالة</th>
+                <th>الخصوصية</th>
                 <th>العمليات</th>
             </tr>
         </thead>
@@ -38,6 +39,16 @@
                     <td>@sr.EmployeeName</td>
                     <td>@sr.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))</td>
                     <td>@sr.Status</td>
+                    <td>
+                            @if (sr.IsPublic)
+                            {
+                                @sr.FollowerCount<text> متابعين</text>
+                            }
+                            else
+                            {
+                                <text>خاصة</text>
+                            }
+                    </td>
                     <td>
                         @if (string.IsNullOrEmpty(sr.EmployeeId))
                         {

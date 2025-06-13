@@ -35,7 +35,18 @@
                     <td>@sr.EmployeeName</td>
                     <td>@sr.DateCreated</td>
                     <td>@sr.Status</td>
-                    <td>@(sr.IsPublic? "عامة" : "خاصة")</td>
+                    <td>
+                        @if (sr.IsPublic)
+                        {
+                            @sr.FollowerCount
+                    
+                            <text> متابعين</text>
+                        }
+                        else
+                        {
+                            <text>خاصة</text>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

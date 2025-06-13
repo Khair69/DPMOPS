@@ -17,6 +17,7 @@ namespace DPMOPS.Data
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<AppNotification> Notifications { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<RequestFollower> RequestFollowers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,6 +86,10 @@ namespace DPMOPS.Data
                 .HasOne(a => a.ServiceRequest)
                 .WithOne(sr => sr.Appointment)
                 .HasForeignKey<Appointment>(a => a.ServiceRequestId);
+
+            modelBuilder.Entity<RequestFollower>()
+                .HasIndex(rf => new { rf.CitizrnId, rf.ServiceRequestId })
+                .IsUnique();
         }
     }
 }

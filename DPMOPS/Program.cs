@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Account;
 using DPMOPS.Services.Appointment;
+using DPMOPS.Services.Follow;
 
 namespace DPMOPS
 {
@@ -80,6 +81,7 @@ namespace DPMOPS
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+            builder.Services.AddScoped<IFollowService, FollowService>();
 
             var app = builder.Build();
 

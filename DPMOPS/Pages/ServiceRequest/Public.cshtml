@@ -51,10 +51,28 @@
                                 <p class="card-text flex-grow-1">@sr.Description</p>
                                 <p class="small text-muted">
                                     <i class="bi bi-geo-alt-fill"></i> @sr.Address <br />
-                                    <i class="bi bi-activity"></i> @sr.Status
+                                    <i class="bi bi-activity"></i> @sr.Status <br />
+                                    <i class="bi bi-person-fill-check"></i> عدد المتابعين @sr.FollowerCount
                                 </p>
-                                @*<div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">                                
-                                </div> *@
+                                <div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">
+                                    @if (sr.FollowVisible)
+                                    {
+                                        <form asp-page="Info" asp-page-handler="@((sr.IsFollowing ? "Unfollow" : "Follow"))" asp-route-id="@sr.ServiceRequestId" class="me-1 p-0">
+                                            <button type="submit" class="btn btn-sm @(sr.IsFollowing ? "btn-outline-danger" : "btn-outline-primary")">
+                                                @if (sr.IsFollowing)
+                                                {
+                                                    <i class="bi bi-patch-minus"></i>
+                                                    <text>الغاء المتابعة</text>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-patch-check"></i>
+                                                    <text>متابعة</text>
+                                                }
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </a>

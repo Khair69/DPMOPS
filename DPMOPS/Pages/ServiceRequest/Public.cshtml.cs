@@ -1,5 +1,5 @@
 using DPMOPS.Models;
-using DPMOPS.Services.District;
+using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -13,20 +13,39 @@ namespace DPMOPS.Pages.ServiceRequest
     public class PublicModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
+        private readonly IFollowService _followService;
+        private readonly IAuthorizationService _authService;
 
-        public PublicModel(IServiceRequestService serviceRequestService)
+        public PublicModel(IServiceRequestService serviceRequestService,
+            IFollowService followService,
+            IAuthorizationService authService)
         {
             _serviceRequestService = serviceRequestService;
+            _followService = followService;
+            _authService = authService;
         }
 
         public string Category { get; set; } = "All";
         public IList<ServiceRequestDto> Requests { get; set; }
 
-        public async Task OnGetAsync(Guid cityId, string category)
+        public async Task OnGetAsync(string category)
         {
             Category = category ?? "All";
 
             IList<ServiceRequestDto> temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync();
+
+            AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
+
+            foreach (var sr in temp_requests)
+            {
+                sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
+                sr.IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
+                {
+                    CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    ServiceRequestId = sr.ServiceRequestId
+                });
+                sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
+            }
 
             Requests = Category switch
             {

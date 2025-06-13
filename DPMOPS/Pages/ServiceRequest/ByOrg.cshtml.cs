@@ -1,5 +1,6 @@
 #nullable disable
 using DPMOPS.Models;
+using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +13,13 @@ namespace DPMOPS.Pages.ServiceRequest
     public class ByOrgModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
+        private readonly IFollowService _followService;
 
-        public ByOrgModel(IServiceRequestService serviceRequestService)
+        public ByOrgModel(IServiceRequestService serviceRequestService,
+            IFollowService followService)
         {
             _serviceRequestService = serviceRequestService;
+            _followService = followService;
         }
 
         public string Category { get; set; } = "All";
@@ -27,6 +31,11 @@ namespace DPMOPS.Pages.ServiceRequest
 
             var orgId = User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value;
             IList<ServiceRequestDto> temp_requests = await _serviceRequestService.GetServiceRequestsByOrganizationAsync(Guid.Parse(orgId));
+
+            foreach (var sr in temp_requests)
+            {
+                sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
+            }
 
             Requests = Category switch
             {

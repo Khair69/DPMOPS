@@ -1,4 +1,5 @@
 #nullable disable
+using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +12,13 @@ namespace DPMOPS.Pages.ServiceRequest
     public class IndexModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;
+        private readonly IFollowService _followService;
 
-        public IndexModel(IServiceRequestService serviceRequestService)
+        public IndexModel(IServiceRequestService serviceRequestService,
+            IFollowService followService)
         {
             _serviceRequestService = serviceRequestService;
+            _followService = followService;
         }
 
         public IList<ServiceRequestDto> ServiceRequests { get; set; }
@@ -22,6 +26,11 @@ namespace DPMOPS.Pages.ServiceRequest
         public async Task OnGetAsync()
         {
             ServiceRequests = await _serviceRequestService.GetAllServiceRequestsAsync();
+
+            foreach (var sr in ServiceRequests)
+            {
+                sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
+            }
         }
     }
 }

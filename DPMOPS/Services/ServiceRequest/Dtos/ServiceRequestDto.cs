@@ -33,5 +33,10 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public DateTime? AppointmentDate { get; set; }
 
         public bool IsPublic { get; set; }
+
+        public bool IsFollowing { get; set; }
+        public int FollowerCount { get; set; }
+
+        public bool FollowVisible { get; set; }
     }
 }

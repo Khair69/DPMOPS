@@ -44,7 +44,7 @@
                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
                 }
                 <br />
-                <i class="bi bi-person-check-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
+                <i class="bi bi-person-badge-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
                 @if (Model.ServiceRequest.IsPublic)
                 {
@@ -85,16 +85,44 @@
                         </button>
                     }
 
+                    @if (Model.ServiceRequest.IsPublic)
+                    {
+                        <div class="d-flex align-items-center pt-3">
+                            <span class="text-muted">
+                                <i class="bi bi-person-fill-check"></i> عدد المتابعين @Model.FollowerCount
+                            </span>
+                            @if (Model.FollowVisible)
+                            {
+                                <form method="post" asp-page-handler="@((Model.IsFollowing ? "Unfollow" : "Follow"))" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="me-1 p-0">
+                                    <button type="submit" class="btn btn-sm @(Model.IsFollowing ? "btn-outline-danger" : "btn-outline-primary")">
+                                        @if (Model.IsFollowing)
+                                        {
+                                            <i class="bi bi-patch-minus"></i>
+                                            <text>الغاء المتابعة</text>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-patch-check"></i>
+                                            <text>متابعة</text>
+                                        }
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    }
+
                     <!--Change Status-->
-                    <div class="d-flex justify-content-center">
-                        <form asp-page="Info" asp-page-handler="Status" class="w-50 text-center">
-                            <div class="form-floating m-3">
-                                <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="@Model.StatusOptions" class="form-select">
-                                </select>
-                                <label asp-for="ChangeStatus.StatusId"></label>
-                                <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+                    <div class="d-flex justify-content-center m-3">
+                        <form asp-page="Info" asp-page-handler="Status" class="text-center w-75">
+                            <div class="d-flex align-items-center justify-content-center gap-3">
+                                <div class="form-floating flex-grow-1">
+                                    <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="@Model.StatusOptions" class="form-select">
+                                    </select>
+                                    <label asp-for="ChangeStatus.StatusId"></label>
+                                    <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+                                </div>
+                                <button id="statusSaveButton" type="submit" class="btn btn-primary" disabled>حفظ</button>
                             </div>
-                            <button id="statusSaveButton" type="submit" class="btn btn btn-primary w-50" disabled>حفظ</button>
                         </form>
                     </div>
                 }

@@ -4,6 +4,7 @@ using DPMOPS.Services.Account;
 using DPMOPS.Services.Account.Dtos;
 using DPMOPS.Services.Appointment;
 using DPMOPS.Services.Appointment.Dtos;
+using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -21,24 +22,30 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IServiceRequestService _serviceRequestService;
         private readonly IAccountService _accountService;
         private readonly IAppointmentService _appointmentService;
+        private readonly IFollowService _followService;
 
         public InfoModel(IAuthorizationService authService,
             IServiceRequestService serviceRequestService,
             IAccountService accountService,
-            IAppointmentService appointmentService)
+            IAppointmentService appointmentService,
+            IFollowService followService)
         {
             _authService = authService;
             _serviceRequestService = serviceRequestService;
             _accountService = accountService;
             _appointmentService = appointmentService;
+            _followService = followService;
         }
 
         public ServiceRequestDto ServiceRequest { get; set; }
         public bool EmployeeViewer { get; set; } = false;
         public bool DeleteVisible { get; set; } = false;
         public bool OrgAdminViewer { get; set; } = false;
+        public bool FollowVisible { get; set; } = false;
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
         public AccountDto Citizen { get; set; }
+        public bool IsFollowing { get; set; }
+        public int FollowerCount { get; set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -77,6 +84,21 @@ namespace DPMOPS.Pages.ServiceRequest
             if (User.HasClaim("IsOrgAdmin", "true"))
             {
                 OrgAdminViewer = true;
+            }
+
+            if (ServiceRequest.IsPublic)
+            {
+                FollowerCount = await _followService.GetRequestFollowCountAsync(id);
+                AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
+                if (citAuth.Succeeded && ServiceRequest.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier))
+                {
+                    FollowVisible = true;
+                    IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
+                    {
+                        CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        ServiceRequestId = id
+                    });
+                }
             }
 
             return Page();
@@ -169,6 +191,50 @@ namespace DPMOPS.Pages.ServiceRequest
                 return BadRequest();
             }
 
+            return RedirectToPage("Info");
+        }
+
+        public async Task<IActionResult> OnPostFollowAsync(Guid id)
+        {
+            AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
+            if (citAuth.Succeeded)
+            {
+                var success = await _followService.FollowAsync(new Services.Follow.Dtos.FollowDto
+                {
+                    CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    ServiceRequestId = id
+                });
+                if (!success)
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+            return RedirectToPage("Info");
+        }
+
+        public async Task<IActionResult> OnPostUnfollowAsync(Guid id)
+        {
+            AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
+            if (citAuth.Succeeded)
+            {
+                var success = await _followService.UnfollowAsync(new Services.Follow.Dtos.FollowDto
+                {
+                    CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    ServiceRequestId = id
+                });
+                if (!success)
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
             return RedirectToPage("Info");
         }
 
