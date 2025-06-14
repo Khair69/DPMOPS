@@ -48,11 +48,17 @@
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
                 @if (Model.ServiceRequest.IsPublic)
                 {
-                    <i class="bi bi-unlock"></i><text> عامة</text><br />
+                    <i class="bi bi-unlock"></i>
+                    <text> عامة</text>
+
+                    <br />
                 }
                 else
                 {
-                    <i class="bi bi-person-lock"></i><text> خاصة</text><br />
+                    <i class="bi bi-person-lock"></i>
+                    <text> خاصة</text>
+
+                    <br />
                 }
                 @if (Model.ServiceRequest.AppointmentDate.HasValue)
                 {
@@ -85,31 +91,6 @@
                         </button>
                     }
 
-                    @if (Model.ServiceRequest.IsPublic)
-                    {
-                        <div class="d-flex align-items-center pt-3">
-                            <span class="text-muted">
-                                <i class="bi bi-person-fill-check"></i> عدد المتابعين @Model.FollowerCount
-                            </span>
-                            @if (Model.FollowVisible)
-                            {
-                                <form method="post" asp-page-handler="@((Model.IsFollowing ? "Unfollow" : "Follow"))" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="me-1 p-0">
-                                    <button type="submit" class="btn btn-sm @(Model.IsFollowing ? "btn-outline-danger" : "btn-outline-primary")">
-                                        @if (Model.IsFollowing)
-                                        {
-                                            <i class="bi bi-patch-minus"></i>
-                                            <text>الغاء المتابعة</text>
-                                        }
-                                        else
-                                        {
-                                            <i class="bi bi-patch-check"></i>
-                                            <text>متابعة</text>
-                                        }
-                                    </button>
-                                </form>
-                            }
-                        </div>
-                    }
 
                     <!--Change Status-->
                     <div class="d-flex justify-content-center m-3">
@@ -124,6 +105,32 @@
                                 <button id="statusSaveButton" type="submit" class="btn btn-primary" disabled>حفظ</button>
                             </div>
                         </form>
+                    </div>
+                }
+
+                @if (Model.ServiceRequest.IsPublic)
+                {
+                    <div class="d-flex align-items-center pt-3">
+                        <span class="text-muted">
+                            <i class="bi bi-person-fill-check"></i> عدد المتابعين @Model.FollowerCount
+                        </span>
+                        @if (Model.FollowVisible)
+                        {
+                            <form method="post" asp-page-handler="@((Model.IsFollowing ? "Unfollow" : "Follow"))" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="me-1 p-0">
+                                <button type="submit" class="btn btn-sm @(Model.IsFollowing ? "btn-outline-danger" : "btn-outline-primary")">
+                                    @if (Model.IsFollowing)
+                                    {
+                                        <i class="bi bi-patch-minus"></i>
+                                        <text>الغاء المتابعة</text>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-patch-check"></i>
+                                        <text>متابعة</text>
+                                    }
+                                </button>
+                            </form>
+                        }
                     </div>
                 }
 
