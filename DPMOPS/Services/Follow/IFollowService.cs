@@ -8,5 +8,6 @@ namespace DPMOPS.Services.Follow
         Task<bool> UnfollowAsync(FollowDto Fdto);
         Task<int> GetRequestFollowCountAsync(Guid Id);
         Task<bool> UserIsFollowingReqAsync(FollowDto Fdto);
+        Task<IList<string>> GetFollowingIds(Guid id);
     }
 }

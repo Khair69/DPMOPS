@@ -3,6 +3,7 @@
 using DPMOPS.Data;
 using DPMOPS.Models;
 using DPMOPS.Services.Account;
+using DPMOPS.Services.Follow;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
@@ -18,18 +19,21 @@ namespace DPMOPS.Services.ServiceRequest
         private readonly INotificationService _notificationService;
         private readonly LinkGenerator _linkGenerator;
         private readonly IAccountService _accountService;
+        private readonly IFollowService _followService;
 
         public ServiceRequestService(ApplicationDbContext context,
             IPhotoUploadService photoUploadService,
             INotificationService notificationService,
             LinkGenerator linkGenerator,
-            IAccountService accountService)
+            IAccountService accountService,
+            IFollowService followService)
         {
             _context = context;
             _photoUploadService = photoUploadService;
             _notificationService = notificationService;
             _linkGenerator = linkGenerator;
             _accountService = accountService;
+            _followService = followService;
         }
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
@@ -192,6 +196,7 @@ namespace DPMOPS.Services.ServiceRequest
 
             if (existingRequest != null)
             {
+                //send to citizen
                 CreateNotificationDto notif = new CreateNotificationDto
                 {
                     AccountId = existingRequest.CitizenId,
@@ -203,6 +208,23 @@ namespace DPMOPS.Services.ServiceRequest
                 };
 
                 await _notificationService.SaveAsync(notif);
+                //send to followers
+                IList<string> FIds = await _followService.GetFollowingIds(srDto.ServiceRequestId);
+                foreach (string fId in FIds) 
+                {
+                    CreateNotificationDto notification = new CreateNotificationDto
+                    {
+                        AccountId = fId,
+                        Title = "تم تغير حالة طلب قمت بمتابعته",
+                        Body = $"\"{existingRequest.Title}\" تغيرت حالته الى {(Status)srDto.StatusId}",
+                        Link = _linkGenerator.GetPathByPage(
+                            "/ServiceRequest/Info",
+                            values: new { id = existingRequest.ServiceRequestId })
+                    };
+
+                    await _notificationService.SaveAsync(notification);
+                }
+
 
                 existingRequest.StatusId = srDto.StatusId;
 
@@ -395,6 +417,23 @@ namespace DPMOPS.Services.ServiceRequest
 
                     await _notificationService.SaveAsync(empNotif);
                     await _notificationService.SaveAsync(citNotif);
+
+                    //send to followers
+                    IList<string> FIds = await _followService.GetFollowingIds(srDto.ServiceRequestId);
+                    foreach (string fId in FIds)
+                    {
+                        CreateNotificationDto notification = new CreateNotificationDto
+                        {
+                            AccountId = fId,
+                            Title = "تم قبول الطلب الذي قمت بمتابعته",
+                            Body = $"لقد تم قبول الطلب بعنوان \"{existingRequest.Title}\"",
+                            Link = _linkGenerator.GetPathByPage(
+                                "/ServiceRequest/Info",
+                                values: new { id = existingRequest.ServiceRequestId })
+                        };
+
+                        await _notificationService.SaveAsync(notification);
+                    }
                 }
 
                 return saveresult == 1;

@@ -71,7 +71,8 @@
 
             <div class="mt-auto pt-3">
 
-                <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#mapModal">
+                <!--Map Button-->
+                <button class="btn btn-outline-light m-1" data-bs-toggle="modal" data-bs-target="#mapModal">
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 
@@ -108,9 +109,10 @@
                     </div>
                 }
 
+                <!--Follower Count / Follow and Unfollow button-->
                 @if (Model.ServiceRequest.IsPublic)
                 {
-                    <div class="d-flex align-items-center pt-3">
+                    <div class="d-flex align-items-center p-1">
                         <span class="text-muted">
                             <i class="bi bi-person-fill-check"></i> عدد المتابعين @Model.FollowerCount
                         </span>
@@ -134,13 +136,14 @@
                     </div>
                 }
 
+                <!--Assign and change employee-->
                 @if (Model.OrgAdminViewer && string.IsNullOrEmpty(Model.ServiceRequest.EmployeeId))
                 {
-                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadAssignModal('@Model.ServiceRequest.ServiceRequestId')">تعيين موظف</button>
+                    <button class="btn btn-outline-primary m-1" data-bs-toggle="modal" data-bs-target="#assignModal" onclick="loadAssignModal('@Model.ServiceRequest.ServiceRequestId')">تعيين موظف</button>
                 }
                 else if (Model.OrgAdminViewer && !string.IsNullOrEmpty(Model.ServiceRequest.EmployeeId))
                 {
-                    <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#changeModal" onclick="event.stopPropagation(); loadChangeModal('@Model.ServiceRequest.ServiceRequestId')">تغيير الموظف</button>
+                    <button class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#changeModal" onclick="event.stopPropagation(); loadChangeModal('@Model.ServiceRequest.ServiceRequestId')">تغيير الموظف</button>
                 }
             </div>
         </div>

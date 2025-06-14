@@ -1,6 +1,6 @@
-﻿using DPMOPS.Data;
+﻿#nullable disable
+using DPMOPS.Data;
 using DPMOPS.Services.Follow.Dtos;
-using DPMOPS.Services.ServiceRequest;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Follow
@@ -8,18 +8,16 @@ namespace DPMOPS.Services.Follow
     public class FollowService : IFollowService
     {
         private readonly ApplicationDbContext _context;
-        private readonly IServiceRequestService _serviceRequestService;
 
-        public FollowService(ApplicationDbContext context,
-            IServiceRequestService serviceRequestService)
+        public FollowService(ApplicationDbContext context)
         {
             _context = context;
-            _serviceRequestService = serviceRequestService;
         }
 
         public async Task<bool> FollowAsync(FollowDto Fdto)
         {
-            var request = await _serviceRequestService.GetServiceRequestByIdAsync(Fdto.ServiceRequestId);
+            var request = await _context.ServiceRequests
+                .FindAsync(Fdto.ServiceRequestId);
             if (request == null || !request.IsPublic)
             {
                 return false;
@@ -41,6 +39,14 @@ namespace DPMOPS.Services.Follow
                 return succ == 1;
             }
             return false;
+        }
+
+        public async Task<IList<string>> GetFollowingIds(Guid id)
+        {
+            return await _context.RequestFollowers
+                .Where(f => f.ServiceRequestId == id)
+                .Select(f => f.CitizrnId)
+                .ToListAsync();
         }
 
         public async Task<int> GetRequestFollowCountAsync(Guid Id)
