@@ -56,6 +56,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 "Suspended" => temp_requests.Where(sr => sr.Status == (Status)4).ToList(),
                 "Denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
                 "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
+                "Explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
                 _ => temp_requests
             };
         }
