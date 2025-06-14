@@ -18,6 +18,7 @@ namespace DPMOPS.Data
         public DbSet<AppNotification> Notifications { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<RequestFollower> RequestFollowers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
