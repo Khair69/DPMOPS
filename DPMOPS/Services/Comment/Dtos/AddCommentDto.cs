@@ -4,7 +4,6 @@ namespace DPMOPS.Services.Comment.Dtos
 {
     public class AddCommentDto
     {
-        [Required]
         public string? AccountId { get; set; }
 
         public Guid ServiceRequestId { get; set; }

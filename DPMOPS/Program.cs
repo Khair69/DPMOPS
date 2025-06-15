@@ -5,6 +5,7 @@ using DPMOPS.Models;
 using DPMOPS.Services.Account;
 using DPMOPS.Services.Appointment;
 using DPMOPS.Services.City;
+using DPMOPS.Services.Comment;
 using DPMOPS.Services.District;
 using DPMOPS.Services.Follow;
 using DPMOPS.Services.Notification;
@@ -98,6 +99,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped<IFollowService, FollowService>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
 
             var app = builder.Build();
 

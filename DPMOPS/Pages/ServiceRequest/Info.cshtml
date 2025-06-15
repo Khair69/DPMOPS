@@ -85,7 +85,7 @@
                     }
                     else
                     {
-                        <button class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#changeModal" onclick="event.stopPropagation(); loadChangeModal('@Model.ServiceRequest.ServiceRequestId')">تغيير الموظف</button>
+                        <button class="btn btn-outline-warning m-1" data-bs-toggle="modal" data-bs-target="#changeModal" onclick="loadChangeModal('@Model.ServiceRequest.ServiceRequestId')">تغيير الموظف</button>
                     }
                 }
 
@@ -146,7 +146,7 @@
                                 </button>
                             </form>
                         }
-                        <button type="button" class="btn btn-sm btn-outline-primary m-1" data-bs-toggle="modal" data-bs-target="#commentsModal">
+                        <button type="button" class="btn btn-sm btn-outline-primary m-1" data-bs-toggle="modal" data-bs-target="#commentsModal" onclick="loadCommentsModal('@Model.ServiceRequest.ServiceRequestId')">
                             <i class="bi bi-chat"></i> التعليقات
                         </button>
                     </div>
@@ -325,12 +325,13 @@
 {
     <!--Comment Modal-->
     <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg rounded-4">
                 <div class="modal-header">
                     <h5 class="modal-title" id="commentsModalLabel">التعليقات</h5>
                     <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <iframe id="commentsFrame" style="border:0; height:500px"></iframe>
             </div>
         </div>
     </div>
@@ -392,5 +393,6 @@
 @section Scripts {
     <script src="~/js/progIndicator.js" asp-append-version="true"></script>
     <script src="~/js/assignModal.js" asp-append-version="true"></script>
+    <script src="~/js/commentsModal.js" asp-append-version="true"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 }

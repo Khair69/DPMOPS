@@ -1,0 +1,52 @@
+﻿@page "{id}"
+@using Humanizer
+@model DPMOPS.Pages.Comments.IndexModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ar" data-bs-theme="dark" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container my-4">
+        <!-- Comment Input Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">أضف تعليقاً</h5>
+                <form asp-page="Index">
+                    <div class="mb-3">
+                        <textarea asp-for="NewComment.Content" class="form-control" rows="3" placeholder="اكتب تعليقك هنا..."></textarea>
+                        <span asp-validation-for="NewComment.Content" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">نشر التعليق</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comment-list">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 fw-bold text-primary">@comment.UserName</h6>
+                            <small class="text-muted">@comment.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</small>
+                        </div>
+                        <p class="mb-0">@comment.Content</p>
+                    </div>
+                </div> 
+            }
+        </div>
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
