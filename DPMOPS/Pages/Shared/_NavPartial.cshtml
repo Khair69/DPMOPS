@@ -5,19 +5,40 @@
 {
     <!--Admin-->
     <li class="nav-item">
-        <a class="nav-link" asp-page="/Location/Cities/Index">المدن</a>
+        <a asp-page="/Location/Cities/Index" class="nav-link">
+            <i class="bi bi-map-fill"></i>
+            <p>المدن</p>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-page="/Organization/Index">المؤسسات</a>
+        <a asp-page="/Organization/Index" class="nav-link">
+            <i class="bi bi-building"></i>
+            <p>المؤسسات</p>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-page="/Accounts/Employees">الموظفين</a>
-    </li>    
-    <li class="nav-item">
-        <a class="nav-link" asp-page="/Accounts/Citizens">المواطنين</a>
+        <a asp-page="/Accounts/Employees" class="nav-link">
+            <i class="bi bi-person-workspace"></i>
+            <p>الموظفين</p>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-page="/ServiceRequest/Index">الطلبات</a>
+        <a asp-page="/Accounts/Citizens" class="nav-link">
+            <i class="bi bi-person-fill"></i>
+            <p>المواطنين</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="/ServiceRequest/Index" class="nav-link">
+            <i class="bi bi-tools"></i>
+            <p>الطلبات</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="/Accounts/Index" class="nav-link">
+            <i class="bi bi-person-gear"></i>
+            <p>إدارة الحسابات</p>
+        </a>
     </li>
 }
 @{
@@ -31,39 +52,115 @@
         @if (User.Claims.FirstOrDefault(x => x.Type == "IsOrgAdmin")?.Value != null)
         {
             <!--Organization Admin-->
-            <li class="nav-item dropdown">
-                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    الطلبات
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="All">الكل</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Pending">قيد الانتظار</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Accepted">المقبولة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="InProgress">قيد العمل</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Completed">المكتملة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Suspended">المعلقة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByOrg" asp-route-category="Denied">المرفوضة</a></li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <i class="bi bi-tools"></i>
+                    <p>
+                        الطلبات
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="All" class="nav-link">
+                            <i class="bi bi-journals"></i>
+                            <p>الكل</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="Pending" class="nav-link">
+                            <i class="bi bi-hourglass-bottom"></i>
+                            <p>قيد الانتظار</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="Accepted" class="nav-link">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                            <p>المقبولة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="InProgress" class="nav-link">
+                            <i class="bi bi-gear-fill"></i>
+                            <p>قيد العمل</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="Completed" class="nav-link">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <p>المكتملة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="Suspended" class="nav-link">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <p>المعلقة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByOrg" asp-route-category="Denied" class="nav-link">
+                            <i class="bi bi-x-octagon-fill"></i>
+                            <p>المرفوضة</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" asp-page="/Organization/Employees/Index" asp-route-id="@orgId">الموظفين</a>
+                <a asp-page="/Organization/Employees/Index" asp-route-id="@orgId" class="nav-link">
+                    <i class="bi bi-person-workspace"></i>
+                    <p>الموظفين</p>
+                </a>
             </li>
         }
         else
         {
             <!--Employee-->
-            <li class="nav-item dropdown">
-                <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    طلباتك
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="All">الكل</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Accepted">المقبولة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="InProgress">قيد العمل</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Completed">المكتملة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Suspended">المعلقة</a></li>
-                    <li><a class="dropdown-item" asp-page="/ServiceRequest/ByEmp" asp-route-category="Denied">المرفوضة</a></li>
+            <li class="nav-item">
+                <a class="nav-link">
+                    <i class="bi bi-tools"></i>
+                    <p>
+                        طلباتك
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="All" class="nav-link">
+                            <i class="bi bi-journals"></i>
+                            <p>الكل</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="Accepted" class="nav-link">
+                            <i class="bi bi-hand-thumbs-up-fill"></i>
+                            <p>المقبولة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="InProgress" class="nav-link">
+                            <i class="bi bi-gear-fill"></i>
+                            <p>قيد العمل</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="Completed" class="nav-link">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <p>المكتملة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="Suspended" class="nav-link">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <p>المعلقة</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-page="/ServiceRequest/ByEmp" asp-route-category="Denied" class="nav-link">
+                            <i class="bi bi-x-octagon-fill"></i>
+                            <p>المرفوضة</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
         }
@@ -71,18 +168,57 @@
     else if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
         <!--Citizen-->
-        <li class="nav-item dropdown">
-            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                طلباتك
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="All">الكل</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Pending">قيد الانتظار</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Accepted">المقبولة</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="InProgress">قيد العمل</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Completed">المكتملة</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Suspended">المعلقة</a></li>
-                <li><a class="dropdown-item" asp-page="/ServiceRequest/ByCitizen" asp-route-category="Denied">المرفوضة</a></li>
+        <li class="nav-item">
+            <a class="nav-link">
+                <i class="bi bi-tools"></i>
+                <p>
+                    طلباتك
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="All" class="nav-link">
+                        <i class="bi bi-journals"></i>
+                        <p>الكل</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="Pending" class="nav-link">
+                        <i class="bi bi-hourglass-bottom"></i>
+                        <p>قيد الانتظار</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="Accepted" class="nav-link">
+                        <i class="bi bi-hand-thumbs-up-fill"></i>
+                        <p>المقبولة</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="InProgress" class="nav-link">
+                        <i class="bi bi-gear-fill"></i>
+                        <p>قيد العمل</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="Completed" class="nav-link">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <p>المكتملة</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="Suspended" class="nav-link">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <p>المعلقة</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-page="/ServiceRequest/ByCitizen" asp-route-category="Denied" class="nav-link">
+                        <i class="bi bi-x-octagon-fill"></i>
+                        <p>المرفوضة</p>
+                    </a>
+                </li>
             </ul>
         </li>
     }
@@ -90,14 +226,25 @@
     {
         <!--Authenticated but not admin-->
         <li class="nav-item">
-            <a class="nav-link" asp-page="/Calendar/Index">الروزنامة</a>
+            <a asp-page="/Calendar/Index" class="nav-link">
+                <i class="bi bi-calendar-week"></i>
+                <p>الروزنامة</p>
+            </a>
         </li>
     }
     <!--Authenticated-->
     <li class="nav-item">
-        <a class="nav-link" asp-page="/ServiceRequest/Public" asp-route-category="Explore">الطلبات العامة</a>
+        <a asp-page="/ServiceRequest/Public" asp-route-category="Explore" class="nav-link">
+            <i class="bi bi-megaphone"></i>
+            <p>الطلبات العامة</p>
+        </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-page="">الشكاوي</a>
+        <a asp-page="" class="nav-link">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <p>الشكاوي</p>
+        </a>
     </li>
 }
+
+@* <li class="nav-header">EXAMPLES</li> *@
