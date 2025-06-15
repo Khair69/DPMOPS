@@ -337,6 +337,7 @@
 }
 
 <script>
+    //map logic
     const latitude = @Model.ServiceRequest.Latitude;
     const longitude = @Model.ServiceRequest.Longitude;
     let mapInitialized = false;
@@ -360,6 +361,26 @@
             map.invalidateSize(); // Recalculate map size if modal is reopened
         }
     });
+
+    //status select section
+
+    let originalValue;
+
+    window.onload = function () {
+        const select = document.getElementById("statusSelect");
+        originalValue = select.value;
+    };
+
+    function checkSelection() {
+        const select = document.getElementById("statusSelect");
+        const button = document.getElementById("statusSaveButton");
+
+        if (select.value !== originalValue) {
+            button.disabled = false;
+        } else {
+            button.disabled = true;
+        }
+    }
 </script>
 
 
