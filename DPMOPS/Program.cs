@@ -1,21 +1,25 @@
+using DPMOPS.Authorization.Handlers;
+using DPMOPS.Authorization.Requirements;
 using DPMOPS.Data;
 using DPMOPS.Models;
-using DPMOPS.Services.City;
-using DPMOPS.Services.District;
-using Microsoft.EntityFrameworkCore;
-using DPMOPS.Services.User;
-using DPMOPS.Services.ServiceRequest;
-using DPMOPS.Services.UserClaim;
-using DPMOPS.Services.Organization;
-using DPMOPS.Authorization.Requirements;
-using DPMOPS.Authorization.Handlers;
-using Microsoft.AspNetCore.Authorization;
-using DPMOPS.Services.Photo;
-using Microsoft.AspNetCore.Identity;
-using DPMOPS.Services.Notification;
 using DPMOPS.Services.Account;
 using DPMOPS.Services.Appointment;
+using DPMOPS.Services.City;
+using DPMOPS.Services.District;
 using DPMOPS.Services.Follow;
+using DPMOPS.Services.Notification;
+using DPMOPS.Services.Organization;
+using DPMOPS.Services.Photo;
+using DPMOPS.Services.ServiceRequest;
+using DPMOPS.Services.User;
+using DPMOPS.Services.UserClaim;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 namespace DPMOPS
 {
@@ -24,6 +28,16 @@ namespace DPMOPS
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[] { new CultureInfo("ar"), new CultureInfo("en") };
+                options.DefaultRequestCulture = new RequestCulture("ar");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
             //Authorization
             builder.Services.AddAuthorization(options =>
@@ -69,7 +83,9 @@ namespace DPMOPS
                 options.Lockout.AllowedForNewUsers = true;
                 options.Password.RequireLowercase = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddRazorPages();
+            builder.Services.AddRazorPages()
+            .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+            .AddDataAnnotationsLocalization();
 
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<IDistrictService, DistrictService>();
@@ -84,6 +100,9 @@ namespace DPMOPS
             builder.Services.AddScoped<IFollowService, FollowService>();
 
             var app = builder.Build();
+
+            var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
