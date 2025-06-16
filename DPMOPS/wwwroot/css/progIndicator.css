@@ -55,11 +55,11 @@
 }
 
 .fourth-dot {
-    left: 0;
+    right: 100%;
 }
 
 .fourth-dot-label {
-    left: 0;
+    right: 100%
 }
 
 .prog-box {
