@@ -79,8 +79,10 @@ namespace DPMOPS
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => { 
-                options.SignIn.RequireConfirmedAccount = true; 
+            // Identity
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
                 options.Lockout.AllowedForNewUsers = true;
                 options.Password.RequireLowercase = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
@@ -113,8 +115,11 @@ namespace DPMOPS
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseExceptionHandler("/Error/500");
+
+                // Handle status codes like 404, 403, etc.
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
                 app.UseHsts();
             }
 
