@@ -1,4 +1,5 @@
 using DPMOPS.Models;
+using DPMOPS.Services.City;
 using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -17,20 +19,24 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IFollowService _followService;
         private readonly IAuthorizationService _authService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICityService _cityService;
 
         public PublicModel(IServiceRequestService serviceRequestService,
             IFollowService followService,
             IAuthorizationService authService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            ICityService cityService)
         {
             _serviceRequestService = serviceRequestService;
             _followService = followService;
             _authService = authService;
             _userManager = userManager;
+            _cityService = cityService;
         }
 
         public string Category { get; set; } = "All";
         public IList<ServiceRequestDto> Requests { get; set; }
+        public IEnumerable<SelectListItem> CityOptions { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public Guid CityId { get; set; }
@@ -78,13 +84,15 @@ namespace DPMOPS.Pages.ServiceRequest
                 "all" => temp_requests,
                 "pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
                 "accepted" => temp_requests.Where(sr => sr.Status == (Status)2).ToList(),
-                "inProgress" => temp_requests.Where(sr => sr.Status == (Status)3).ToList(),
+                "inprogress" => temp_requests.Where(sr => sr.Status == (Status)3).ToList(),
                 "suspended" => temp_requests.Where(sr => sr.Status == (Status)4).ToList(),
                 "denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
                 "completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 "explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
                 _ => temp_requests
             };
+
+            CityOptions = await _cityService.GetCityOptionsAsync();
         }
     }
 }

@@ -83,7 +83,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 "all" => temp,
                 "pending" => temp.Where(sr => sr.StatusId == 1).ToList(),
                 "accepted" => temp.Where(sr => sr.StatusId == 2).ToList(),
-                "inProgress" => temp.Where(sr => sr.StatusId == 3).ToList(),
+                "inprogress" => temp.Where(sr => sr.StatusId == 3).ToList(),
                 "suspended" => temp.Where(sr => sr.StatusId == 4).ToList(),
                 "denied" => temp.Where(sr => sr.StatusId == 5).ToList(),
                 "completed" => temp.Where(sr => sr.StatusId == 6).ToList(),
