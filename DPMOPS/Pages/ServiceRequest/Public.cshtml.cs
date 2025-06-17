@@ -71,18 +71,18 @@ namespace DPMOPS.Pages.ServiceRequest
                     sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
                 }
             
-            Category = category ?? "All";
+            Category = category ?? "all";
 
-            Requests = Category switch
+            Requests = Category.ToLower() switch
             {
-                "All" => temp_requests,
-                "Pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
-                "Accepted" => temp_requests.Where(sr => sr.Status == (Status)2).ToList(),
-                "InProgress" => temp_requests.Where(sr => sr.Status == (Status)3).ToList(),
-                "Suspended" => temp_requests.Where(sr => sr.Status == (Status)4).ToList(),
-                "Denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
-                "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
-                "Explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
+                "all" => temp_requests,
+                "pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
+                "accepted" => temp_requests.Where(sr => sr.Status == (Status)2).ToList(),
+                "inProgress" => temp_requests.Where(sr => sr.Status == (Status)3).ToList(),
+                "suspended" => temp_requests.Where(sr => sr.Status == (Status)4).ToList(),
+                "denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
+                "completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
+                "explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
                 _ => temp_requests
             };
         }

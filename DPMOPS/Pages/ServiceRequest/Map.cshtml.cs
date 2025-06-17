@@ -32,7 +32,7 @@ namespace DPMOPS.Pages.ServiceRequest
         [BindProperty(SupportsGet = true)]
         public bool IsPublic { get; set; } = false;
 
-        public async Task OnGetAsync(string? category = "All")
+        public async Task OnGetAsync(string? category = "all")
         {
             UserType usertype = _userClaimService.ResolveUserType(User);
 
@@ -78,15 +78,15 @@ namespace DPMOPS.Pages.ServiceRequest
                 }
             }
 
-            MapPoints = category switch
+            MapPoints = category.ToLower() switch
             {
-                "All" => temp,
-                "Pending" => temp.Where(sr => sr.StatusId == 1).ToList(),
-                "Accepted" => temp.Where(sr => sr.StatusId == 2).ToList(),
-                "InProgress" => temp.Where(sr => sr.StatusId == 3).ToList(),
-                "Suspended" => temp.Where(sr => sr.StatusId == 4).ToList(),
-                "Denied" => temp.Where(sr => sr.StatusId == 5).ToList(),
-                "Completed" => temp.Where(sr => sr.StatusId == 6).ToList(),
+                "all" => temp,
+                "pending" => temp.Where(sr => sr.StatusId == 1).ToList(),
+                "accepted" => temp.Where(sr => sr.StatusId == 2).ToList(),
+                "inProgress" => temp.Where(sr => sr.StatusId == 3).ToList(),
+                "suspended" => temp.Where(sr => sr.StatusId == 4).ToList(),
+                "denied" => temp.Where(sr => sr.StatusId == 5).ToList(),
+                "completed" => temp.Where(sr => sr.StatusId == 6).ToList(),
                 _ => temp
             };
         }
