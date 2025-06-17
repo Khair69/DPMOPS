@@ -3,8 +3,10 @@ using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
@@ -14,37 +16,62 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IServiceRequestService _serviceRequestService;
         private readonly IFollowService _followService;
         private readonly IAuthorizationService _authService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public PublicModel(IServiceRequestService serviceRequestService,
             IFollowService followService,
-            IAuthorizationService authService)
+            IAuthorizationService authService,
+            UserManager<ApplicationUser> userManager)
         {
             _serviceRequestService = serviceRequestService;
             _followService = followService;
             _authService = authService;
+            _userManager = userManager;
         }
 
         public string Category { get; set; } = "All";
         public IList<ServiceRequestDto> Requests { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public Guid CityId { get; set; }
+
         public async Task OnGetAsync(string category)
         {
-            Category = category ?? "All";
-
-            IList<ServiceRequestDto> temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync();
-
             AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
 
-            foreach (var sr in temp_requests)
+            IList<ServiceRequestDto> temp_requests = new List<ServiceRequestDto>();
+            if (User.Identity.IsAuthenticated)
             {
-                sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
-                sr.IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
+                if (CityId == Guid.Empty)
                 {
-                    CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                    ServiceRequestId = sr.ServiceRequestId
-                });
-                sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
+                    CityId = _userManager.Users
+                        .Where(u => u.Id == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                        .Include(u => u.District)
+                        .Select(u => u.District.CityId)
+                        .FirstOrDefault();
+                }
+                temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync(CityId);
             }
+            else
+            {
+                if (CityId == Guid.Empty) temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync();
+                else temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync(CityId);
+            }
+
+
+
+            foreach (var sr in temp_requests)
+                {
+                    sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
+                    sr.IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
+                    {
+                        CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        ServiceRequestId = sr.ServiceRequestId
+                    });
+                    sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
+                }
+            
+            Category = category ?? "All";
 
             Requests = Category switch
             {

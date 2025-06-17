@@ -3,13 +3,13 @@
 using DPMOPS.Data;
 using DPMOPS.Models;
 using DPMOPS.Services.Account;
+using DPMOPS.Services.District;
 using DPMOPS.Services.Follow;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace DPMOPS.Services.ServiceRequest
 {
@@ -21,13 +21,15 @@ namespace DPMOPS.Services.ServiceRequest
         private readonly LinkGenerator _linkGenerator;
         private readonly IAccountService _accountService;
         private readonly IFollowService _followService;
+        private readonly IDistrictService _districtService;
 
         public ServiceRequestService(ApplicationDbContext context,
             IPhotoUploadService photoUploadService,
             INotificationService notificationService,
             LinkGenerator linkGenerator,
             IAccountService accountService,
-            IFollowService followService)
+            IFollowService followService,
+            IDistrictService districtService)
         {
             _context = context;
             _photoUploadService = photoUploadService;
@@ -35,6 +37,7 @@ namespace DPMOPS.Services.ServiceRequest
             _linkGenerator = linkGenerator;
             _accountService = accountService;
             _followService = followService;
+            _districtService = districtService;
         }
 
         public async Task<IList<ServiceRequestDto>> GetAllServiceRequestsAsync()
@@ -499,8 +502,53 @@ namespace DPMOPS.Services.ServiceRequest
             return false;
         }
 
-        public async Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync()
+        public async Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync(Guid? cityId = null)
         {
+            if(cityId.HasValue)
+            {
+                IList<Guid> districtsIds = await _districtService.GetDistrictsByCityAsync(cityId.Value);
+                return await _context.ServiceRequests
+                    .OrderBy(sr => sr.DateCreated)
+                    .Where(sr => sr.IsPublic == true)
+                    .Where(sr => districtsIds.Contains((Guid)sr.DistrictId))
+                    .Include(sr => sr.District)
+                        .ThenInclude(d => d.City)
+                    .Include(sr => sr.Citizen)
+                    .Include(sr => sr.Employee)
+                    .Include(sr => sr.Organization)
+                    .Include(sr => sr.Appointment)
+                    .AsNoTracking()
+                    .Select(sr => new ServiceRequestDto
+                    {
+                        ServiceRequestId = sr.ServiceRequestId,
+                        Title = sr.Title,
+                        Description = sr.Description,
+                        LocDescription = sr.LocDescription,
+                        DateCreated = sr.DateCreated,
+
+                        DistrictId = sr.DistrictId,
+                        Address = sr.District.City.Name + ", " + sr.District.Name,
+                        Status = (Status)sr.StatusId,
+
+                        CitizenName = sr.Citizen.FirstName + " " + sr.Citizen.LastName,
+                        EmployeeName = sr.Employee.FirstName + " " + sr.Employee.LastName,
+                        OrganizationName = sr.Organization.Name,
+
+                        CitizenId = sr.Citizen.Id,
+                        OrganizationId = sr.OrganizationId,
+                        EmployeeId = sr.EmployeeId,
+
+                        PhotoPath = sr.PhotoPath,
+
+                        Latitude = sr.Latitude,
+                        Longitude = sr.Longitude,
+
+                        AppointmentId = sr.Appointment.AppointmentId,
+                        AppointmentDate = sr.Appointment.ScheduledAt
+                    })
+                    .ToListAsync();
+            }
+
             return await _context.ServiceRequests
                 .OrderBy(sr => sr.DateCreated)
                 .Where(sr => sr.IsPublic == true)

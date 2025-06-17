@@ -14,6 +14,6 @@ namespace DPMOPS.Services.ServiceRequest
         Task<bool> ChangeRequestStatusAsync(ChangeRequestStatusDto srDto);
         Task<bool> AssignEmployeeAsync(AssignEmployeeDto srDto);
         Task<bool> ChangeEmployeeAsync(AssignEmployeeDto srDto);
-        Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync();
+        Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync(Guid? cityId = null);
     }
 }
