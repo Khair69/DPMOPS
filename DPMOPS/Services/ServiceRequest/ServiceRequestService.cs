@@ -9,6 +9,7 @@ using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace DPMOPS.Services.ServiceRequest
 {
@@ -210,7 +211,7 @@ namespace DPMOPS.Services.ServiceRequest
                 await _notificationService.SaveAsync(notif);
                 //send to followers
                 IList<string> FIds = await _followService.GetFollowingIds(srDto.ServiceRequestId);
-                foreach (string fId in FIds) 
+                foreach (string fId in FIds)
                 {
                     CreateNotificationDto notification = new CreateNotificationDto
                     {
@@ -383,8 +384,8 @@ namespace DPMOPS.Services.ServiceRequest
 
             if (existingRequest != null)
             {
-                if (existingRequest.EmployeeId != null 
-                    || await _accountService.UserHasClaimAsync(srDto.EmployeeId, "IsOrgAdmin", "true") 
+                if (existingRequest.EmployeeId != null
+                    || await _accountService.UserHasClaimAsync(srDto.EmployeeId, "IsOrgAdmin", "true")
                     || await _accountService.ValueOfUserClaimAsync(srDto.EmployeeId, "OrganizationId") != existingRequest.OrganizationId.ToString())
                 {
                     return false;
@@ -539,6 +540,35 @@ namespace DPMOPS.Services.ServiceRequest
                     AppointmentDate = sr.Appointment.ScheduledAt
                 })
                 .ToListAsync();
+        }
+
+        public async Task<IList<MapPointDto>> GetLocationsByOrg(Guid orgId)
+        {
+            return await _context.ServiceRequests
+                .Where(sr => sr.OrganizationId == orgId)
+                .Select(sr => new MapPointDto
+                {
+                    Latitude = sr.Latitude,
+                    Longitude = sr.Longitude,
+                    StatusId = sr.StatusId,
+                    Title = sr.Title,
+                    RequestId = sr.ServiceRequestId
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IList<MapPointDto>> GetAllLocations()
+        {
+            return await _context.ServiceRequests
+            .Select(sr => new MapPointDto
+            {
+                Latitude = sr.Latitude,
+                Longitude = sr.Longitude,
+                StatusId = sr.StatusId,
+                Title = sr.Title,
+                RequestId = sr.ServiceRequestId
+            })
+            .ToListAsync();
         }
     }
 }

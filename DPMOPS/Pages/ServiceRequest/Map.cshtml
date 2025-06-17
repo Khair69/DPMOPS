@@ -1,0 +1,99 @@
+﻿@page "{category?}"
+@model DPMOPS.Pages.ServiceRequest.MapModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Map";
+    var mapPointsJson = JsonSerializer.Serialize(Model.MapPoints);
+}
+
+<div id="map"></div>
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/lib/leaflet/css/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/lib/leaflet/extramarkers/css/leaflet.extra-markers.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="~/lib/leaflet/js/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="~/lib/leaflet/extramarkers/js/leaflet.extra-markers.min.js"></script>
+    <script>
+        const map = L.map('map').setView([35.124180, 36.759390], 13);
+        // Tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Cluster group
+        const markers = L.markerClusterGroup();
+
+        // Backend data
+        const data = @Html.Raw(mapPointsJson);
+
+        // Status colors
+        const statusIcons = {
+            1: { color: 'gray', icon: 'bi-hourglass-bottom', shape: 'circle' },
+            2: { color: 'black', icon: 'bi-hand-thumbs-up-fill', shape: 'square' },
+            3: { color: 'blue', icon: 'bi-gear-fill', shape: 'star' },
+            4: { color: 'orange', icon: 'bi-exclamation-triangle-fill', shape: 'penta' },
+            5: { color: 'red', icon: 'bi-x-octagon-fill', shape: 'circle' },
+            6: { color: 'green', icon: 'bi-check-circle-fill', shape: 'square' }
+        };
+
+        const bounds = L.latLngBounds([]);
+
+        data.forEach(point => {
+            if (point.Latitude != null && point.Longitude != null) {
+                const config = statusIcons[point.StatusId] || { color: 'black', icon: 'bi-question-circle-fill', shape: 'circle' };
+
+                const customIcon = L.ExtraMarkers.icon({
+                    icon: config.icon,
+                    markerColor: config.color,
+                    shape: config.shape,
+                    prefix: 'bi'
+                });
+
+                const marker = L.marker([point.Latitude, point.Longitude], { icon: customIcon });
+
+                const link = `/ServiceRequest/Info/${point.RequestId}`;
+
+                marker.bindPopup(`
+                    <strong>${point.Title}</strong><br />
+                    <a href="${link}">معلومات الطلب</a>
+                `);
+
+                markers.addLayer(marker);
+                bounds.extend([point.Latitude, point.Longitude]);
+            }
+        });
+
+        map.addLayer(markers);
+
+        if (bounds.isValid()) {
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+
+    </script>
+
+
+}

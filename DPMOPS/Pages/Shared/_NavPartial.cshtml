@@ -40,6 +40,12 @@
             <p>إدارة الحسابات</p>
         </a>
     </li>
+    <li class="nav-item">
+        <a asp-page="/ServiceRequest/Map" class="nav-link">
+            <i class="bi bi-map-fill"></i>
+            <p>الخريطة</p>
+        </a>
+    </li>
 }
 @{
     var orgId = User.Claims.FirstOrDefault(x => x.Type == "OrganizationId")?.Value;
@@ -110,6 +116,12 @@
                 <a asp-page="/Organization/Employees/Index" asp-route-id="@orgId" class="nav-link">
                     <i class="bi bi-person-workspace"></i>
                     <p>الموظفين</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-page="/ServiceRequest/Map" class="nav-link">
+                    <i class="bi bi-map-fill"></i>
+                    <p>الخريطة</p>
                 </a>
             </li>
         }
