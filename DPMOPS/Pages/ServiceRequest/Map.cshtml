@@ -5,7 +5,68 @@
 @{
     ViewData["Title"] = "Map";
     var mapPointsJson = JsonSerializer.Serialize(Model.MapPoints);
+    var currentCategory = Model.Category ?? "all";
+
 }
+
+<div style="position: absolute; bottom: 20px; left: 20px; z-index: 1000;background-color:antiquewhite;">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="catradio" id="all" data-category="all" autocomplete="off"
+               @(currentCategory == "all" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="all">الكل</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="pending" data-category="pending" autocomplete="off"
+               @(currentCategory == "pending" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="pending">قيد الانتظار</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="accepted" data-category="accepted" autocomplete="off"
+               @(currentCategory == "accepted" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="accepted">المقبولة</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="inprogress" data-category="inprogress" autocomplete="off"
+               @(currentCategory == "inprogress" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="inprogress">قيد العمل</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="completed" data-category="completed" autocomplete="off"
+               @(currentCategory == "completed" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="completed">المكتملة</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="suspended" data-category="suspended" autocomplete="off"
+               @(currentCategory == "suspended" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="suspended">المعلقة</label>
+
+        <input type="radio" class="btn-check" name="catradio" id="denied" data-category="denied" autocomplete="off"
+               @(currentCategory == "denied" ? "checked" : "") />
+        <label class="btn btn-outline-primary" for="denied">المرفوضة</label>
+    </div>
+    <div class="btn-group" id="cityDropdown" style="display:none;">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            المدينة
+        </button>
+        <ul class="dropdown-menu">
+            @foreach (var city in Model.CityOptions)
+            {
+                var routeData = new Dictionary<string,string>();
+                routeData["cityId"] = city.Value;
+                foreach (var q in HttpContext.Request.Query)
+                {
+                    if (q.Key != "cityId")
+                        routeData[q.Key] = q.Value.ToString();
+                }
+                <li><a class="dropdown-item" asp-page="Map" asp-all-route-data="routeData">@city.Text</a></li>
+            }
+        </ul>
+    </div>
+    <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="privacyradio" id="yours" data-privacy="false" autocomplete="off"
+                @(Model.IsPublic == false? "checked" : "")>
+        <label class="btn btn-outline-primary" for="yours">لك</label>
+
+        <input type="radio" class="btn-check" name="privacyradio" id="public" data-privacy="true" autocomplete="off"
+                @(Model.IsPublic == true? "checked" : "")>
+        <label class="btn btn-outline-primary" for="public">العامة</label>
+    </div>
+</div>
 
 <div id="map"></div>
 
@@ -95,5 +156,56 @@
 
     </script>
 
+    <script>
+        document.querySelectorAll('input[name="catradio"]').forEach((radio) => {
+            radio.addEventListener("change", function () {
+                if (this.checked) {
+                    const category = this.getAttribute("data-category");
+                    const queryString = window.location.search;
+                    const basePath = "/ServiceRequest/Map";
+                    const newUrl = `${basePath}/${category}${queryString}`;
+                    window.location.href = newUrl;
+                }
+            });
+        });
+    </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const yoursRadio = document.getElementById('yours');
+            const publicRadio = document.getElementById('public');
+            const dropdown = document.getElementById('cityDropdown');
+
+            function toggleDropdown() {
+                if (publicRadio.checked) {
+                    dropdown.style.display = 'inline-block';
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            }
+
+            toggleDropdown();
+
+            yoursRadio.addEventListener('change', toggleDropdown);
+            publicRadio.addEventListener('change', toggleDropdown);
+        });
+
+        document.querySelectorAll('input[name="privacyradio"]').forEach((radio) => {
+            radio.addEventListener("change", function () {
+                if (this.checked) {
+                    const privacy = this.getAttribute("data-privacy");
+                    const queryString = window.location.search;
+                    const basePath = "/ServiceRequest/Map";
+                    let newUrl
+                    if (queryString){
+                        newUrl = `${basePath}${queryString}&IsPublic=${privacy}`;
+                    }
+                    else{
+                        newUrl = `${basePath}?IsPublic=${privacy}`;
+                    }
+                    window.location.href = newUrl;
+                }
+            });
+        });
+    </script>
 }

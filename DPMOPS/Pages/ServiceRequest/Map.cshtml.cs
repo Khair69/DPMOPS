@@ -1,11 +1,13 @@
 using DPMOPS.Enums;
 using DPMOPS.Models;
+using DPMOPS.Services.City;
 using DPMOPS.Services.Map;
 using DPMOPS.Services.Map.Dtos;
 using DPMOPS.Services.UserClaim;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -16,21 +18,29 @@ namespace DPMOPS.Pages.ServiceRequest
         private readonly IMapService _mapService;
         private readonly IUserClaimService _userClaimService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICityService _cityService;
 
-        public MapModel(IMapService mapService, IUserClaimService userClaimService, UserManager<ApplicationUser> userManager)
+        public MapModel(IMapService mapService,
+            IUserClaimService userClaimService,
+            UserManager<ApplicationUser> userManager,
+            ICityService cityService)
         {
             _mapService = mapService;
             _userClaimService = userClaimService;
             _userManager = userManager;
+            _cityService = cityService;
         }
 
         public IList<MapPointDto> MapPoints { get; set; }
+        public IEnumerable<SelectListItem> CityOptions { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public Guid CityId { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public bool IsPublic { get; set; } = false;
+
+        public string Category { get; set; } = "all";
 
         public async Task OnGetAsync(string? category = "all")
         {
@@ -78,7 +88,9 @@ namespace DPMOPS.Pages.ServiceRequest
                 }
             }
 
-            MapPoints = category.ToLower() switch
+            Category = category ?? "all";
+
+            MapPoints = Category.ToLower() switch
             {
                 "all" => temp,
                 "pending" => temp.Where(sr => sr.StatusId == 1).ToList(),
@@ -89,6 +101,8 @@ namespace DPMOPS.Pages.ServiceRequest
                 "completed" => temp.Where(sr => sr.StatusId == 6).ToList(),
                 _ => temp
             };
+
+            CityOptions = await _cityService.GetCityOptionsAsync();
         }
     }
 }

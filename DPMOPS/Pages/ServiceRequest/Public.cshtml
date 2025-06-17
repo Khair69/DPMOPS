@@ -125,7 +125,7 @@
             radio.addEventListener("change", function () {
                 if (this.checked) {
                     const category = this.getAttribute("data-category");
-                    const queryString = window.location.search; // gets "?page=2&sort=desc"
+                    const queryString = window.location.search;
                     const basePath = "/ServiceRequest/Public";
                     const newUrl = `${basePath}/${category}${queryString}`;
                     window.location.href = newUrl;

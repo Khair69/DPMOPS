@@ -34,7 +34,7 @@ namespace DPMOPS.Pages.ServiceRequest
             _cityService = cityService;
         }
 
-        public string Category { get; set; } = "All";
+        public string Category { get; set; } = "all";
         public IList<ServiceRequestDto> Requests { get; set; }
         public IEnumerable<SelectListItem> CityOptions { get; set; }
 
