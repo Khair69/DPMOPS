@@ -13,7 +13,6 @@ using DPMOPS.Services.Notification;
 using DPMOPS.Services.Organization;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest;
-using DPMOPS.Services.User;
 using DPMOPS.Services.UserClaim;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -93,7 +92,6 @@ namespace DPMOPS
 
             builder.Services.AddScoped<ICityService, CityService>();
             builder.Services.AddScoped<IDistrictService, DistrictService>();
-            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
             builder.Services.AddScoped<IUserClaimService, UserClaimService>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();

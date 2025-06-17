@@ -6,6 +6,8 @@ using DPMOPS.Services.Account.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace DPMOPS.Services.Account
 {
@@ -36,7 +38,8 @@ namespace DPMOPS.Services.Account
                     DateCreated = u.DateCreated,
                     PhoneNumber = u.PhoneNumber,
                     Address = u.District.City.Name + ", " + u.District.Name,
-                    NumberOfRequests = u.CitizinServiceRequests.Count()
+                    NumberOfRequests = u.CitizinServiceRequests.Count(),
+                    OrganizationId = u.OrganizationId
                 })
                 .FirstOrDefaultAsync();
 
@@ -105,14 +108,28 @@ namespace DPMOPS.Services.Account
                     PhoneNumber = u.PhoneNumber,
                     Address = u.District.City.Name + ", " + u.District.Name,
                     NumberOfRequests = u.EmployeeServiceRequests.Count(),
-                    OrganizationName = u.Organization.Name
+                    OrganizationName = u.Organization.Name,
+                    OrganizationId = u.OrganizationId
                 })
                 .ToListAsync();
         }
 
-        public Task<IList<AccountDto>> GetOrgAdminsAsync()
+        public async Task<IList<AccountDto>> GetOrgAdminsAsync()
         {
-            throw new NotImplementedException();
+            return await _userManager.Users
+                .Where(u => _context.UserClaims
+                    .Any(c => c.UserId == u.Id && c.ClaimType == "IsOrgAdmin" && c.ClaimValue == "true"))
+                .Select(u => new AccountDto
+                {
+                    AccountId = u.Id,
+                    FullName = u.FirstName + " " + u.LastName,
+                    Email = u.Email,
+                    DateCreated = u.DateCreated,
+                    PhoneNumber = u.PhoneNumber,
+                    Address = u.District.City.Name + ", " + u.District.Name,
+                    OrganizationId = u.OrganizationId
+                })
+                .ToListAsync();
         }
 
         public async Task<bool> UserHasClaimAsync(string userId, string claimType, string claimValue)
@@ -127,6 +144,73 @@ namespace DPMOPS.Services.Account
                 .Where(c => c.UserId == userId && c.ClaimType == claimType)
                 .Select (c => c.ClaimValue)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IList<ApplicationUser>> GetAllAdminsAsync()
+        {
+            var users = _userManager.Users.ToList();
+
+            IList<ApplicationUser> Admins = new List<ApplicationUser>();
+            foreach (var user in users)
+            {
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                var isAdminClaim = claims.FirstOrDefault(c => c.Type == "IsAdmin");
+
+                if (isAdminClaim != null)
+                {
+                    Admins.Add(user);
+                }
+            }
+            return Admins;
+        }
+
+        public async Task<bool> MakeAdminAsync(string Id)
+        {
+            var selUser = await _userManager.FindByIdAsync(Id);
+            if (selUser == null) return false;
+
+            var claim = new Claim("IsAdmin", "true");
+            var res = await _userManager.AddClaimAsync(selUser, claim);
+            if (res != null) return true;
+            return false;
+        }
+
+        public async Task<bool> RemoveAdminAsync(string Id)
+        {
+            var selUser = await _userManager.FindByIdAsync(Id);
+            if (selUser == null) return false;
+
+            var adminClaims = await _userManager.GetClaimsAsync(selUser);
+            var isAdminClaims = adminClaims.Where(c => c.Type == "IsAdmin" && c.Value == "true").ToList();
+
+            var res = await _userManager.RemoveClaimsAsync(selUser, isAdminClaims);
+            if (res != null) return true;
+            return false;
+        }
+
+        public async Task<bool> MakeOrgAdminAsync(string Id)
+        {
+            var selUser = await _userManager.FindByIdAsync(Id);
+            if (selUser == null) return false;
+
+            var claim = new Claim("IsOrgAdmin", "true");
+            var res = await _userManager.AddClaimAsync(selUser, claim);
+            if (res != null) return true;
+            return false;
+        }
+
+        public async Task<bool> RemoveOrgAdminAsync(string Id)
+        {
+            var selUser = await _userManager.FindByIdAsync(Id);
+            if (selUser == null) return false;
+
+            var adminClaims = await _userManager.GetClaimsAsync(selUser);
+            var isAdminClaims = adminClaims.Where(c => c.Type == "IsOrgAdmin" && c.Value == "true").ToList();
+
+            var res = await _userManager.RemoveClaimsAsync(selUser, isAdminClaims);
+            if (res != null) return true;
+            return false;
         }
     }
 }

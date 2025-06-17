@@ -34,7 +34,7 @@
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td>@user.PhoneNumber</td>
                         <td>
-                            <a asp-page="" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
+                            <a asp-page="MakeAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a>
                             <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
@@ -79,7 +79,7 @@
                         <td>@user.District.City.Name, @user.District.Name</td>
                         <td>@user.PhoneNumber</td>
                         <td>
-                            <a asp-page="" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
+                            <a asp-page="RemoveAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">الإزالة كأدمن</a>
                             <a asp-page="" class="btn btn-sm btn-outline-danger" title="Delete">
                                 <i class="bi bi-trash-fill"></i>
                             </a>

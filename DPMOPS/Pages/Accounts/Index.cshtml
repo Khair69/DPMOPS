@@ -39,7 +39,7 @@
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.PhoneNumber</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="/Accounts/MakeAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a></td>
+                        <td><a asp-page="MakeAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-secondary">التحويل لأدمن</a></td>
                     </tr>
                 }
             </tbody>
@@ -76,7 +76,7 @@ else
                         <td>@user.DateCreated.Date.ToString("dd/MM/yyyy")</td>
                         <td>@user.PhoneNumber</td>
                         <td>@user.District.City.Name, @user.District.Name</td>
-                        <td><a asp-page="/Accounts/RemoveAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-danger">اللإزالة كأدمن</a></td>
+                        <td><a asp-page="RemoveAdmin" asp-route-id="@user.Id" class="btn btn-sm btn-outline-danger">اللإزالة كأدمن</a></td>
                     </tr>
                 }
             </tbody>
