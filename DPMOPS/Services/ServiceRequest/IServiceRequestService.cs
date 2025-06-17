@@ -15,7 +15,5 @@ namespace DPMOPS.Services.ServiceRequest
         Task<bool> AssignEmployeeAsync(AssignEmployeeDto srDto);
         Task<bool> ChangeEmployeeAsync(AssignEmployeeDto srDto);
         Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync();
-        Task<IList<MapPointDto>> GetLocationsByOrg(Guid orgId);
-        Task<IList<MapPointDto>> GetAllLocations();
     }
 }

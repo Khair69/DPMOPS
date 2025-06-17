@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace DPMOPS.Pages.ServiceRequest
 {
-    [Authorize]
     public class PublicModel : PageModel
     {
         private readonly IServiceRequestService _serviceRequestService;

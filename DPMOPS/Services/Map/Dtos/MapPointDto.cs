@@ -1,4 +1,4 @@
-﻿namespace DPMOPS.Services.ServiceRequest.Dtos
+﻿namespace DPMOPS.Services.Map.Dtos
 {
     public class MapPointDto
     {

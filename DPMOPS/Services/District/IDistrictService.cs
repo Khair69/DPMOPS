@@ -12,5 +12,6 @@ namespace DPMOPS.Services.District
         Task<bool> DeleteDistrictAsync(Guid id);
         Task<IEnumerable<SelectListItem>> GetDistrictOptionsByCityAsync(Guid cityId);
         Task<Guid> GetCityIdByDistrictAsync(Guid id);
+        Task<IList<Guid>> GetDistrictsByCityAsync(Guid cityId);
     }
 }

@@ -8,6 +8,7 @@ using DPMOPS.Services.City;
 using DPMOPS.Services.Comment;
 using DPMOPS.Services.District;
 using DPMOPS.Services.Follow;
+using DPMOPS.Services.Map;
 using DPMOPS.Services.Notification;
 using DPMOPS.Services.Organization;
 using DPMOPS.Services.Photo;
@@ -102,6 +103,7 @@ namespace DPMOPS
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddScoped<IFollowService, FollowService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IMapService, MapService>();
 
             var app = builder.Build();
 

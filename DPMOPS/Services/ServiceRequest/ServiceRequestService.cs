@@ -541,34 +541,5 @@ namespace DPMOPS.Services.ServiceRequest
                 })
                 .ToListAsync();
         }
-
-        public async Task<IList<MapPointDto>> GetLocationsByOrg(Guid orgId)
-        {
-            return await _context.ServiceRequests
-                .Where(sr => sr.OrganizationId == orgId)
-                .Select(sr => new MapPointDto
-                {
-                    Latitude = sr.Latitude,
-                    Longitude = sr.Longitude,
-                    StatusId = sr.StatusId,
-                    Title = sr.Title,
-                    RequestId = sr.ServiceRequestId
-                })
-                .ToListAsync();
-        }
-
-        public async Task<IList<MapPointDto>> GetAllLocations()
-        {
-            return await _context.ServiceRequests
-            .Select(sr => new MapPointDto
-            {
-                Latitude = sr.Latitude,
-                Longitude = sr.Longitude,
-                StatusId = sr.StatusId,
-                Title = sr.Title,
-                RequestId = sr.ServiceRequestId
-            })
-            .ToListAsync();
-        }
     }
 }
