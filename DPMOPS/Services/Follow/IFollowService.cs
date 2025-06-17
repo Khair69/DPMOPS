@@ -9,5 +9,6 @@ namespace DPMOPS.Services.Follow
         Task<int> GetRequestFollowCountAsync(Guid Id);
         Task<bool> UserIsFollowingReqAsync(FollowDto Fdto);
         Task<IList<string>> GetFollowingIds(Guid id);
+        Task<IList<FollowingDto>> GetFollowingAsync(string userId);
     }
 }

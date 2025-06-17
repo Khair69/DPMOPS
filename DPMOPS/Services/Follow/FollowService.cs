@@ -41,6 +41,24 @@ namespace DPMOPS.Services.Follow
             return false;
         }
 
+        public async Task<IList<FollowingDto>> GetFollowingAsync(string userId)
+        {
+            return await _context.RequestFollowers
+                .Where(f => f.CitizenId == userId)
+                .Include(f => f.ServiceRequest)
+                    .ThenInclude(sr => sr.Citizen)
+                .Select(f => new FollowingDto
+                {
+                    Id = f.Id,
+                    ServiceRequestId = f.ServiceRequestId,
+                    FollowedAt = f.FollowedAt,
+                    RequestTitle = f.ServiceRequest.Title,
+                    RequestOwnerName = f.ServiceRequest.Citizen.FirstName + " " + f.ServiceRequest.Citizen.LastName,
+                    StatusId = f.ServiceRequest.StatusId
+                })
+                .ToListAsync();
+        }
+
         public async Task<IList<string>> GetFollowingIds(Guid id)
         {
             return await _context.RequestFollowers

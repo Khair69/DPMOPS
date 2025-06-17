@@ -1,0 +1,101 @@
+﻿@page
+@using DPMOPS.Models
+@using Humanizer
+@model DPMOPS.Pages.Accounts.ProfileModel
+@{
+    ViewData["Title"] = "قائمة المتابعة والتعليقات";
+}
+
+@if (Model.IsCitizen)
+{
+    <div class="card mb-5">
+        <div class="card-header">
+            <h3 class="card-title">الطلبات التي قمت بمتابعتها</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>عنوان الطلب</th>
+                            <th>المواطن</th>
+                            <th>الوقت</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var req in Model.Followings)
+                        {
+                            var bg = req.StatusId switch
+                            {
+                                1 => "text-bg-light",
+                                2 => "text-bg-info",
+                                3 => "text-bg-primary",
+                                4 => "text-bg-warning",
+                                5 => "text-bg-danger",
+                                6 => "text-bg-success",
+                                _ => "text-bg-secondary"
+                            };
+                            <tr>
+                                <td>
+                                    <a asp-page="/ServiceRequest/Info" asp-route-id="@req.ServiceRequestId"
+                                       class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">@req.RequestTitle</a>
+                                </td>
+                                <td>@req.RequestOwnerName</td>
+                                <td>@req.FollowedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</td>
+                                <td><span class="badge @bg"> @((Status)req.StatusId) </span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">تعليقاتك</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>التعليق</th>
+                        <th>الوقت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var com in Model.Comments)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="/ServiceRequest/Info" asp-route-id="@com.ServiceRequestId"
+                                   class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">@com.Content</a>
+                            </td>
+                            <td>@com.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

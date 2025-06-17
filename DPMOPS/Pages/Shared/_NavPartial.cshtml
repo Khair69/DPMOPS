@@ -6,7 +6,7 @@
     <!--Admin-->
     <li class="nav-item">
         <a asp-page="/Location/Cities/Index" class="nav-link">
-            <i class="bi bi-map-fill"></i>
+            <i class="bi bi-geo-fill"></i>
             <p>المدن</p>
         </a>
     </li>
@@ -222,6 +222,18 @@
             </ul>
         </li>
     }
+    <li class="nav-item">
+        <a asp-page="/ServiceRequest/Public" asp-route-category="Explore" class="nav-link">
+            <i class="bi bi-megaphone"></i>
+            <p>الطلبات العامة</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-page="/ServiceRequest/Map" class="nav-link">
+            <i class="bi bi-map-fill"></i>
+            <p>الخريطة</p>
+        </a>
+    </li>
     @if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
         <!--Authenticated but not admin-->
@@ -239,18 +251,10 @@
             <p>الشكاوي</p>
         </a>
     </li>
+    <li class="nav-item">
+        <a asp-page="/Accounts/Profile" class="nav-link">
+            <i class="bi bi-chat-left-quote"></i>
+            <p>التعليقات</p>
+        </a>
+    </li>
 }
-
-@* <li class="nav-header">EXAMPLES</li> *@
-<li class="nav-item">
-    <a asp-page="/ServiceRequest/Public" asp-route-category="Explore" class="nav-link">
-        <i class="bi bi-megaphone"></i>
-        <p>الطلبات العامة</p>
-    </a>
-</li>
-<li class="nav-item">
-    <a asp-page="/ServiceRequest/Map" class="nav-link">
-        <i class="bi bi-map-fill"></i>
-        <p>الخريطة</p>
-    </a>
-</li>
