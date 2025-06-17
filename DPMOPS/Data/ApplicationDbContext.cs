@@ -89,7 +89,7 @@ namespace DPMOPS.Data
                 .HasForeignKey<Appointment>(a => a.ServiceRequestId);
 
             modelBuilder.Entity<RequestFollower>()
-                .HasIndex(rf => new { rf.CitizrnId, rf.ServiceRequestId })
+                .HasIndex(rf => new { rf.CitizenId, rf.ServiceRequestId })
                 .IsUnique();
         }
     }

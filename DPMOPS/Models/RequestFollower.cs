@@ -8,7 +8,7 @@ namespace DPMOPS.Models
         public Guid Id { get; set; }
 
         [Required]
-        public string? CitizrnId { get; set; }
+        public string? CitizenId { get; set; }
         [Required]
         public Guid ServiceRequestId { get; set; }
         [Required]

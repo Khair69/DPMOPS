@@ -24,14 +24,14 @@ namespace DPMOPS.Services.Follow
             }
 
             bool alreadyFollowing = await _context.RequestFollowers
-                .AnyAsync(f => f.CitizrnId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
+                .AnyAsync(f => f.CitizenId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
 
             if (!alreadyFollowing)
             {
                 _context.RequestFollowers.Add(new Models.RequestFollower
                 {
                     Id = Guid.NewGuid(),
-                    CitizrnId = Fdto.CitizenId,
+                    CitizenId = Fdto.CitizenId,
                     ServiceRequestId = Fdto.ServiceRequestId
                 });
                 var succ = await _context.SaveChangesAsync();
@@ -45,7 +45,7 @@ namespace DPMOPS.Services.Follow
         {
             return await _context.RequestFollowers
                 .Where(f => f.ServiceRequestId == id)
-                .Select(f => f.CitizrnId)
+                .Select(f => f.CitizenId)
                 .ToListAsync();
         }
 
@@ -58,7 +58,7 @@ namespace DPMOPS.Services.Follow
         public async Task<bool> UnfollowAsync(FollowDto Fdto)
         {
             var follower = await _context.RequestFollowers
-                .FirstOrDefaultAsync(f => f.CitizrnId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
+                .FirstOrDefaultAsync(f => f.CitizenId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
 
             if (follower != null)
             {
@@ -73,7 +73,7 @@ namespace DPMOPS.Services.Follow
         public async Task<bool> UserIsFollowingReqAsync(FollowDto Fdto)
         {
             return await _context.RequestFollowers
-                .AnyAsync(f => f.CitizrnId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
+                .AnyAsync(f => f.CitizenId == Fdto.CitizenId && f.ServiceRequestId == Fdto.ServiceRequestId);
         }
     }
 }
