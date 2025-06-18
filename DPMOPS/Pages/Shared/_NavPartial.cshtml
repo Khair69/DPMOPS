@@ -165,15 +165,6 @@
             </li>
         }
     }
-    @if (!string.IsNullOrEmpty(orgId) || User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value != null)
-    {
-        <li class="nav-item">
-            <a asp-page="/Analytics/Index" class="nav-link">
-                <i class="bi bi-graph-up-arrow"></i>
-                <p>الإحصائيات</p>
-            </a>
-        </li>
-    }
     else if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
         <!--Citizen-->
@@ -229,6 +220,15 @@
                     </a>
                 </li>
             </ul>
+        </li>
+    }
+    @if (User.Claims.FirstOrDefault(x => x.Type == "IsOrgAdmin")?.Value != null || User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value != null)
+    {
+        <li class="nav-item">
+            <a asp-page="/Analytics/Index" class="nav-link">
+                <i class="bi bi-graph-up-arrow"></i>
+                <p>الإحصائيات</p>
+            </a>
         </li>
     }
 }
