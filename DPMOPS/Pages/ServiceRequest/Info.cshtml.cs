@@ -126,6 +126,10 @@ namespace DPMOPS.Pages.ServiceRequest
             }
 
             ServiceRequest = await _serviceRequestService.GetServiceRequestByIdAsync(id);
+            if (ServiceRequest == null)
+            {
+                return NotFound();
+            }
             if (User.FindFirstValue(ClaimTypes.NameIdentifier) != ServiceRequest.EmployeeId)
             {
                 return new ForbidResult();
