@@ -169,6 +169,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                 user.DateCreated = DateTime.Now;
                 user.OrganizationId = orgId;
                 user.PhoneNumber = Input.PhoneNumber;
+                user.EmailConfirmed = true;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -198,7 +199,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("/Organization/Employees/Index", new { id = orgId });
                     }
                     else
                     {

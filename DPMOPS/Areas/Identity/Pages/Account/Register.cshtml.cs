@@ -88,7 +88,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required(ErrorMessage = "{0} مطلوب")]
-            [EmailAddress(ErrorMessage ="يجب عليك ادخال بريد الكتروني صالح")]
+            [EmailAddress(ErrorMessage = "يجب عليك ادخال بريد الكتروني صالح")]
             [Display(Name = "البريد الالكتروني")]
             public string Email { get; set; }
 
@@ -162,6 +162,7 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                 user.DistrictId = Input.DistrictId;
                 user.DateCreated = DateTime.Now;
                 user.PhoneNumber = Input.PhoneNumber;
+                user.EmailConfirmed = true;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -184,15 +185,9 @@ namespace DPMOPS.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
+
                 }
                 foreach (var error in result.Errors)
                 {
