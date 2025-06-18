@@ -1,7 +1,7 @@
 ﻿#nullable disable
 
 using DPMOPS.Data;
-using DPMOPS.Models;
+using DPMOPS.Enums;
 using DPMOPS.Services.Account;
 using DPMOPS.Services.District;
 using DPMOPS.Services.Follow;

@@ -1,4 +1,5 @@
 ﻿@page
+@using DPMOPS.Enums
 @model DPMOPS.Pages.ServiceRequest.IndexModel
 @{
     ViewData["Title"] = "طلبات خدمة";
@@ -27,12 +28,12 @@
             {
                 var bg = sr.Status switch
                 {
-                    (Models.Status)1 => "text-bg-light",
-                    (Models.Status)2 => "text-bg-info",
-                    (Models.Status)3 => "text-bg-primary",
-                    (Models.Status)4 => "text-bg-warning",
-                    (Models.Status)5 => "text-bg-danger",
-                    (Models.Status)6 => "text-bg-success",
+                    (Status)1 => "text-bg-light",
+                    (Status)2 => "text-bg-info",
+                    (Status)3 => "text-bg-primary",
+                    (Status)4 => "text-bg-warning",
+                    (Status)5 => "text-bg-danger",
+                    (Status)6 => "text-bg-success",
                     _ => "text-bg-secondary"
                 };
                 <tr class="clickable-row" data-href="@Url.Page("Info", new { id = sr.ServiceRequestId })">

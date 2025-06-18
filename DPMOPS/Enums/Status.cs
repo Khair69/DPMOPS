@@ -1,4 +1,4 @@
-﻿namespace DPMOPS.Models
+﻿namespace DPMOPS.Enums
 {
     public enum Status
     {

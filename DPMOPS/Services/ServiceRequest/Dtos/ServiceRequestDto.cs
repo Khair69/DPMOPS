@@ -1,4 +1,4 @@
-﻿using DPMOPS.Models;
+﻿using DPMOPS.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 

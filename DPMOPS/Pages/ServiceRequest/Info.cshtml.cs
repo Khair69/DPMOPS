@@ -1,5 +1,5 @@
 #nullable disable
-using DPMOPS.Models;
+using DPMOPS.Enums;
 using DPMOPS.Services.Account;
 using DPMOPS.Services.Account.Dtos;
 using DPMOPS.Services.Appointment;
