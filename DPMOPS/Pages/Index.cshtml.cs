@@ -20,9 +20,9 @@ namespace DPMOPS.Pages
 
             return userType switch
             {
-                UserType.Admin => RedirectToPage("/AdminHome"),
+                UserType.Admin => RedirectToPage("/Analytics/Index"),
                 UserType.Employee => RedirectToPage("/ServiceRequest/ByEmp"),
-                UserType.OrgAdmin => RedirectToPage("/ServiceRequest/ByOrg"),
+                UserType.OrgAdmin => RedirectToPage("/Analytics/Index"),
                 UserType.Citizen => RedirectToPage("/ServiceRequest/ByCitizen"),
                 _ => Page()
             };

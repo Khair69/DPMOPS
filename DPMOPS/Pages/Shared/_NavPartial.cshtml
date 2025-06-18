@@ -165,6 +165,15 @@
             </li>
         }
     }
+    @if (!string.IsNullOrEmpty(orgId) || User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value != null)
+    {
+        <li class="nav-item">
+            <a asp-page="/Analytics/Index" class="nav-link">
+                <i class="bi bi-graph-up-arrow"></i>
+                <p>الإحصائيات</p>
+            </a>
+        </li>
+    }
     else if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
         <!--Citizen-->
@@ -222,18 +231,21 @@
             </ul>
         </li>
     }
-    <li class="nav-item">
-        <a asp-page="/ServiceRequest/Public" asp-route-category="Explore" class="nav-link">
-            <i class="bi bi-megaphone"></i>
-            <p>الطلبات العامة</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a asp-page="/ServiceRequest/Map" class="nav-link">
-            <i class="bi bi-map-fill"></i>
-            <p>الخريطة</p>
-        </a>
-    </li>
+}
+<li class="nav-item">
+    <a asp-page="/ServiceRequest/Public" asp-route-category="Explore" class="nav-link">
+        <i class="bi bi-megaphone"></i>
+        <p>الطلبات العامة</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a asp-page="/ServiceRequest/Map" class="nav-link">
+        <i class="bi bi-map-fill"></i>
+        <p>الخريطة</p>
+    </a>
+</li>
+@if (SignInManager.IsSignedIn(User))
+{
     @if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == null)
     {
         <!--Authenticated but not admin-->

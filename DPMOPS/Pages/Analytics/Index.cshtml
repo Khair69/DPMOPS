@@ -1,0 +1,196 @@
+﻿@page
+@using System.Text.Json
+@model DPMOPS.Pages.Analytics.IndexModel
+@{
+    ViewData["Title"] = "الإحصائيات";
+}
+
+<h1 class="text-center">
+    @Model.OrgName
+</h1>
+
+<div class="row g-3 my-2">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="card-title">عدد الطلبات حسب الحالة</h3>
+            </div>
+            <div class="card-body" style="height:300px;">
+                <canvas id="statusChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="card-title">طلباتك خلال الزمن</h3>
+            </div>
+            <div class="card-body" style="height:300px;">
+                <canvas id="requestTrendChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row g-3 mt-2">
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-primary h-100">
+            <div class="inner">
+                <h3>@Model.AnalyticsData.TotalRequests</h3>
+                <p>طلب في مؤسستك</p>
+            </div>
+            <i class="bi bi-tools small-box-icon"></i>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-secondary h-100">
+            <div class="inner">
+                <h3>@Model.AnalyticsData.RequestsThisMonth</h3>
+                <p>طلب في هذا الشهر</p>
+                <small class="text-muted">الاسبوع: @Model.AnalyticsData.RequestsThisWeek | اليوم: @Model.AnalyticsData.RequestsToday</small>
+            </div>
+            <i class="bi bi-calendar3 small-box-icon"></i>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-success h-100">
+            <div class="inner">
+                <h3>@Model.AnalyticsData.CompletedRequests</h3>
+                <p>طلب مكتمل</p>
+                <small class="text-muted">@Model.AnalyticsData.CompletionPercentage.ToString("0.0")% من الكل</small>
+            </div>
+            <i class="bi bi-check-circle-fill small-box-icon"></i>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-warning h-100">
+            <div class="inner">
+                <h3>@Model.AnalyticsData.PendingRequests</h3>
+                <p>طلب قيد الانتظار</p>
+            </div>
+            <i class="bi bi-hourglass-bottom small-box-icon"></i>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-dark h-100">
+            <div class="inner">
+                <h3>
+                    @(Model.AnalyticsData.AverageResolutionTime?.ToString(@"hh\:mm\:ss") ?? "N/A")
+                </h3>
+                <p>متوسط وقت حل الطلب</p>
+            </div>
+            <i class="bi bi-stopwatch small-box-icon"></i>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-6">
+        <div class="small-box text-bg-info h-100">
+            <div class="inner">
+                <h3>@Model.AnalyticsData.AvarageRating</h3>
+                <p>متوسط تقييم الطلبات</p>
+            </div>
+            <i class="bi bi-tools small-box-icon"></i>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/lib/Chart.js/chart.umd.min.js"></script>
+    <script>
+        const statusData = @Html.Raw(JsonSerializer.Serialize(Model.AnalyticsData.StatusCounts));
+        const labels = Object.keys(statusData);
+        const data = [];
+
+        const statusColors = {
+            "قيدالانتظار": "#727f8c",
+            "مقبول": "#0dcaf0",
+            "قيدالعمل": "#0d6efd",
+            "معلق": "#ffc107",
+            "مرفوض": "#dc3545",
+            "مكتمل": "#198754"
+        };
+        const backgroundColors = [];
+
+        labels.forEach(label => {
+            data.push(statusData[label]);
+            backgroundColors.push(statusColors[label] || "#95a5a6"); // Default gray if not found
+        });
+
+        new Chart(document.getElementById("statusChart"), {
+            type: "doughnut",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "الحالة",
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        const trendData = @Html.Raw(JsonSerializer.Serialize(Model.AnalyticsData.TrendData));
+        console.log(trendData);
+        const labelsTrend = trendData.map(p => p.Date);
+        const dataTrend = trendData.map(p => p.Count);
+
+        new Chart(document.getElementById("requestTrendChart"), {
+            type: 'line',
+            data: {
+                labels: labelsTrend,
+                datasets: [{
+                    label: "الطلبات",
+                    data: dataTrend,
+                    fill: false,
+                    borderColor: "#3498db",
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointBackgroundColor: "#2980b9"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Date"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Request Count"
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+    </script>
+}
