@@ -19,6 +19,7 @@ namespace DPMOPS.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<RequestFollower> RequestFollowers { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

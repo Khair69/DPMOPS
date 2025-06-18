@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Services.ServiceRequest.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DPMOPS.Services.ServiceRequest
 {
@@ -16,5 +17,6 @@ namespace DPMOPS.Services.ServiceRequest
         Task<bool> ChangeEmployeeAsync(AssignEmployeeDto srDto);
         Task<IList<ServiceRequestDto>> GetAllPublicServiceRequestsAsync(Guid? cityId = null);
         Task<bool> ReviewServiceRequest(ReviewDto reDto);
+        Task<IEnumerable<SelectListItem>> GetCitizenRequestsOptions(string citId);
     }
 }

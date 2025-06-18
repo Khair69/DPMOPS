@@ -1,0 +1,72 @@
+﻿@page "{id}"
+@using Humanizer
+@model DPMOPS.Pages.Complaints.InfoModel
+@{
+    ViewData["Title"] = "معلومات الشكوة";
+    var bg = Model.Complaint.StatusId switch
+    {
+        1 => "text-bg-light",
+        2 => "text-bg-primary",
+        3 => "text-bg-success",
+        4 => "text-bg-danger",
+        _ => "text-bg-secondary"
+    };
+}
+
+
+<div class="container py-5">
+    <div class="row align-items-stretch justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10 border rounded-3 shadow-sm overflow-hidden p-4 position-relative">
+            <h1 class="display-5 fw-bold">@Model.Complaint.Title</h1>
+            <p class="lead mt-3">@Model.Complaint.Description</p>
+            <p class="list-unstyled small text-muted fs-6">
+                <a asp-page="/ServiceRequest/Info" asp-route-id="@Model.Complaint.ServiceRequestId"><i class="bi bi-tools"></i> @Model.Complaint.RequestTitle <br /></a>
+                <i class="bi bi-person-fill"></i> @Model.Complaint.CitizenName <br />
+                <i class="bi bi-building"></i> @Model.Complaint.OrgName <br />
+                <i class="bi bi-calendar"></i> @Model.Complaint.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar")) <br />
+                <span class="badge @bg">@Model.Complaint.Status</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+@if (Model.IsOrgAdmin && !Model.IsCompleted)
+{
+    <div class="text-center">
+        <form asp-page="Info" asp-page-handler="Status">
+                <div class="form-floating mb-3">
+                    <select id="statusSelect" onchange="checkSelection()" asp-for="ChangeStatus.StatusId" asp-items="Model.Statuses" class="form-select">
+                    </select>
+                    <label asp-for="ChangeStatus.StatusId" class="control-label">الحالة</label>
+                    <span asp-validation-for="ChangeStatus.StatusId" class="text-danger"></span>
+                </div>
+                <button id="statusSaveButton" type="submit" class="btn btn-primary" disabled>حفظ</button>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        //status select section
+
+        let originalValue;
+
+        window.onload = function () {
+            const select = document.getElementById("statusSelect");
+            if(select) originalValue = select.value;
+        };
+
+        function checkSelection() {
+            const select = document.getElementById("statusSelect");
+            const button = document.getElementById("statusSaveButton");
+            if (select){
+                if (select.value !== originalValue) {
+                    button.disabled = false;
+                } else {
+                    button.disabled = true;
+                }
+            }
+        }
+    </script>
+}

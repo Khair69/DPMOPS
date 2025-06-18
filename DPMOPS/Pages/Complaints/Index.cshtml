@@ -1,0 +1,78 @@
+﻿@page
+@using Humanizer
+@model DPMOPS.Pages.Complaints.IndexModel
+@{
+    ViewData["Title"] = "الشكاوي";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between mb-3">
+        @if (Model.Complaints == null || Model.Complaints.Count == 0)
+        {
+            <div class="alert alert-info">
+                لا يوجد شكاوي
+            </div>
+        }
+        else
+        {
+            <div class="panel-heading">
+                <h2 class="fw-bold mb-0">الشكاوي</h2>
+            </div>
+        }
+        <div>
+            <a asp-page="/Complaints/Add" class="btn btn-outline-primary">
+                <i class="bi bi-plus-lg"></i>
+                التقديم على شكوة
+            </a>
+        </div>
+    </div>
+    <div class="row g-4">
+
+        @foreach (var c in Model.Complaints)
+        {
+            var bg = c.StatusId switch
+            {
+                1 => "text-bg-light",
+                2 => "text-bg-primary",
+                3 => "text-bg-success",
+                4 => "text-bg-danger",
+                _ => "text-bg-secondary"
+            };
+            <a asp-page="Info" asp-route-id="@c.ComplaintId" class="text-decoration-none">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@c.Title</h5>
+                        <p class="card-text text-muted">@c.Description</p>
+                        <div class="mt-auto">
+                            <p class="mb-1 text-secondary small"><i class="bi bi-tools"></i> @c.RequestTitle</p>
+                            <p class="mb-1 text-secondary small"><i class="bi bi-person-fill"></i> @c.CitizenName</p>
+                            <p class="mb-1 text-secondary small"><i class="bi bi-calendar"></i> @c.CreatedAt.Humanize(culture: new System.Globalization.CultureInfo("ar"))</p>
+                            <span class="badge @bg">@c.Status</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </a>
+        }
+    </div>
+</div>
+
+
+
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.2s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .card-text {
+            min-height: 60px;
+        }
+    </style>
+}

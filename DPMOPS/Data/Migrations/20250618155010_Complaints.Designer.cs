@@ -4,6 +4,7 @@ using DPMOPS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DPMOPS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250618155010_Complaints")]
+    partial class Complaints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,6 +231,9 @@ namespace DPMOPS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
 
@@ -244,6 +250,8 @@ namespace DPMOPS.Data.Migrations
                     b.HasKey("ComplaintId");
 
                     b.HasIndex("CitizenId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("OrganizationId");
 
@@ -595,6 +603,10 @@ namespace DPMOPS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DPMOPS.Models.ApplicationUser", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("DPMOPS.Models.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
@@ -608,6 +620,8 @@ namespace DPMOPS.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Citizen");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Organization");
 

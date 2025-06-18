@@ -9,6 +9,7 @@ using DPMOPS.Services.Notification;
 using DPMOPS.Services.Notification.Dtos;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest.Dtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.ServiceRequest
@@ -643,6 +644,18 @@ namespace DPMOPS.Services.ServiceRequest
 
             var success = await _context.SaveChangesAsync();
             return success == 1;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetCitizenRequestsOptions(string citId)
+        {
+            return await _context.ServiceRequests
+                .Where(sr => sr.CitizenId == citId)
+                .Select(sr => new SelectListItem
+                {
+                    Value = sr.ServiceRequestId.ToString(),
+                    Text = sr.Title,
+                })
+                .ToListAsync();
         }
     }
 }

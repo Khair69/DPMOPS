@@ -1,0 +1,33 @@
+﻿@page
+@model DPMOPS.Pages.Complaints.AddModel
+@{
+    ViewData["Title"] = "التقديم على شكوة";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-page="Add">
+            <hr />
+            <div class="form-floating mb-3">
+                <input asp-for="NewComplaint.Title" class="form-control" />
+                <label asp-for="NewComplaint.Title"></label>
+                <span asp-validation-for="NewComplaint.Title" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <textarea asp-for="NewComplaint.Description" class="form-control" style="height: 100px;"></textarea>
+                <label asp-for="NewComplaint.Description"></label>
+                <span asp-validation-for="NewComplaint.Description" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="NewComplaint.ServiceRequestId" asp-items="Model.Requests" class="form-select">
+                    <option value=" "> </option>
+                </select>
+                <label asp-for="NewComplaint.ServiceRequestId" class="control-label"></label>
+                <span asp-validation-for="NewComplaint.ServiceRequestId" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">إضافة</button>
+        </form>
+    </div>
+</div>
