@@ -4,23 +4,27 @@
 @using System.Globalization
 @{
     ViewData["Title"] = "معلومات الطلب";
+    bool hasPhoto = !string.IsNullOrEmpty(Model.ServiceRequest.PhotoPath);
+    string contentColClass = hasPhoto ? "col-lg-6" : "col-lg-6 col-md-8 col-sm-10 border rounded-3 shadow-sm overflow-hidden p-4";
+    string fatherclass = hasPhoto ? "border rounded-3 shadow-sm overflow-hidden" : "justify-content-center";
 }
 
 <div class="container py-5">
-    <div class="row align-items-stretch border rounded-3 shadow-sm overflow-hidden">
-        <!-- Image on the Left -->
+    <div class="row align-items-stretch @fatherclass">
+    @if (hasPhoto)
+    {
         <div class="col-lg-6 mb-4 mb-lg-0 p-0">
             <div class="ratio ratio-4x3">
-                <img src="@(string.IsNullOrEmpty(Model.ServiceRequest.PhotoPath) ? "/placeholder.jpg" : Model.ServiceRequest.PhotoPath)"
+                <img src="@Model.ServiceRequest.PhotoPath"
                      class="img-fluid rounded shadow-sm object-fit-cover"
                      alt="الصورة غير متوفرة"
                      asp-append-version="true">
             </div>
         </div>
-
+    }
         <!-- Content on the Right -->
-        <div class="col-lg-6 position-relative">
-            <!-- Delete Button -->
+        <div class="@contentColClass position-relative">
+          <!-- Delete Button -->
             @if (Model.DeleteVisible)
             {
                 <a asp-page="Delete"
