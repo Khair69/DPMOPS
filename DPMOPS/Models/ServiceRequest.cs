@@ -39,10 +39,13 @@ namespace DPMOPS.Models
         public Appointment? Appointment { get; set; }
         public bool IsPublic { get; set; } = true;
 
+        [AllowNull]
+        public DateTime? DateCompleted { get; set; }
+        [AllowNull]
+        [Range(1, 5)]
+        public int? Review { get; set; }
+
         // possible add ons:
-        // public DateTime? DateCompleted { get; set; }
-        // public int? Rating { get; set; }
-        // public string ServiceProviderNotes { get; set; }
         // public string ReportType { get; set; } // e.g., "Maintenance", "Complaint"
         // public bool IsUrgent { get; set; }
     }

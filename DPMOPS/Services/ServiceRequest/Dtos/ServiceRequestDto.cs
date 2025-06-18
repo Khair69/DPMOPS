@@ -1,4 +1,5 @@
 ﻿using DPMOPS.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace DPMOPS.Services.ServiceRequest.Dtos
@@ -38,5 +39,8 @@ namespace DPMOPS.Services.ServiceRequest.Dtos
         public int FollowerCount { get; set; }
 
         public bool FollowVisible { get; set; }
+
+        public DateTime? DateCompleted { get; set; }
+        public int? Review { get; set; }
     }
 }

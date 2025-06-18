@@ -37,7 +37,7 @@
             <!-- List of Details -->
             <p class="list-unstyled small text-muted fs-6">
                 <i class="bi bi-geo-alt-fill"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription <br />
-                <i class="bi bi-calendar-event"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
+                <i class="bi bi-calendar"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
                 <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName
                 @if (Model.EmployeeViewer || Model.OrgAdminViewer)
                 {
@@ -63,8 +63,15 @@
                 @if (Model.ServiceRequest.AppointmentDate.HasValue)
                 {
                     <span>
-                        <i class="bi bi-calendar-check"></i>
+                        <i class="bi bi-calendar-event"></i>
                         الموعد المحدد: @Model.ServiceRequest.AppointmentDate.Value.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))
+                    </span>
+                }
+                @if (Model.IsCompleted)
+                {
+                    <span>
+                        <i class="bi bi-calendar-check"></i>
+                        تاريخ الانهاء: @Model.ServiceRequest.DateCompleted.Humanize(culture: new System.Globalization.CultureInfo("ar"))
                     </span>
                 }
             </p>
@@ -76,8 +83,36 @@
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 
+                @if (Model.IsCompleted)
+                {
+                    <div class="row">
+	                    <div class="col-md-12">
+		                    <div class="stars rtl">
+                              <form asp-page="Info" asp-page-handler="Review" class="rating-form">
+                                <input class="star star-5" id="star-5" type="radio" name="ReviewStar" value="5" 
+                                @((Model.IsOwner && Model.ServiceRequest.Review == null) ? "" : "disabled") @(Model.ServiceRequest.Review == 5 ? "checked" : "")/>
+                                <label class="star star-5" for="star-5"></label>
+                                <input class="star star-4" id="star-4" type="radio" name="ReviewStar" value="4"
+                                @((Model.IsOwner && Model.ServiceRequest.Review == null) ? "" : "disabled") @(Model.ServiceRequest.Review == 4 ? "checked" : "")/>
+                                <label class="star star-4" for="star-4"></label>
+                                <input class="star star-3" id="star-3" type="radio" name="ReviewStar" value="3"
+                                @((Model.IsOwner && Model.ServiceRequest.Review == null) ? "" : "disabled") @(Model.ServiceRequest.Review == 3 ? "checked" : "")/>
+                                <label class="star star-3" for="star-3"></label>
+                                <input class="star star-2" id="star-2" type="radio" name="ReviewStar" value="2"
+                                @((Model.IsOwner && Model.ServiceRequest.Review == null) ? "" : "disabled") @(Model.ServiceRequest.Review == 2 ? "checked" : "")/>
+                                <label class="star star-2" for="star-2"></label>
+                                <input class="star star-1" id="star-1" type="radio" name="ReviewStar" value="1"
+                                @((Model.IsOwner && Model.ServiceRequest.Review == null) ? "" : "disabled") @(Model.ServiceRequest.Review == 1 ? "checked" : "")/>
+                                <label class="star star-1" for="star-1"></label>
+                                <button id="submitReview" type="submit" style="display:none;" class="btn btn-sm btn-outline-info position-absolute">التقييم</button>
+                              </form>
+                            </div>	
+	                    </div>
+                    </div>
+                }
+
                 <!--Assign and change employee-->
-                @if (Model.OrgAdminViewer)
+                @if (Model.OrgAdminViewer && !Model.IsCompleted)
                 {
                     @if (string.IsNullOrEmpty(Model.ServiceRequest.EmployeeId))
                     {
@@ -89,7 +124,7 @@
                     }
                 }
 
-                @if (Model.EmployeeViewer)
+                @if (Model.EmployeeViewer && !Model.IsCompleted)
                 {
                     <!--Appointment-->
                     @if (Model.ServiceRequest.AppointmentId == null)
@@ -129,7 +164,7 @@
                         <span class="text-muted">
                             <i class="bi bi-person-fill-check"></i> عدد المتابعين @Model.FollowerCount
                         </span>
-                        @if (Model.FollowVisible)
+                        @if (Model.FollowVisible && !Model.IsCompleted)
                         {
                             <form method="post" asp-page-handler="@((Model.IsFollowing ? "Unfollow" : "Follow"))" asp-route-id="@Model.ServiceRequest.ServiceRequestId" class="me-1 p-0">
                                 <button type="submit" class="btn btn-sm @(Model.IsFollowing ? "btn-outline-danger" : "btn-outline-primary")">
@@ -211,7 +246,7 @@
     </div>
 </div>
 
-@if (Model.EmployeeViewer)
+@if (Model.EmployeeViewer && !Model.IsCompleted)
 {
     <!-- Schedule Modal -->
     <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
@@ -297,7 +332,7 @@
 </div>
 }
 
-@if (Model.OrgAdminViewer)
+@if (Model.OrgAdminViewer && !Model.IsCompleted)
 {
     <!--Assign Modal-->
     <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignEmployeeModalLabel" aria-hidden="true">
@@ -367,32 +402,49 @@
             map.invalidateSize(); // Recalculate map size if modal is reopened
         }
     });
-
+</script>
+<script>
     //status select section
 
     let originalValue;
 
     window.onload = function () {
         const select = document.getElementById("statusSelect");
-        originalValue = select.value;
+        if(select) originalValue = select.value;
     };
 
     function checkSelection() {
         const select = document.getElementById("statusSelect");
         const button = document.getElementById("statusSaveButton");
-
-        if (select.value !== originalValue) {
-            button.disabled = false;
-        } else {
-            button.disabled = true;
+        if (select){
+            if (select.value !== originalValue) {
+                button.disabled = false;
+            } else {
+                button.disabled = true;
+            }
         }
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const stars = document.querySelectorAll('.rating-form input[type="radio"]');
+        const submitButton = document.getElementById('submitReview');
 
+        if (stars){
+            stars.forEach(star => {
+                star.addEventListener('change', () => {
+                    submitButton.style.display = 'inline-block';
+                });
+            });
+        }
+    });
+</script>
 
 @section Styles {
     <link rel="stylesheet" href="~/css/progindicator.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/leaflet/css/leaflet.css" />
+    <link rel="stylesheet" href="~/css/review.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
 }
 
 @section Scripts {

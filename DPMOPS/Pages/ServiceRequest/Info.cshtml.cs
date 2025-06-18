@@ -42,6 +42,8 @@ namespace DPMOPS.Pages.ServiceRequest
         public bool DeleteVisible { get; set; } = false;
         public bool OrgAdminViewer { get; set; } = false;
         public bool FollowVisible { get; set; } = false;
+        public bool IsCompleted { get; set; } = false;
+        public bool IsOwner { get; set; } = false;
         public IEnumerable<SelectListItem> StatusOptions { get; set; }
         public AccountDto Citizen { get; set; }
         public bool IsFollowing { get; set; }
@@ -85,6 +87,14 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 OrgAdminViewer = true;
             }
+            if (ServiceRequest.Status == (Status)6)
+            {
+                IsCompleted = true;
+            }
+            if (ServiceRequest.CitizenId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                IsOwner = true;
+            }
 
             if (ServiceRequest.IsPublic)
             {
@@ -110,7 +120,7 @@ namespace DPMOPS.Pages.ServiceRequest
         public async Task<IActionResult> OnPostStatusAsync(Guid id)
         {
             RemoveUnrelatedModelState("ChangeStatus");
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || IsCompleted)
             {
                 return RedirectToPage("Info");
             }
@@ -132,7 +142,7 @@ namespace DPMOPS.Pages.ServiceRequest
         }
 
         [BindProperty(Name = "AddAppointment")]
-        public CreateAppointmentDto AddAppointment {  get; set; }
+        public CreateAppointmentDto AddAppointment { get; set; }
 
         public async Task<IActionResult> OnPostAddAppointmentAsync(Guid id)
         {
@@ -235,6 +245,32 @@ namespace DPMOPS.Pages.ServiceRequest
             {
                 return BadRequest();
             }
+            return RedirectToPage("Info");
+        }
+
+        [BindProperty(Name = "ReviewStar")]
+        public string ReviewStar { get; set; }
+
+        public async Task<IActionResult> OnPostReviewAsync(Guid id)
+        {
+            RemoveUnrelatedModelState("ReviewStar");
+            if (string.IsNullOrEmpty(ReviewStar))
+            {
+                return RedirectToPage("Info");
+            }
+            int rating = int.Parse(ReviewStar);
+
+            var success = await _serviceRequestService.ReviewServiceRequest(new ReviewDto
+            {
+                ServiceRequestId = id,
+                Review = rating
+            });
+
+            if (!success)
+            {
+                return BadRequest();
+            }
+
             return RedirectToPage("Info");
         }
 

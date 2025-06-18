@@ -25,6 +25,16 @@
         <tbody>
             @foreach (var sr in Model.ServiceRequests)
             {
+                var bg = sr.Status switch
+                {
+                    (Models.Status)1 => "text-bg-light",
+                    (Models.Status)2 => "text-bg-info",
+                    (Models.Status)3 => "text-bg-primary",
+                    (Models.Status)4 => "text-bg-warning",
+                    (Models.Status)5 => "text-bg-danger",
+                    (Models.Status)6 => "text-bg-success",
+                    _ => "text-bg-secondary"
+                };
                 <tr class="clickable-row" data-href="@Url.Page("Info", new { id = sr.ServiceRequestId })">
                     <td>@sr.Title</td>
                     <td>@sr.Description</td>
@@ -34,7 +44,7 @@
                     <td>@sr.CitizenName</td>
                     <td>@sr.EmployeeName</td>
                     <td>@sr.DateCreated</td>
-                    <td>@sr.Status</td>
+                    <td><span class="badge @bg">@sr.Status</span> @(sr.Review != null ? $"التقييم {sr.Review} نجوم" : "")</td>
                     <td>
                         @if (sr.IsPublic)
                         {

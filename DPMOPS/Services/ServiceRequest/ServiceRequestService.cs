@@ -79,7 +79,10 @@ namespace DPMOPS.Services.ServiceRequest
                     AppointmentId = sr.Appointment.AppointmentId,
                     AppointmentDate = sr.Appointment.ScheduledAt,
 
-                    IsPublic = sr.IsPublic
+                    IsPublic = sr.IsPublic,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .ToListAsync();
         }
@@ -123,7 +126,10 @@ namespace DPMOPS.Services.ServiceRequest
                     AppointmentId = sr.Appointment.AppointmentId,
                     AppointmentDate = sr.Appointment.ScheduledAt,
 
-                    IsPublic = sr.IsPublic
+                    IsPublic = sr.IsPublic,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .FirstOrDefaultAsync();
         }
@@ -198,8 +204,30 @@ namespace DPMOPS.Services.ServiceRequest
                 .Where(sr => sr.ServiceRequestId == srDto.ServiceRequestId)
                 .FirstOrDefaultAsync();
 
-            if (existingRequest != null)
+            if (existingRequest != null && existingRequest.StatusId != 6)
             {
+                if (srDto.StatusId == 6)
+                {
+                    //send to citizen
+                    CreateNotificationDto finNotif = new CreateNotificationDto
+                    {
+                        AccountId = existingRequest.CitizenId,
+                        Title = "تم انهاء العمل على طلبك",
+                        Body = $"الرجاء قم بتقييم العمل على \"{existingRequest.Title}\"",
+                        Link = _linkGenerator.GetPathByPage(
+                            "/ServiceRequest/Info",
+                            values: new { id = existingRequest.ServiceRequestId })
+                    };
+
+                    await _notificationService.SaveAsync(finNotif);
+
+                    existingRequest.StatusId = 6;
+                    existingRequest.DateCompleted = DateTime.UtcNow;
+
+                    var saveres = await _context.SaveChangesAsync();
+                    return saveres == 1;
+                }
+
                 //send to citizen
                 CreateNotificationDto notif = new CreateNotificationDto
                 {
@@ -293,7 +321,10 @@ namespace DPMOPS.Services.ServiceRequest
                     Latitude = sr.Latitude,
                     Longitude = sr.Longitude,
 
-                    IsPublic = sr.IsPublic
+                    IsPublic = sr.IsPublic,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .ToListAsync();
         }
@@ -334,7 +365,10 @@ namespace DPMOPS.Services.ServiceRequest
                     Latitude = sr.Latitude,
                     Longitude = sr.Longitude,
 
-                    IsPublic = sr.IsPublic
+                    IsPublic = sr.IsPublic,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .ToListAsync();
         }
@@ -375,7 +409,10 @@ namespace DPMOPS.Services.ServiceRequest
                     Latitude = sr.Latitude,
                     Longitude = sr.Longitude,
 
-                    IsPublic = sr.IsPublic
+                    IsPublic = sr.IsPublic,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .ToListAsync();
         }
@@ -544,7 +581,10 @@ namespace DPMOPS.Services.ServiceRequest
                         Longitude = sr.Longitude,
 
                         AppointmentId = sr.Appointment.AppointmentId,
-                        AppointmentDate = sr.Appointment.ScheduledAt
+                        AppointmentDate = sr.Appointment.ScheduledAt,
+
+                        DateCompleted = sr.DateCompleted,
+                        Review = sr.Review
                     })
                     .ToListAsync();
             }
@@ -585,9 +625,24 @@ namespace DPMOPS.Services.ServiceRequest
                     Longitude = sr.Longitude,
 
                     AppointmentId = sr.Appointment.AppointmentId,
-                    AppointmentDate = sr.Appointment.ScheduledAt
+                    AppointmentDate = sr.Appointment.ScheduledAt,
+
+                    DateCompleted = sr.DateCompleted,
+                    Review = sr.Review
                 })
                 .ToListAsync();
+        }
+
+        public async Task<bool> ReviewServiceRequest(ReviewDto reDto)
+        {
+            var existingRequest = await _context.ServiceRequests
+                .FindAsync(reDto.ServiceRequestId);
+            if (existingRequest == null || existingRequest.StatusId != 6 || existingRequest.DateCompleted == null) return false;
+
+            existingRequest.Review = reDto.Review;
+
+            var success = await _context.SaveChangesAsync();
+            return success == 1;
         }
     }
 }
