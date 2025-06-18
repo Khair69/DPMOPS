@@ -17,12 +17,6 @@ html {
     object-fit: cover;
 }
 
-.card-custom-bg {
-    background-color: #343a40;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 .thumbnail-img {
     width: 100px;
     height: 75px;
