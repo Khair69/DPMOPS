@@ -41,6 +41,7 @@ namespace DPMOPS.Services.Account
                     NumberOfRequests = u.CitizinServiceRequests.Count(),
                     OrganizationId = u.OrganizationId
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
         }
@@ -64,6 +65,7 @@ namespace DPMOPS.Services.Account
                     Address = u.District.City.Name + ", " + u.District.Name,
                     NumberOfRequests = u.CitizinServiceRequests.Count()
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -74,6 +76,7 @@ namespace DPMOPS.Services.Account
                 .Where(u => _context.UserClaims
                     .Any(c => c.UserId == u.Id && c.ClaimType == "IsOrgAdmin" && c.ClaimValue == "true"))
                 .Select(u => u.Id)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -88,6 +91,7 @@ namespace DPMOPS.Services.Account
                     Value = u.Id,
                     Text = u.FirstName + " " + u.LastName,
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -111,6 +115,7 @@ namespace DPMOPS.Services.Account
                     OrganizationName = u.Organization.Name,
                     OrganizationId = u.OrganizationId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -129,6 +134,7 @@ namespace DPMOPS.Services.Account
                     Address = u.District.City.Name + ", " + u.District.Name,
                     OrganizationId = u.OrganizationId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -143,12 +149,14 @@ namespace DPMOPS.Services.Account
             return await _context.UserClaims
                 .Where(c => c.UserId == userId && c.ClaimType == claimType)
                 .Select (c => c.ClaimValue)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IList<ApplicationUser>> GetAllAdminsAsync()
         {
-            var users = _userManager.Users.ToList();
+            var users = _userManager.Users
+                .AsNoTracking().ToList();
 
             IList<ApplicationUser> Admins = new List<ApplicationUser>();
             foreach (var user in users)

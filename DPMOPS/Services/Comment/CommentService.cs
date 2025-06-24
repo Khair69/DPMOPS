@@ -56,6 +56,7 @@ namespace DPMOPS.Services.Comment
                     CreatedAt = c.CreatedAt,
                     UserName = c.Account.FirstName + " " + c.Account.LastName
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -74,6 +75,7 @@ namespace DPMOPS.Services.Comment
                     CreatedAt = c.CreatedAt,
                     UserName = c.Account.FirstName + " " + c.Account.LastName
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
     }

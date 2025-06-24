@@ -71,6 +71,7 @@ namespace DPMOPS.Services.Appointment
                     ScheduledAt = a.ScheduledAt,
                     RequestTitle = a.ServiceRequest.Title
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -86,6 +87,7 @@ namespace DPMOPS.Services.Appointment
                     ScheduledAt = a.ScheduledAt,
                     RequestTitle = a.ServiceRequest.Title
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -101,6 +103,7 @@ namespace DPMOPS.Services.Appointment
                     ScheduledAt= a.ScheduledAt,
                     RequestTitle = a.ServiceRequest.Title
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 

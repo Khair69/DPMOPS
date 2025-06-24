@@ -42,6 +42,7 @@ namespace DPMOPS.Services.Organization
                     CityName = o.City.Name,
                     NumberOfEmployees = o.Employees.Count()
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -59,6 +60,7 @@ namespace DPMOPS.Services.Organization
                     CityName = o.City.Name,
                     NumberOfEmployees = o.Employees.Count()
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
 
@@ -71,6 +73,7 @@ namespace DPMOPS.Services.Organization
                     Text = o.Name,
                     Value = o.OrganizationId.ToString()
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 

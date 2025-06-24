@@ -56,6 +56,7 @@ namespace DPMOPS.Services.Follow
                     RequestOwnerName = f.ServiceRequest.Citizen.FirstName + " " + f.ServiceRequest.Citizen.LastName,
                     StatusId = f.ServiceRequest.StatusId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -64,6 +65,7 @@ namespace DPMOPS.Services.Follow
             return await _context.RequestFollowers
                 .Where(f => f.ServiceRequestId == id)
                 .Select(f => f.CitizenId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

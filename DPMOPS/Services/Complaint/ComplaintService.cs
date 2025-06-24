@@ -116,6 +116,7 @@ namespace DPMOPS.Services.Complaint
                     RequestTitle = c.ServiceRequest.Title,
                     Status = (Enums.ComplaintStatus)c.Status
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -141,6 +142,7 @@ namespace DPMOPS.Services.Complaint
                     RequestTitle = c.ServiceRequest.Title,
                     Status = (Enums.ComplaintStatus)c.Status
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -166,6 +168,7 @@ namespace DPMOPS.Services.Complaint
                     RequestTitle = c.ServiceRequest.Title,
                     Status = (Enums.ComplaintStatus)c.Status
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -191,6 +194,7 @@ namespace DPMOPS.Services.Complaint
                     RequestTitle = c.ServiceRequest.Title,
                     Status = (Enums.ComplaintStatus)c.Status
                 })
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
         }
     }

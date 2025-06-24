@@ -105,6 +105,7 @@ namespace DPMOPS.Services.District
                     Value = d.DistrictId.ToString(),
                     Text = d.Name
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -112,6 +113,7 @@ namespace DPMOPS.Services.District
         {
             var dis = await _context.Districts
                 .Where(d => d.DistrictId == id)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
             return dis.CityId;
         }

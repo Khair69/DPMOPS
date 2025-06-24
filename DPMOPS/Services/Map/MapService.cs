@@ -29,6 +29,7 @@ namespace DPMOPS.Services.Map
                     Title = sr.Title,
                     RequestId = sr.ServiceRequestId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -43,6 +44,7 @@ namespace DPMOPS.Services.Map
                 Title = sr.Title,
                 RequestId = sr.ServiceRequestId
             })
+            .AsNoTracking()
             .ToListAsync();
         }
 
@@ -63,6 +65,7 @@ namespace DPMOPS.Services.Map
                         Title = sr.Title,
                         RequestId = sr.ServiceRequestId
                     })
+                    .AsNoTracking()
                     .ToListAsync();
             }
 
@@ -76,6 +79,7 @@ namespace DPMOPS.Services.Map
                     Title = sr.Title,
                     RequestId = sr.ServiceRequestId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -91,6 +95,7 @@ namespace DPMOPS.Services.Map
                     Title = sr.Title,
                     RequestId = sr.ServiceRequestId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -106,6 +111,7 @@ namespace DPMOPS.Services.Map
                     Title = sr.Title,
                     RequestId = sr.ServiceRequestId
                 })
+                .AsNoTracking()
                 .ToListAsync();
         }
     }
