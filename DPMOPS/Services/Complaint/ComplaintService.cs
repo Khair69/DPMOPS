@@ -1,6 +1,11 @@
 ﻿#nullable disable
 using DPMOPS.Data;
+using DPMOPS.Enums;
+using DPMOPS.Services.Account;
 using DPMOPS.Services.Complaint.Dtos;
+using DPMOPS.Services.Notification;
+using DPMOPS.Services.Notification.Dtos;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Complaint
@@ -8,29 +13,54 @@ namespace DPMOPS.Services.Complaint
     public class ComplaintService : IComplaintService
     {
         private readonly ApplicationDbContext _context;
+        private readonly INotificationService _notificationService;
+        private readonly LinkGenerator _linkGenerator;
+        private readonly IAccountService _accountService;
 
-        public ComplaintService(ApplicationDbContext context)
+        public ComplaintService(ApplicationDbContext context,
+            INotificationService notificationService,
+            LinkGenerator linkGenerator,
+            IAccountService accountService)
         {
             _context = context;
+            _notificationService = notificationService;
+            _linkGenerator = linkGenerator;
+            _accountService = accountService;
         }
 
         public async Task<bool> MakeComplaintAsync(MakeComplaintDto complaint)
         {
+            var Complaint = new Models.Complaint
+            {
+                ComplaintId = Guid.NewGuid(),
+                Title = complaint.Title,
+                Description = complaint.Description,
+                CitizenId = complaint.CitizenId,
+                OrganizationId = complaint.OrganizationId,
+                ServiceRequestId = complaint.ServiceRequestId
+            };
             await _context.Complaints
-                .AddAsync(new Models.Complaint
-                {
-                    ComplaintId = Guid.NewGuid(),
-                    Title = complaint.Title,
-                    Description = complaint.Description,
-                    CitizenId = complaint.CitizenId,
-                    OrganizationId = complaint.OrganizationId,
-                    ServiceRequestId = complaint.ServiceRequestId
-                });
+                .AddAsync(Complaint);
             var succ = await _context.SaveChangesAsync();
 
             if (succ == 1)
             {
                 //send notification to the organization
+                var AdminsIds = await _accountService.GetAdminIdsInOrg(complaint.OrganizationId);
+                foreach (var empId in AdminsIds)
+                {
+                    CreateNotificationDto notif = new CreateNotificationDto
+                    {
+                        AccountId = empId,
+                        Title = "تم تقديم شكوى الى مؤسستك",
+                        Body = $"تم تقديم شكوى بعنوان {complaint.Title}",
+                        Link = _linkGenerator.GetPathByPage(
+                            "/Complaints/Info",
+                            values: new { id = Complaint.ComplaintId })
+                    };
+
+                    await _notificationService.SaveAsync(notif);
+                }
             }
 
             return succ == 1;
@@ -49,6 +79,17 @@ namespace DPMOPS.Services.Complaint
             if (succ == 1)
             {
                 //notification to the citizen
+                CreateNotificationDto notif = new CreateNotificationDto
+                {
+                    AccountId = existing.CitizenId,
+                    Title = "تم تغيير حالة الشكوى",
+                    Body = $"\"{existing.Title}\" تغيرت حالتها الى {(ComplaintStatus)existing.Status}",
+                    Link = _linkGenerator.GetPathByPage(
+                        "/Complaints/Info",
+                        values: new { id = existing.ComplaintId })
+                };
+
+                await _notificationService.SaveAsync(notif);
             }
 
             return succ == 1;
