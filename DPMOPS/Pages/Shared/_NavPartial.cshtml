@@ -132,7 +132,7 @@ else if (userType == Enums.UserType.OrgAdmin)
     </li>
 
     <li class="nav-item">
-        <a asp-page="/Organization/Employees/Index" asp-route-id="@User.Claims.FirstOrDefault(x => x.Type == " OrganizationId")?.Value" class="nav-link">
+        <a asp-page="/Organization/Employees/Index" asp-route-id="@User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value" class="nav-link">
             <i class="bi bi-person-workspace"></i>
             <p>الموظفين</p>
         </a>
