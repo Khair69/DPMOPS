@@ -1,9 +1,11 @@
 ﻿using DPMOPS.Services.Organization;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
-using Microsoft.AspNetCore.Authorization;
+using DPMOPS.Services.UserClaim;
+using DPMOPS.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace DPMOPS.Pages.Analytics
 {
@@ -11,15 +13,14 @@ namespace DPMOPS.Pages.Analytics
     {
         private readonly IServiceRequestService _serviceRequestService;
         private readonly IOrganizationService _organizationService;
-        private readonly IAuthorizationService _authService;
-
+        private readonly IUserClaimService _userClaimService;
         public IndexModel(IServiceRequestService serviceRequestService,
             IOrganizationService organizationService,
-            IAuthorizationService authService)
+            IUserClaimService userClaimService)           
         {
             _serviceRequestService = serviceRequestService;
             _organizationService = organizationService;
-            _authService = authService;
+            _userClaimService = userClaimService;
         }
 
         public AnalyticsDto AnalyticsData { get; set; }
@@ -27,28 +28,31 @@ namespace DPMOPS.Pages.Analytics
 
         public async Task<IActionResult> OnGetAsync()
         {
-            string? claim = User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value;
-            Guid orgId = Guid.Empty;
-            if (claim != null)
-            {
-                orgId = Guid.Parse(claim);
-            }
-            AuthorizationResult authResult = await _authService.AuthorizeAsync(User, orgId, "IsAdminOrOrgAdmin");
-            if (!authResult.Succeeded)
-            {
-                return new ForbidResult();
-            }
-            var org = await _organizationService.GetOrganizationByIdAsync(orgId);
+            var userType = _userClaimService.ResolveUserType(User);
             IList<ServiceRequestDto> requests = new List<ServiceRequestDto>();
-            if (org != null)
-            {
-                OrgName = "الإحصائيات في " + org.Name;
-                requests = await _serviceRequestService.GetServiceRequestsByOrganizationAsync(orgId);
-            }
-            else
+            if (userType == UserType.Admin)
             {
                 OrgName = "الإحصائيات في النظام";
                 requests = await _serviceRequestService.GetAllServiceRequestsAsync();
+            }
+            else if (userType == UserType.OrgAdmin)
+            {
+                Guid OrgId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "OrganizationId")?.Value);
+                var org = await _organizationService.GetOrganizationByIdAsync(OrgId);
+                OrgName = "الإحصائيات في " + org.Name;
+                requests = await _serviceRequestService.GetServiceRequestsByOrganizationAsync(OrgId);
+                
+
+
+            }
+            else if (userType == UserType.Employee)
+            {
+                OrgName = "إحصائياتك";
+                requests = await _serviceRequestService.GetServiceRequestsByEmployeeAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            else
+            {
+                return Forbid();
             }
 
             var now = DateTime.UtcNow;
