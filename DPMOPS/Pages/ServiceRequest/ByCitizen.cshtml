@@ -64,13 +64,16 @@
                                     <i class="bi bi-geo-alt-fill"></i> @sr.Address <br />
                                     <span class="badge @bg">@sr.Status</span>
                                 </p>
-                                @*<div class="position-absolute d-flex gap-2" style="bottom: 0.5rem; left: 0.5rem;">                                
-                                </div> *@
                             </div>
                         </div>
                     </a>
                 </div>
             }
+        </div>
+        <div page-model="@Model.pagingInfo" page-link="/ServiceRequest/ByCitizen"
+             page-classes-enabled="true" page-class="btn"
+             page-class-normal="btn-outline"
+             page-class-selected="btn-outline-primary" class="btn-group m-2">
         </div>
     }
 </div>

@@ -1,5 +1,6 @@
 #nullable disable
 using DPMOPS.Enums;
+using DPMOPS.Models.ViewModels;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
 using Microsoft.AspNetCore.Authorization;
@@ -22,13 +23,16 @@ namespace DPMOPS.Pages.ServiceRequest
         public string Category { get; set; } = "All";
         public IList<ServiceRequestDto> Requests { get; set; }
 
-        public async Task OnGetAsync(string category)
+        public PagingInfo pagingInfo { get; set; }
+        public int PageSize = 8;
+
+        public async Task OnGetAsync(string category, int pageNumber = 1)
         {
             Category = category ?? "All";
 
             IList<ServiceRequestDto> temp_requests = await _serviceRequestService.GetServiceRequestsByCitizenAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            Requests = Category switch
+            var filtered = Category switch
             {
                 "All" => temp_requests,
                 "Pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
@@ -38,6 +42,18 @@ namespace DPMOPS.Pages.ServiceRequest
                 "Denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
                 "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 _ => temp_requests
+            };
+
+            Requests = filtered
+                .Skip((pageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            pagingInfo = new PagingInfo
+            {
+                CurrentPage = pageNumber,
+                ItemsPerPage = PageSize,
+                TotalItems = filtered.Count
             };
         }
     }
