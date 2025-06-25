@@ -35,10 +35,10 @@ html {
     position: absolute;
     bottom: 20px; /* adjust as needed */
     left: 0;
-    right: 0;
+    right: 20px;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: start;
 }
 
 .checkbox {
