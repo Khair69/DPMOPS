@@ -36,12 +36,12 @@
                                     <img src="@(string.IsNullOrEmpty(request.PhotoPath) ? "/placeholder.jpg" : request.PhotoPath)"
                                          alt="الصورة غير متوفرة" class="img-thumbnail thumbnail-img me-3 p-0">
                                 </div>
-                                <div class="col position-relative">
+                                <div class="col position-relative my-3">
                                     <div class="card-body py-2 px-0 pe-4 position-relative">
-                                        <h5 class="card-title fw-bold mb-1">@request.Title</h5>
-                                        <p class="card-text mb-2">@request.Description</p>
+                                        <h5 class="fw-bold mb-1">@request.Title</h5>
+                                        <p class="mb-1">@request.Description</p>
 
-                                        <p class="card-text text-muted small mb-5 text-wrap">
+                                        <p class="card-text text-muted small text-wrap">
                                             <i class="bi bi-person-fill me-1"></i> @request.CitizenName |
                                             <i class="bi bi-geo-alt-fill me-1"></i> @request.Address |
                                             <i class="bi bi-calendar-event me-1"></i> @request.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar")) |
