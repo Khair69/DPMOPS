@@ -1,5 +1,6 @@
 using DPMOPS.Enums;
 using DPMOPS.Models;
+using DPMOPS.Models.ViewModels;
 using DPMOPS.Services.City;
 using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
@@ -39,10 +40,13 @@ namespace DPMOPS.Pages.ServiceRequest
         public IList<ServiceRequestDto> Requests { get; set; }
         public IEnumerable<SelectListItem> CityOptions { get; set; }
 
+        public PagingInfo pagingInfo { get; set; }
+        public int PageSize = 8;
+
         [BindProperty(SupportsGet = true)]
         public Guid CityId { get; set; }
 
-        public async Task OnGetAsync(string category)
+        public async Task OnGetAsync(string category, int pageNumber = 1)
         {
             AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
 
@@ -65,22 +69,20 @@ namespace DPMOPS.Pages.ServiceRequest
                 else temp_requests = await _serviceRequestService.GetAllPublicServiceRequestsAsync(CityId);
             }
 
-
-
             foreach (var sr in temp_requests)
+            {
+                sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
+                sr.IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
                 {
-                    sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
-                    sr.IsFollowing = await _followService.UserIsFollowingReqAsync(new Services.Follow.Dtos.FollowDto
-                    {
-                        CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                        ServiceRequestId = sr.ServiceRequestId
-                    });
-                    sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
-                }
-            
+                    CitizenId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    ServiceRequestId = sr.ServiceRequestId
+                });
+                sr.FollowVisible = (sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier) && citAuth.Succeeded) ? true : false;
+            }
+
             Category = category ?? "all";
 
-            Requests = Category.ToLower() switch
+            var filtered = Category.ToLower() switch
             {
                 "all" => temp_requests,
                 "pending" => temp_requests.Where(sr => sr.Status == (Status)1).ToList(),
@@ -91,6 +93,18 @@ namespace DPMOPS.Pages.ServiceRequest
                 "completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 "explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
                 _ => temp_requests
+            };
+
+            Requests = filtered
+                .Skip((pageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            pagingInfo = new PagingInfo
+            {
+                CurrentPage = pageNumber,
+                ItemsPerPage = PageSize,
+                TotalItems = filtered.Count
             };
 
             CityOptions = await _cityService.GetCityOptionsAsync();
