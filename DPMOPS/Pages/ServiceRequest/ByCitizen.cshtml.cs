@@ -1,4 +1,4 @@
-#nullable disable
+﻿#nullable disable
 using DPMOPS.Enums;
 using DPMOPS.Models.ViewModels;
 using DPMOPS.Services.ServiceRequest;
@@ -21,6 +21,7 @@ namespace DPMOPS.Pages.ServiceRequest
         }
 
         public string Category { get; set; } = "All";
+        public string CatName { get; set; } = "كل طلباتك";
         public IList<ServiceRequestDto> Requests { get; set; }
 
         public PagingInfo pagingInfo { get; set; }
@@ -42,6 +43,18 @@ namespace DPMOPS.Pages.ServiceRequest
                 "Denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
                 "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 _ => temp_requests
+            };
+
+            CatName = Category switch
+            {
+                "All" => "كل طلباتك",
+                "Pending" => "طلباتك القيد الانتظار",
+                "Accepted" => "طلباتك المقبولة",
+                "InProgress" => "طلباتك القيد العمل",
+                "Suspended" => "طلباتك المعلقة",
+                "Denied" => "طلباتك المرفوضة",
+                "Completed" => "طلباتك المكتملة",
+                _ => "طلباتك"
             };
 
             Requests = filtered

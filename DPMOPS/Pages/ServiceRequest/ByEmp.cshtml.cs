@@ -1,5 +1,6 @@
-#nullable disable
+﻿#nullable disable
 using DPMOPS.Enums;
+using DPMOPS.Models.ViewModels;
 using DPMOPS.Services.Follow;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.ServiceRequest.Dtos;
@@ -24,9 +25,13 @@ namespace DPMOPS.Pages.ServiceRequest
         }
 
         public string Category { get; set; } = "All";
+        public string CatName { get; set; } = "كل طلباتك";
         public IList<ServiceRequestDto> Requests { get; set; }
 
-        public async Task OnGetAsync(string category)
+        public PagingInfo pagingInfo { get; set; }
+        public int PageSize = 8;
+
+        public async Task OnGetAsync(string category, int pageNumber = 1)
         {
             Category = category ?? "All";
 
@@ -37,7 +42,7 @@ namespace DPMOPS.Pages.ServiceRequest
                 sr.FollowerCount = await _followService.GetRequestFollowCountAsync(sr.ServiceRequestId);
             }
 
-            Requests = Category switch
+            var filtered = Category switch
             {
                 "All" => temp_requests,
                 "Accepted" => temp_requests.Where(sr => sr.Status == (Status)2).ToList(),
@@ -46,6 +51,29 @@ namespace DPMOPS.Pages.ServiceRequest
                 "Denied" => temp_requests.Where(sr => sr.Status == (Status)5).ToList(),
                 "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 _ => temp_requests
+            };
+
+            CatName = Category switch
+            {
+                "All" => "كل طلباتك",
+                "Accepted" => "طلباتك المقبولة",
+                "InProgress" => "طلباتك القيد العمل",
+                "Suspended" => "طلباتك المعلقة",
+                "Denied" => "طلباتك المرفوضة",
+                "Completed" => "طلباتك المكتملة",
+                _ => "طلباتك"
+            };
+
+            Requests = filtered
+                .Skip((pageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToList();
+
+            pagingInfo = new PagingInfo
+            {
+                CurrentPage = pageNumber,
+                ItemsPerPage = PageSize,
+                TotalItems = filtered.Count
             };
         }
     }
