@@ -41,7 +41,7 @@ namespace DPMOPS.Infrastructure
                 {
                     TagBuilder tag = new TagBuilder("a");
                     tag.Attributes["href"] = urlHelper.Page(PageLink,
-                    new { pageNumber = i });
+                    new { pageNumber = i, searchTerm = ViewContext?.HttpContext?.Request.Query["searchTerm"].ToString(), category = ViewContext?.HttpContext?.Request.Query["category"].ToString() });
                     if (PageClassesEnabled)
                     {
                         tag.AddCssClass(PageClass);

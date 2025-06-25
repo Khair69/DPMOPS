@@ -31,9 +31,12 @@ namespace DPMOPS.Pages.ServiceRequest
         public PagingInfo pagingInfo { get; set; }
         public int PageSize = 8;
 
-        public async Task OnGetAsync(string category, int pageNumber = 1)
+        public string SearchTerm { get; set; }
+
+        public async Task OnGetAsync(string category, string searchTerm,int pageNumber = 1)
         {
             Category = category ?? "All";
+            SearchTerm = searchTerm?.Trim();
 
             IList<ServiceRequestDto> temp_requests = await _serviceRequestService.GetServiceRequestsByEmployeeAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -52,6 +55,15 @@ namespace DPMOPS.Pages.ServiceRequest
                 "Completed" => temp_requests.Where(sr => sr.Status == (Status)6).ToList(),
                 _ => temp_requests
             };
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                filtered = filtered
+                    .Where(sr =>
+                        (!string.IsNullOrWhiteSpace(sr.Title) && sr.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(sr.Description) && sr.Description.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+            }
 
             CatName = Category switch
             {

@@ -43,10 +43,12 @@ namespace DPMOPS.Pages.ServiceRequest
         public PagingInfo pagingInfo { get; set; }
         public int PageSize = 8;
 
+        public string SearchTerm { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public Guid CityId { get; set; }
 
-        public async Task OnGetAsync(string category, int pageNumber = 1)
+        public async Task OnGetAsync(string category, string searchTerm, int pageNumber = 1)
         {
             AuthorizationResult citAuth = await _authService.AuthorizeAsync(User, "IsCitizen");
 
@@ -81,6 +83,7 @@ namespace DPMOPS.Pages.ServiceRequest
             }
 
             Category = category ?? "all";
+            SearchTerm = searchTerm?.Trim();
 
             var filtered = Category.ToLower() switch
             {
@@ -94,6 +97,15 @@ namespace DPMOPS.Pages.ServiceRequest
                 "explore" => temp_requests.Where(sr => sr.CitizenId != User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList(),
                 _ => temp_requests
             };
+
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                filtered = filtered
+                    .Where(sr =>
+                        (!string.IsNullOrWhiteSpace(sr.Title) && sr.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                        (!string.IsNullOrWhiteSpace(sr.Description) && sr.Description.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+            }
 
             Requests = filtered
                 .Skip((pageNumber - 1) * PageSize)

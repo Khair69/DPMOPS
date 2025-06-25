@@ -21,6 +21,13 @@
             <div class="panel-heading">
                 <h3 class="fw-bold mb-0">الطلبات العامة</h3>
             </div>
+            <form method="get" class="mb-3">
+                <div class="input-group">
+                    <input type="hidden" name="category" value="@Model.Category" />
+                    <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="🔍 ابحث في الطلبات..." />
+                    <button class="btn btn-outline-primary" type="submit">بحث</button>
+                </div>
+            </form>
         }
         <div>
             <div class="btn-group mx-1" role="group" aria-label="Basic radio toggle button group">
