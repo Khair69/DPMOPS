@@ -15,8 +15,8 @@ using DPMOPS.Services.Organization;
 using DPMOPS.Services.Photo;
 using DPMOPS.Services.ServiceRequest;
 using DPMOPS.Services.UserClaim;
+using Ganss.Xss;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +104,7 @@ namespace DPMOPS
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IMapService, MapService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
+            builder.Services.AddSingleton<IHtmlSanitizer>(new HtmlSanitizer());
 
             var app = builder.Build();
 

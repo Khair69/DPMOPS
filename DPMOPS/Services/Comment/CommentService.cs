@@ -1,5 +1,6 @@
 ﻿using DPMOPS.Data;
 using DPMOPS.Services.Comment.Dtos;
+using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 
 namespace DPMOPS.Services.Comment
@@ -7,10 +8,13 @@ namespace DPMOPS.Services.Comment
     public class CommentService : ICommentService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHtmlSanitizer _htmlSanitizer;
 
-        public CommentService(ApplicationDbContext context)
+        public CommentService(ApplicationDbContext context,
+            IHtmlSanitizer htmlSanitizer)
         {
             _context = context;
+            _htmlSanitizer = htmlSanitizer;
         }
 
         public async Task<bool> AddCommentAsync(AddCommentDto cDto)
@@ -23,13 +27,17 @@ namespace DPMOPS.Services.Comment
                 return false;
             }
 
+            var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedTags.Clear();
+            sanitizer.AllowedAttributes.Clear();
+
             await _context.Comments
                 .AddAsync(new Models.Comment
                 {
                     CommentId = Guid.NewGuid(),
                     ServiceRequestId = cDto.ServiceRequestId,
                     AccountId = cDto.AccountId,
-                    Content = cDto.Content
+                    Content = sanitizer.Sanitize(cDto.Content)
                 });
             var succ = await _context.SaveChangesAsync();
 
