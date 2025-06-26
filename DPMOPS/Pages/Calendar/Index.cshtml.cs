@@ -59,7 +59,8 @@ namespace DPMOPS.Pages.Calendar
             var jsonAp = appointments.Select(a => new
             {
                 title = a.RequestTitle,
-                start = a.ScheduledAt.ToString("s")
+                start = a.ScheduledAt.ToString("s"),
+                url = $"/ServiceRequest/Info/{a.ServiceRequestId}"
             }).ToList();
 
             return new JsonResult(jsonAp);
