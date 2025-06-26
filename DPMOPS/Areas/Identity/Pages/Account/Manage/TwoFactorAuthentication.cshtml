@@ -1,0 +1,71 @@
+﻿@page
+@using Microsoft.AspNetCore.Http.Features
+@model TwoFactorAuthenticationModel
+@{
+    ViewData["Title"] = "Two-factor authentication (2FA)";
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<h3>المصادقة الثنائية - @ViewData["Title"]</h3>
+@{
+    var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
+    @if (consentFeature?.CanTrack ?? true)
+    {
+        @if (Model.Is2faEnabled)
+        {
+            if (Model.RecoveryCodesLeft == 0)
+            {
+                <div class="alert alert-danger">
+                    <strong>ليس لديك أي رمز استرداد متبقي.</strong>
+                    <p>يجب عليك <a asp-page="./GenerateRecoveryCodes">إنشاء مجموعة جديدة من رموز الاسترداد</a> قبل أن تتمكن من تسجيل الدخول باستخدام رمز الاسترداد.</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft == 1)
+            {
+                <div class="alert alert-danger">
+                    <strong>يوجد لديك رمز استرداد واحد متبقي</strong>
+                    <p>يمكنك <a asp-page="./GenerateRecoveryCodes">إنشاء مجموعة جديدة من رموز الاسترداد</a>.</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft <= 3)
+            {
+                <div class="alert alert-warning">
+                    <strong>يوجد لديك @Model.RecoveryCodesLeft رموز استرداد متبقية</strong>
+                    <p>يجب عليك <a asp-page="./GenerateRecoveryCodes">إنشاء مجموعة جديدة من رموز الاسترداد</a>.</p>
+                </div>
+            }
+
+            if (Model.IsMachineRemembered)
+            {
+                <form method="post" style="display: inline-block">
+                    <button type="submit" class="btn btn-primary">نسيان هذا المتصفح</button>
+                </form>
+            }
+            <a asp-page="./Disable2fa" class="btn btn-primary">إلغاء 2FA</a>
+            <a asp-page="./GenerateRecoveryCodes" class="btn btn-primary">إعادة ضبط رموز الاسترداد</a>
+        }
+
+        <h4>تطبيق الAuthenticator</h4>
+        @if (!Model.HasAuthenticator)
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">إضافة تطبيق الauthenticator</a>
+        }
+        else
+        {
+            <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">تفعيل تطبيق الauthenticator</a>
+            <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-primary">إعادة ضبط تطبيق الauthenticator</a>
+        }
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            <strong>Privacy and cookie policy have not been accepted.</strong>
+            <p>You must accept the policy before you can enable two factor authentication.</p>
+        </div>
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
