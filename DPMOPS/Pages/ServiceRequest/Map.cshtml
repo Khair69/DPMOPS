@@ -3,7 +3,7 @@
 @using System.Text.Json
 
 @{
-    ViewData["Title"] = "Map";
+    ViewData["Title"] = "الخريطة";
     var mapPointsJson = JsonSerializer.Serialize(Model.MapPoints);
     var currentCategory = Model.Category ?? "all";
 
