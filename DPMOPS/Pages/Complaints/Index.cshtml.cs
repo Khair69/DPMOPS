@@ -21,9 +21,11 @@ namespace DPMOPS.Pages.Complaints
 
         public IList<ComplaintDto> Complaints { get; set; }
 
+        public Enums.UserType userType { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            var userType = _userClaimService.ResolveUserType(User);
+            userType = _userClaimService.ResolveUserType(User);
             if (userType == Enums.UserType.Admin 
                 || userType == Enums.UserType.OrgAdmin 
                 || userType == Enums.UserType.Citizen)

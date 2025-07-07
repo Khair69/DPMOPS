@@ -20,10 +20,13 @@
             </div>
         }
         <div>
-            <a asp-page="/Complaints/Add" class="btn btn-outline-primary">
-                <i class="bi bi-plus-lg"></i>
-                التقديم على شكوة
-            </a>
+            @if (Model.userType == Enums.UserType.Citizen)
+            {
+                <a asp-page="/Complaints/Add" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    التقديم على شكوة
+                </a>
+            }
         </div>
     </div>
     <div class="row g-4">
