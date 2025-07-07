@@ -42,12 +42,13 @@
             <p class="list-unstyled small text-muted fs-6">
                 <i class="bi bi-geo-alt-fill"></i> @Model.ServiceRequest.Address, @Model.ServiceRequest.LocDescription <br />
                 <i class="bi bi-calendar"></i> @Model.ServiceRequest.DateCreated.Humanize(culture: new System.Globalization.CultureInfo("ar"))<br />
-                <i class="bi bi-person-fill"></i> المواطن: @Model.ServiceRequest.CitizenName
-                @if (Model.EmployeeViewer || Model.OrgAdminViewer)
-                {
+                @if (Model.EmployeeViewer || Model.OrgAdminViewer) {
+                    <i class="bi bi-person-fill"></i>
+                    <text>المواطن: </text>
+                    @Model.ServiceRequest.CitizenName
                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
+                    <br />
                 }
-                <br />
                 <i class="bi bi-person-badge-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
                 @if (Model.ServiceRequest.IsPublic)
@@ -69,7 +70,7 @@
                     <span>
                         <i class="bi bi-calendar-event"></i>
                         الموعد المحدد: @Model.ServiceRequest.AppointmentDate.Value.ToString("dddd, dd MMMM yyyy - hh:mm tt", new CultureInfo("ar-SY"))
-                    </span>
+                    </span> <br />
                 }
                 @if (Model.IsCompleted)
                 {
@@ -87,7 +88,7 @@
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 
-                @if (Model.IsCompleted)
+                @if ((Model.IsCompleted && Model.IsOwner) || Model.ServiceRequest.Review != null)
                 {
                     <div class="row">
 	                    <div class="col-md-12">
