@@ -92,6 +92,12 @@ namespace DPMOPS.Data
             modelBuilder.Entity<RequestFollower>()
                 .HasIndex(rf => new { rf.CitizenId, rf.ServiceRequestId })
                 .IsUnique();
+
+            modelBuilder.Entity<RequestFollower>()
+                   .HasOne(rf => rf.User)
+                   .WithMany()
+                   .HasForeignKey(rf => rf.CitizenId)
+                   .HasPrincipalKey(u => u.Id);
         }
     }
 }
