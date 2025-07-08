@@ -7,8 +7,8 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
-    <div class="col-md-4">
-        <form asp-page="Add">
+    <div class="col-md-6 order-1 order-md-1">
+        <form asp-page="Add" class="w-75">
             <hr />
             <div class="form-floating mb-3">
                 <input asp-for="NewComplaint.Title" class="form-control" />
@@ -30,4 +30,10 @@
             <button type="submit" class="btn btn-primary w-100">إضافة</button>
         </form>
     </div>
+
+    <!-- Image Column -->
+    <div class="col-md-6 order-2 order-md-2 d-flex align-items-center justify-content-center">
+        <img src="~/images/complaint.png" alt="Illustration" class="img-fluid rounded">
+    </div>
 </div>
+
