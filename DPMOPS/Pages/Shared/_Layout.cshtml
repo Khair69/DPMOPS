@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.RazorPages
+@inject Microsoft.AspNetCore.Mvc.ViewEngines.ICompositeViewEngine Engine
+
+<!DOCTYPE html>
 <html lang="ar" data-bs-theme="dark" dir="rtl">
 <head>
     <meta charset="utf-8" />
@@ -25,7 +28,13 @@
                     </li>
                     <li class="nav-item d-none d-md-block"><a asp-page="/Index" class="nav-link">الصفحة الرئيسية</a></li>
                 </ul>
-                <span class="nav-item d-none d-md-block text-muted">> @ViewData["Title"]</span>
+                @{
+                    var currentPage = ViewContext.ActionDescriptor?.RouteValues["page"];
+                }
+                @if (!string.Equals(currentPage, "/Index", StringComparison.OrdinalIgnoreCase))
+                {
+                    <span class="nav-item d-none d-md-block text-muted"><span class="fw-bold">></span> @ViewData["Title"]</span>
+                }
                 <!--end::Start Navbar Links-->
                 <!--begin::End Navbar Links-->
                 <ul class="navbar-nav ms-auto">
