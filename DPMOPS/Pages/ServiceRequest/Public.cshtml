@@ -8,8 +8,8 @@
     var currentCategory = Model.Category ?? "all";
 }
 
-<div class="container my-4">
-    <div class="d-flex justify-content-between mb-3">
+<div class="container mt-2">
+    <div class="d-flex justify-content-between mb-2">
         @if (Model.Requests == null || Model.Requests.Count == 0)
         {
             <div class="alert alert-info">
@@ -70,6 +70,12 @@
                 </ul>
             </div>
         </div>
+    </div>
+    <div class="text-center mb-3">
+        <a asp-page="/ServiceRequest/Add" class="btn btn-outline-primary">
+            <i class="bi bi-plus-lg"></i>
+            التقديم على طلب خدمة
+        </a>
     </div>
 
     @if (Model.Requests != null && Model.Requests.Count > 0)
