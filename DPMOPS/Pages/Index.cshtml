@@ -4,8 +4,22 @@
     ViewData["Title"] = "الصفحة الرئيسية";
 }
 
-<div class="text-center">
-    <h3 class="display-5">حاج تأجل هي الصفحة</h3>
+<div class="container-fluid py-5">
+    <div class="row align-items-center text-md-start">
+        <!-- Text Section -->
+        <div class="col-12 col-md-6 mb-4 mb-md-0 text-center">
+            <h1 class="custom-font display-5 fw-bold mb-4">أهلاً بك في موقع بَلِغنا</h1>
+            <hr class="w-25 mx-auto mb-4">
+            <h2 class="custom-font fs-3 mb-3">وجد الموقع لخدمتكم</h2>
+            <h2 class="custom-font fs-3 mb-3">لا تتردد في تقديم شكواك</h2>
+            <p class="custom-font fs-4 fw-semibold mb-2">معاً لبناء وطن أفضل</p>
+            <p class="custom-font fs-4 fw-semibold mb-2">تصفح <a asp-page="/ServiceRequest/Public">الطلبات العامة</a> بالقرب منك</p>
+            <p class="custom-font fs-4">نشكر زيارتكم</p>
+        </div>
+
+        <!-- Image Section -->
+        <div class="col-12 col-md-6 text-center">
+            <img class="img-fluid w-75" src="~/images/home.png" alt="خطأ في تحميل الصورة" />
+        </div>
+    </div>
 </div>
-
-

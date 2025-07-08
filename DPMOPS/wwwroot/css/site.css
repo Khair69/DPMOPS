@@ -98,3 +98,14 @@ body.dark .moon-icon {
 body:not(.dark) .sun-icon {
     display: inline;
 }
+
+@font-face{
+    font-family: 'HomeFont';
+    src: url('/fonts/Hacen-Liner-Print-out.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.custom-font{
+    font-family: 'HomeFont', sans-serif;
+}
