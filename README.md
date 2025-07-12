@@ -52,7 +52,7 @@
 | **تطوير الواجهة الخلفية**  | ASP.NET Core             |
 | **إدارة قاعدة البيانات**   | SQL Server & EF Core     |
 | **تصميم الواجهة الأمامية** | HTML, CSS, Bootstrap, JS |
-| **إدارة الخرائط GIS**      | Leaflet.js               |
+| **إدارة الخرائط**          | Leaflet.js               |
 | **التوثيق والأمان**        | ASP.NET Core Identity    |
 
 ---
