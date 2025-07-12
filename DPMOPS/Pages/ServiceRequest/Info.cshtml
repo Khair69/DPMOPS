@@ -49,7 +49,7 @@
                     <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactModal"><i class="bi bi-chat"></i> التواصل</button>
                     <br />
                 }
-                <i class="bi bi-person-badge-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصصة" : Model.ServiceRequest.EmployeeName) <br />
+                <i class="bi bi-person-badge-fill"></i> الموظف: @(Model.ServiceRequest.EmployeeId == null ? "غير مخصص" : Model.ServiceRequest.EmployeeName) <br />
                 <i class="bi bi-building"></i> المؤسسة: @Model.ServiceRequest.OrganizationName <br />
                 @if (Model.ServiceRequest.IsPublic)
                 {
@@ -84,7 +84,7 @@
             <div class="mt-auto pt-3">
 
                 <!--Map Button-->
-                <button class="btn btn-outline-light m-1" data-bs-toggle="modal" data-bs-target="#mapModal">
+                <button class="btn btn-outline-secondary m-1" data-bs-toggle="modal" data-bs-target="#mapModal">
                     <i class="bi bi-geo-alt"></i> عرض على الخرائط
                 </button>
 

@@ -290,7 +290,7 @@ namespace DPMOPS.Services.ServiceRequest
         {
             return await _context.ServiceRequests
                 .Where(sr => sr.CitizenId == id)
-                .OrderBy(sr => sr.DateCreated)
+                .OrderByDescending(sr => sr.DateCreated)
                 .Include(sr => sr.District)
                     .ThenInclude(d => d.City)
                 .Include(sr => sr.Citizen)
@@ -334,7 +334,7 @@ namespace DPMOPS.Services.ServiceRequest
         {
             return await _context.ServiceRequests
                 .Where(sr => sr.EmployeeId == id)
-                .OrderBy(sr => sr.DateCreated)
+                .OrderByDescending(sr => sr.DateCreated)
                 .Include(sr => sr.District)
                     .ThenInclude(d => d.City)
                 .Include(sr => sr.Citizen)
@@ -378,7 +378,7 @@ namespace DPMOPS.Services.ServiceRequest
         {
             return await _context.ServiceRequests
                 .Where(sr => sr.OrganizationId == id)
-                .OrderBy(sr => sr.DateCreated)
+                .OrderByDescending(sr => sr.DateCreated)
                 .Include(sr => sr.District)
                     .ThenInclude(d => d.City)
                 .Include(sr => sr.Citizen)
@@ -546,7 +546,7 @@ namespace DPMOPS.Services.ServiceRequest
             {
                 IList<Guid> districtsIds = await _districtService.GetDistrictsByCityAsync(cityId.Value);
                 return await _context.ServiceRequests
-                    .OrderBy(sr => sr.DateCreated)
+                    .OrderByDescending(sr => sr.DateCreated)
                     .Where(sr => sr.IsPublic == true)
                     .Where(sr => districtsIds.Contains((Guid)sr.DistrictId))
                     .Include(sr => sr.District)
