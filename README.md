@@ -79,7 +79,7 @@ cd DPMOPS
 
 ```bash
 dotnet ef database update
-dotnet run
+dotnet run -lp https
 ```
 
 ## مستقبل المشروع
