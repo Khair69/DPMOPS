@@ -41,7 +41,7 @@ html {
     justify-content: start;
 }
 
-.checkbox {
+.checkbox-theme {
     opacity: 0;
     position: absolute;
 }
