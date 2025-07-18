@@ -70,7 +70,7 @@
 
 ```bash
 git clone https://github.com/Khair69/DPMOPS.git
-cd DPMOPS
+cd DPMOPS/DPMOPS
 ```
 
 ### 3. إعداد قاعدة البيانات
